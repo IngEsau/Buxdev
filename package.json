@@ -5,6 +5,7 @@
   "homepage": "https://buxdev.com/",
   "scripts": {
     "build": "next build",
+    "deploy:ftp": "bash scripts/deploy-ftp.sh",
     "dev": "next dev",
     "lint": "eslint .",
     "start": "next start"

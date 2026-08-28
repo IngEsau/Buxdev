@@ -11,23 +11,21 @@
 .section::before,
 .section::after {
   position: absolute;
-  left: 50%;
+  right: 0;
+  left: 0;
   z-index: -1;
   content: "";
-  transform: translateX(-50%);
   pointer-events: none;
 }
 
 .section::before {
   inset-block: 0;
-  width: min(calc(100% - (2 * var(--page-gutter))), var(--container-max));
   border-right: 1px solid var(--border);
   border-left: 1px solid var(--border);
 }
 
 .section::after {
   inset-block: 0;
-  width: min(100%, 76rem);
   background-image:
     linear-gradient(to right, var(--border) 1px, transparent 1px),
     linear-gradient(to bottom, var(--border) 1px, transparent 1px);
@@ -80,7 +78,7 @@
   color: var(--foreground);
   font-size: clamp(2.7rem, 6vw, 5.25rem);
   font-weight: 720;
-  letter-spacing: -0.068em;
+  letter-spacing: var(--heading-letter-spacing);
   line-height: 0.98;
   text-wrap: balance;
 }
@@ -208,7 +206,7 @@
   color: var(--foreground);
   font-size: clamp(1.35rem, 2.4vw, 2rem);
   font-weight: 630;
-  letter-spacing: -0.045em;
+  letter-spacing: var(--heading-letter-spacing);
   line-height: 1.08;
 }
 

@@ -25,11 +25,8 @@
 
 .grid {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
+  inset: 0;
   z-index: -2;
-  width: min(calc(100% - (2 * var(--page-gutter))), var(--container-max));
   border-right: 1px solid var(--border);
   border-left: 1px solid var(--border);
   background-image:
@@ -37,7 +34,6 @@
     linear-gradient(to bottom, var(--border) 1px, transparent 1px);
   background-size: clamp(4.25rem, 7.5vw, 7.5rem) clamp(4.25rem, 7.5vw, 7.5rem);
   opacity: 0.42;
-  transform: translateX(-50%);
   -webkit-mask-image: linear-gradient(to bottom, #000, rgb(0 0 0 / 62%) 66%, transparent);
   mask-image: linear-gradient(to bottom, #000, rgb(0 0 0 / 62%) 66%, transparent);
 }
@@ -105,7 +101,8 @@
   color: var(--foreground);
   font-size: clamp(2.65rem, 5.25vw, 4.9rem);
   font-weight: 740;
-  letter-spacing: -0.06em;
+  font-kerning: normal;
+  letter-spacing: var(--page-display-letter-spacing);
   line-height: 0.98;
   text-wrap: balance;
 }
@@ -419,7 +416,6 @@
 
   .title {
     font-size: clamp(2.35rem, 11.2vw, 3rem);
-    letter-spacing: -0.055em;
   }
 
   .description {

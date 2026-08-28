@@ -85,7 +85,7 @@
   font-size: clamp(2.45rem, 4.6vw, 4.8rem);
   font-weight: 650;
   line-height: 0.98;
-  letter-spacing: -0.055em;
+  letter-spacing: var(--heading-letter-spacing);
   text-wrap: balance;
 }
 

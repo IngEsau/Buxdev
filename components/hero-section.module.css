@@ -25,11 +25,8 @@
 
 .technicalGrid {
   position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
+  inset: 0;
   z-index: -3;
-  width: min(calc(100% - (2 * var(--page-gutter))), var(--container-max));
   border-right: 1px solid var(--border);
   border-left: 1px solid var(--border);
   background-image:
@@ -37,7 +34,6 @@
     linear-gradient(to bottom, var(--border) 1px, transparent 1px);
   background-size: clamp(4rem, 7.5vw, 7.5rem) clamp(4rem, 7.5vw, 7.5rem);
   opacity: 0.52;
-  transform: translateX(-50%);
   -webkit-mask-image: linear-gradient(to bottom, #000, rgb(0 0 0 / 58%) 62%, transparent 96%);
   mask-image: linear-gradient(to bottom, #000, rgb(0 0 0 / 58%) 62%, transparent 96%);
 }
@@ -107,7 +103,8 @@
   color: var(--foreground);
   font-size: clamp(2.4rem, 5.45vw, 5rem);
   font-weight: 750;
-  letter-spacing: -0.06em;
+  font-kerning: normal;
+  letter-spacing: var(--display-letter-spacing);
   line-height: 0.98;
   text-wrap: balance;
 }
@@ -1006,7 +1003,6 @@
 
   .headline {
     font-size: clamp(2.25rem, 10.2vw, 2.75rem);
-    letter-spacing: -0.055em;
   }
 
   .capabilityRail span:last-of-type,

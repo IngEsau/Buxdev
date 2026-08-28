@@ -32,6 +32,9 @@
   --container-max: 75rem;
   --page-gutter: clamp(1.25rem, 4vw, 2.5rem);
   --header-height: 5.5rem;
+  --display-letter-spacing: 0em;
+  --page-display-letter-spacing: 0em;
+  --heading-letter-spacing: -0.01em;
 
   /* shadcn/Tailwind compatibility */
   --card: var(--surface);

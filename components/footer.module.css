@@ -10,14 +10,12 @@
 
 .grid {
   position: absolute;
-  inset: 0 auto 0 50%;
-  width: min(calc(100% - (2 * var(--page-gutter))), var(--container-max));
+  inset: 0;
   border-right: 1px solid var(--border);
   border-left: 1px solid var(--border);
   background-image: linear-gradient(to right, var(--border) 1px, transparent 1px);
   background-size: clamp(4.25rem, 7.5vw, 7.5rem) 100%;
   opacity: 0.34;
-  transform: translateX(-50%);
   -webkit-mask-image: linear-gradient(to bottom, #000, transparent 92%);
   mask-image: linear-gradient(to bottom, #000, transparent 92%);
   pointer-events: none;

@@ -76,7 +76,7 @@
   color: var(--foreground);
   font-size: clamp(2.7rem, 5.6vw, 5rem);
   font-weight: 730;
-  letter-spacing: -0.068em;
+  letter-spacing: var(--heading-letter-spacing);
   line-height: 0.98;
   text-wrap: balance;
 }

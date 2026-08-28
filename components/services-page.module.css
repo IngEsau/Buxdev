@@ -9,14 +9,12 @@
 
 .grid {
   position: absolute;
-  inset: 0 auto 0 50%;
-  width: min(calc(100% - (2 * var(--page-gutter))), var(--container-max));
+  inset: 0;
   border-right: 1px solid var(--border);
   border-left: 1px solid var(--border);
   background-image: linear-gradient(to right, var(--border) 1px, transparent 1px);
   background-size: clamp(4.25rem, 7.5vw, 7.5rem) 100%;
   opacity: 0.42;
-  transform: translateX(-50%);
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
   mask-image: linear-gradient(to bottom, transparent, #000 4%, #000 96%, transparent);
   pointer-events: none;
@@ -51,7 +49,7 @@
   color: var(--foreground);
   font-size: clamp(2.5rem, 5vw, 4.75rem);
   font-weight: 690;
-  letter-spacing: -0.06em;
+  letter-spacing: var(--heading-letter-spacing);
   line-height: 1;
   text-wrap: balance;
 }
@@ -108,7 +106,7 @@
   color: var(--foreground);
   font-size: clamp(2rem, 4vw, 3.75rem);
   font-weight: 670;
-  letter-spacing: -0.06em;
+  letter-spacing: var(--heading-letter-spacing);
   line-height: 1;
 }
 

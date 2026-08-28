@@ -1,9 +1,11 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowUpRight, Eye, Heart, Target } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 
 import { useLanguage } from "@/hooks/use-language"
+
+import { AboutPrinciples } from "./about-principles"
 
 import styles from "./about-section.module.css"
 
@@ -12,6 +14,9 @@ export function AboutSection() {
 
   return (
     <section id="nosotros" className={styles.section} aria-labelledby="home-about-title">
+      <div className={styles.grid} aria-hidden="true" />
+      <div className={styles.glow} aria-hidden="true" />
+
       <div className={styles.container}>
         <div className={styles.intro}>
           <div className={styles.identity}>
@@ -24,48 +29,7 @@ export function AboutSection() {
           <p className={styles.lead}>{t.about.experience}</p>
         </div>
 
-        <div className={styles.principles}>
-          <article className={`${styles.principle} ${styles.mission}`}>
-            <div className={styles.principleMeta}>
-              <span>01</span>
-              <Target aria-hidden="true" />
-            </div>
-            <div>
-              <h3>{t.about.mission.title}</h3>
-              <p>{t.about.mission.text}</p>
-            </div>
-          </article>
-
-          <article className={`${styles.principle} ${styles.vision}`}>
-            <div className={styles.principleMeta}>
-              <span>02</span>
-              <Eye aria-hidden="true" />
-            </div>
-            <div>
-              <h3>{t.about.vision.title}</h3>
-              <p>{t.about.vision.text}</p>
-            </div>
-          </article>
-
-          <div className={styles.values}>
-            <div className={styles.valuesHeading}>
-              <div className={styles.principleMeta}>
-                <span>03</span>
-                <Heart aria-hidden="true" />
-              </div>
-              <h3>{t.about.values.title}</h3>
-            </div>
-
-            <ul className={styles.valuesList}>
-              {t.about.values.items.map((value, index) => (
-                <li key={value}>
-                  <span>{String(index + 1).padStart(2, "0")}</span>
-                  <strong>{value}</strong>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+        <AboutPrinciples />
 
         <div className={styles.sectionFooter}>
           <Link

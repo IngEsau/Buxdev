@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://buxdev.com/sitemap.xml

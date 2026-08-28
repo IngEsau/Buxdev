@@ -1,40 +1,29 @@
-"use client"
+import type { Metadata } from "next"
 
-import { useEffect } from "react"
-import { useThemeEffect } from "@/hooks/use-theme"
-import { Navbar } from "@/components/navbar"
-import { HeroSection } from "@/components/hero-section"
-import { AboutSection } from "@/components/about-section"
-import { ServicesSection } from "@/components/services-section"
-import { ContactSection } from "@/components/contact-section"
-import { PortfolioSection } from "@/components/portfolio-section"
-import { Footer } from "@/components/footer"
-import { FloatingChat } from "@/components/floating-chat"
-import { Toaster } from "@/components/ui/toaster"
+import { PageHero } from "@/components/page-hero"
+import { WorkPageContent } from "@/components/work-page"
+
+export const metadata: Metadata = {
+  title: "Trabajos",
+  description: "Portafolio de trabajos de BUXDEV. Próximamente se publicará una selección de proyectos destacados.",
+  alternates: {
+    canonical: "/work/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_MX",
+    siteName: "BUXDEV",
+    url: "/work/",
+    title: "Trabajos | BUXDEV",
+    description: "Próximamente: una selección de proyectos desarrollados por BUXDEV.",
+  },
+}
 
 export default function Page() {
-  useThemeEffect()
-
-  useEffect(() => {
-    const element = document.getElementById("trabajos")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }, [])
-
   return (
-    <>
-      <Navbar />
-      <main>
-        <HeroSection />
-        <AboutSection />
-        <ServicesSection />
-        <ContactSection />
-        <PortfolioSection />
-      </main>
-      <Footer />
-      <FloatingChat />
-      <Toaster />
-    </>
+    <main>
+      <PageHero page="work" />
+      <WorkPageContent />
+    </main>
   )
 }

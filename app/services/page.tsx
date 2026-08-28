@@ -1,40 +1,31 @@
-"use client"
+import type { Metadata } from "next"
 
-import { useEffect } from "react"
-import { useThemeEffect } from "@/hooks/use-theme"
-import { Navbar } from "@/components/navbar"
-import { HeroSection } from "@/components/hero-section"
-import { AboutSection } from "@/components/about-section"
-import { ServicesSection } from "@/components/services-section"
-import { ContactSection } from "@/components/contact-section"
-import { PortfolioSection } from "@/components/portfolio-section"
-import { Footer } from "@/components/footer"
-import { FloatingChat } from "@/components/floating-chat"
-import { Toaster } from "@/components/ui/toaster"
+import { PageHero } from "@/components/page-hero"
+import { ServicesPageContent } from "@/components/services-page"
+
+export const metadata: Metadata = {
+  title: "Servicios",
+  description:
+    "Páginas web, tiendas en línea, web apps, aplicaciones móviles, rediseño y SEO desarrollados por BUXDEV.",
+  alternates: {
+    canonical: "/services/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_MX",
+    siteName: "BUXDEV",
+    url: "/services/",
+    title: "Servicios | BUXDEV",
+    description:
+      "Servicios de desarrollo web, comercio electrónico, aplicaciones, rediseño y optimización para buscadores.",
+  },
+}
 
 export default function Page() {
-  useThemeEffect()
-
-  useEffect(() => {
-    const element = document.getElementById("servicios")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }, [])
-
   return (
-    <>
-      <Navbar />
-      <main>
-        <HeroSection />
-        <AboutSection />
-        <ServicesSection />
-        <ContactSection />
-        <PortfolioSection />
-      </main>
-      <Footer />
-      <FloatingChat />
-      <Toaster />
-    </>
+    <main>
+      <PageHero page="services" />
+      <ServicesPageContent />
+    </main>
   )
 }

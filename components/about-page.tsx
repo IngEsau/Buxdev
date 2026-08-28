@@ -1,27 +1,30 @@
 "use client"
 
-import Link from "next/link"
-import { ArrowUpRight, Eye, Heart, Target } from "lucide-react"
+import { Eye, Heart, Target } from "lucide-react"
 
 import { useLanguage } from "@/hooks/use-language"
 
-import styles from "./about-section.module.css"
+import styles from "./about-page.module.css"
 
-export function AboutSection() {
+export function AboutPageContent() {
   const { t } = useLanguage()
 
   return (
-    <section id="nosotros" className={styles.section} aria-labelledby="home-about-title">
-      <div className={styles.container}>
-        <div className={styles.intro}>
-          <div className={styles.identity}>
-            <p className={styles.eyebrow}>{t.about.title}</p>
-            <h2 id="home-about-title" className={styles.title}>
-              {t.about.company}
-            </h2>
+    <section className={styles.about} aria-labelledby="about-story-title">
+      <div className={styles.grid} aria-hidden="true" />
+      <div className={styles.inner}>
+        <div className={styles.introduction}>
+          <div className={styles.index} aria-hidden="true">
+            <span>01</span>
+            <i />
+            <span>BUXDEV</span>
           </div>
 
-          <p className={styles.lead}>{t.about.experience}</p>
+          <div className={styles.introCopy}>
+            <p className={styles.kicker}>{t.about.title}</p>
+            <h2 id="about-story-title">{t.about.company}</h2>
+            <p className={styles.lead}>{t.about.experience}</p>
+          </div>
         </div>
 
         <div className={styles.principles}>
@@ -47,7 +50,7 @@ export function AboutSection() {
             </div>
           </article>
 
-          <div className={styles.values}>
+          <article className={`${styles.principle} ${styles.values}`}>
             <div className={styles.valuesHeading}>
               <div className={styles.principleMeta}>
                 <span>03</span>
@@ -55,27 +58,16 @@ export function AboutSection() {
               </div>
               <h3>{t.about.values.title}</h3>
             </div>
-
-            <ul className={styles.valuesList}>
+            <ol>
               {t.about.values.items.map((value, index) => (
                 <li key={value}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <strong>{value}</strong>
+                  <i aria-hidden="true" />
                 </li>
               ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className={styles.sectionFooter}>
-          <Link
-            href="/about"
-            className={styles.sectionLink}
-            aria-label={`${t.nav.nosotros}: ${t.about.company}`}
-          >
-            <span>{t.nav.nosotros}</span>
-            <ArrowUpRight aria-hidden="true" />
-          </Link>
+            </ol>
+          </article>
         </div>
       </div>
     </section>

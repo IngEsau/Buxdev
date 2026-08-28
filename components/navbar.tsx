@@ -33,6 +33,7 @@ export function Navbar() {
   const pathname = usePathname()
   const { t, language, setLanguage } = useLanguage()
   const { theme, toggleTheme } = useTheme()
+  const normalizedPathname = pathname.replace(/\/+$/, "") || "/"
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 16)
@@ -96,35 +97,35 @@ export function Navbar() {
         <Link
           href="/"
           className={styles.logoLink}
-          aria-label="BUXDEV — Inicio"
+          aria-label={t.header.homeLabel}
           onClick={() => setIsOpen(false)}
         >
           <Image
-            src="/darklogo.svg"
+            src="/brand/buxdev/logo-on-light.svg"
             alt=""
-            width={152}
-            height={100}
+            width={613}
+            height={404}
             className={styles.logoOnLight}
             priority
           />
           <Image
-            src="/buxdev-logo-on-dark.svg"
+            src="/brand/buxdev/logo-on-dark.svg"
             alt=""
-            width={152}
-            height={100}
+            width={613}
+            height={404}
             className={styles.logoOnDark}
             priority
           />
         </Link>
 
-        <nav className={styles.desktopNav} aria-label="Navegación principal">
+        <nav className={styles.desktopNav} aria-label={t.header.primaryNavigation}>
           {navigation.map((item) => (
             <Link
               key={item.key}
               href={item.href}
               className={styles.navLink}
               onClick={() => setIsOpen(false)}
-              aria-current={pathname === item.href ? "page" : undefined}
+              aria-current={normalizedPathname === item.href ? "page" : undefined}
             >
               {t.nav[item.key]}
             </Link>
@@ -164,7 +165,7 @@ export function Navbar() {
         id="mobile-navigation"
         className={styles.mobileMenu}
         data-open={isOpen}
-        aria-label="Navegación móvil"
+        aria-label={t.header.mobileNavigation}
         aria-hidden={!isOpen}
       >
         <div className={styles.mobileLinks}>
@@ -175,7 +176,7 @@ export function Navbar() {
               className={styles.mobileLink}
               onClick={() => setIsOpen(false)}
               tabIndex={isOpen ? 0 : -1}
-              aria-current={pathname === item.href ? "page" : undefined}
+              aria-current={normalizedPathname === item.href ? "page" : undefined}
             >
               <span>{t.nav[item.key]}</span>
               <ArrowUpRight aria-hidden="true" />

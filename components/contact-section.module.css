@@ -1,0 +1,453 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  padding-block: clamp(5.5rem, 10vw, 9rem);
+  border-block: 1px solid var(--border);
+  background:
+    linear-gradient(180deg, color-mix(in srgb, var(--background-elevated) 72%, transparent), transparent 32%),
+    var(--background);
+}
+
+.technicalGrid,
+.ambientLight {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+}
+
+.technicalGrid {
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 4rem 4rem;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, rgb(0 0 0 / 72%) 20%, rgb(0 0 0 / 24%) 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, rgb(0 0 0 / 72%) 20%, rgb(0 0 0 / 24%) 82%, transparent);
+  opacity: 0.36;
+}
+
+.ambientLight {
+  z-index: -1;
+  background:
+    radial-gradient(circle at 14% 32%, color-mix(in srgb, var(--brand) 24%, transparent), transparent 30rem),
+    radial-gradient(circle at 82% 62%, color-mix(in srgb, var(--brand) 12%, transparent), transparent 28rem);
+  opacity: 0.78;
+}
+
+.container {
+  width: min(100% - (2 * var(--page-gutter)), var(--container-max));
+  margin-inline: auto;
+}
+
+.layout {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+  gap: clamp(3rem, 7vw, 7rem);
+  align-items: start;
+}
+
+.intro {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 100%;
+  flex-direction: column;
+  padding-block: clamp(0.75rem, 2vw, 1.75rem);
+}
+
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  width: fit-content;
+  margin: 0 0 clamp(1.5rem, 4vw, 3rem);
+  color: var(--foreground-muted);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.68rem;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.eyebrow > span {
+  width: 1.8rem;
+  height: 1px;
+  background: var(--brand-hover);
+  box-shadow: 0 0 0.7rem color-mix(in srgb, var(--brand) 80%, transparent);
+}
+
+.copy h2 {
+  max-width: 9ch;
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(2.45rem, 4.6vw, 4.8rem);
+  font-weight: 650;
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.copy > p {
+  max-width: 34rem;
+  margin: 1.5rem 0 0;
+  color: var(--foreground-muted);
+  font-size: clamp(0.98rem, 1.4vw, 1.08rem);
+  line-height: 1.75;
+}
+
+.contactList {
+  display: grid;
+  gap: 0;
+  margin: clamp(2.5rem, 6vw, 5rem) 0 0;
+  border-top: 1px solid var(--border);
+  font-style: normal;
+}
+
+.contactLink {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.9rem;
+  align-items: center;
+  min-height: 5.25rem;
+  padding-block: 0.85rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground);
+  text-decoration: none;
+  transition:
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.contactIcon {
+  display: grid;
+  width: 2.55rem;
+  height: 2.55rem;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  color: var(--brand-hover);
+}
+
+.contactIcon svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.contactLink > span:nth-child(2) {
+  display: grid;
+  min-width: 0;
+  gap: 0.35rem;
+}
+
+.contactLink small {
+  color: var(--foreground-subtle);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.62rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.contactLink strong {
+  overflow: hidden;
+  font-size: 0.88rem;
+  font-weight: 550;
+  letter-spacing: -0.01em;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.contactLink > svg {
+  width: 1rem;
+  height: 1rem;
+  color: var(--foreground-subtle);
+  transition:
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.contactLink:hover {
+  border-color: var(--border-strong);
+  color: var(--brand-hover);
+}
+
+.contactLink:hover > svg {
+  color: var(--brand-hover);
+  transform: translate(0.14rem, -0.14rem);
+}
+
+.signal {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 2.5rem;
+}
+
+.signal span {
+  width: 0.22rem;
+  height: 0.22rem;
+  border-radius: 999px;
+  background: var(--border-strong);
+}
+
+.signal span:first-child {
+  width: 2.5rem;
+  border-radius: 0;
+  background: linear-gradient(90deg, var(--brand), transparent);
+}
+
+.formPanel {
+  position: relative;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--surface-hover) 66%, transparent), transparent 38%),
+    color-mix(in srgb, var(--surface) 94%, transparent);
+  box-shadow:
+    0 2rem 5rem rgb(0 0 0 / 20%),
+    inset 0 1px rgb(255 255 255 / 3%);
+}
+
+.formPanel::after {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(circle at 100% 0%, color-mix(in srgb, var(--brand) 13%, transparent), transparent 36%);
+  content: "";
+  pointer-events: none;
+}
+
+.formPanelHeader {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: center;
+  min-height: 6.25rem;
+  padding: 1.25rem clamp(1.25rem, 3vw, 2.25rem);
+  border-bottom: 1px solid var(--border);
+}
+
+.formIndex {
+  display: grid;
+  width: 2.25rem;
+  height: 2.25rem;
+  place-items: center;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  color: var(--foreground-subtle);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.62rem;
+}
+
+.formPanelHeader p {
+  margin: 0 0 0.35rem;
+  color: var(--foreground-subtle);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.formPanelHeader h3 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(1.05rem, 2vw, 1.3rem);
+  font-weight: 600;
+  letter-spacing: -0.025em;
+}
+
+.formStatus {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 999px;
+  background: var(--brand-hover);
+  box-shadow: 0 0 0.8rem var(--brand-hover);
+}
+
+.form {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  gap: 1.4rem;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+}
+
+.field {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.field label {
+  color: var(--foreground-muted);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.66rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.selectTrigger,
+.input,
+.textarea {
+  width: 100%;
+  border-color: var(--border-strong);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--background-elevated) 84%, transparent);
+  color: var(--foreground);
+  box-shadow: inset 0 1px rgb(255 255 255 / 2%);
+}
+
+.selectTrigger,
+.input {
+  height: 3.25rem;
+  padding-inline: 1rem;
+}
+
+.textarea {
+  min-height: 9.75rem;
+  resize: vertical;
+  padding: 0.95rem 1rem;
+  line-height: 1.6;
+}
+
+.selectTrigger:hover,
+.input:hover,
+.textarea:hover {
+  border-color: color-mix(in srgb, var(--foreground) 22%, transparent);
+}
+
+.selectTrigger:focus-visible,
+.input:focus-visible,
+.textarea:focus-visible {
+  border-color: var(--brand-hover);
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+.phoneField {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  gap: 0.75rem;
+}
+
+.countryCode {
+  width: 100%;
+}
+
+.submitButton {
+  width: 100%;
+  height: 3.35rem;
+  margin-top: 0.2rem;
+  border: 1px solid color-mix(in srgb, var(--brand-hover) 72%, white 8%);
+  border-radius: var(--radius-md);
+  background: var(--brand);
+  color: #ffffff;
+  font-weight: 650;
+  box-shadow:
+    0 0.9rem 2.5rem color-mix(in srgb, var(--brand) 24%, transparent),
+    inset 0 1px rgb(255 255 255 / 10%);
+}
+
+.submitButton:hover {
+  background: var(--brand-hover);
+}
+
+.submitButton svg {
+  transition: transform 180ms ease;
+}
+
+.submitButton:hover svg {
+  transform: translate(0.12rem, -0.12rem);
+}
+
+@media (max-width: 60rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 3.5rem;
+  }
+
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.05fr) minmax(16rem, 0.95fr);
+    column-gap: clamp(2.5rem, 8vw, 5rem);
+  }
+
+  .eyebrow,
+  .copy {
+    grid-column: 1;
+  }
+
+  .contactList {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+    align-self: end;
+    margin-top: 0;
+  }
+
+  .signal {
+    display: none;
+  }
+}
+
+@media (max-width: 43.75rem) {
+  .section {
+    padding-block: clamp(4.75rem, 18vw, 6.5rem);
+  }
+
+  .technicalGrid {
+    background-size: 3rem 3rem;
+  }
+
+  .intro {
+    display: flex;
+  }
+
+  .copy h2 {
+    max-width: 11ch;
+    font-size: clamp(2.35rem, 11vw, 3.5rem);
+  }
+
+  .contactList {
+    margin-top: 2.75rem;
+  }
+
+  .formPanelHeader {
+    min-height: 5.5rem;
+  }
+
+  .form {
+    gap: 1.25rem;
+  }
+}
+
+@media (max-width: 25rem) {
+  .phoneField {
+    grid-template-columns: 7.25rem minmax(0, 1fr);
+    gap: 0.5rem;
+  }
+
+  .contactLink {
+    gap: 0.7rem;
+  }
+
+  .contactIcon {
+    width: 2.35rem;
+    height: 2.35rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .contactLink,
+  .contactLink > svg,
+  .submitButton svg {
+    transition: none;
+  }
+}

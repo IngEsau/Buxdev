@@ -9,11 +9,53 @@ export const translations = {
     },
     header: {
       projectCta: "Hablemos",
+      homeLabel: "BUXDEV — Inicio",
+      primaryNavigation: "Navegación principal",
+      mobileNavigation: "Navegación móvil",
       themeToLight: "Cambiar a tema claro",
       themeToDark: "Cambiar a tema oscuro",
       language: "Cambiar idioma",
       openMenu: "Abrir menú",
       closeMenu: "Cerrar menú",
+    },
+    common: {
+      learnMore: "Conocer más",
+      viewAbout: "Conocer BUXDEV",
+      viewServices: "Ver todos los servicios",
+      viewWork: "Ver trabajos",
+      startProject: "Cuéntanos tu proyecto",
+      comingSoon: "Próximamente",
+      service: "Servicio",
+    },
+    pages: {
+      about: {
+        eyebrow: "BUXDEV / Nosotros",
+        titleStart: "Ingeniería de software",
+        titleAccent: "con excelencia.",
+        description:
+          "Más de dos años desarrollando software multiplataforma con conocimiento, precisión y compromiso.",
+      },
+      services: {
+        eyebrow: "BUXDEV / Servicios",
+        titleStart: "Tecnología para",
+        titleAccent: "hacer avanzar tu negocio.",
+        description:
+          "Desarrollamos sitios, comercios y aplicaciones; también modernizamos plataformas y optimizamos su presencia en buscadores.",
+      },
+      work: {
+        eyebrow: "BUXDEV / Trabajos",
+        titleStart: "Nuestros proyectos,",
+        titleAccent: "próximamente en este espacio.",
+        description:
+          "Estamos preparando una selección de trabajos para presentarlos con el contexto y el detalle que merecen.",
+      },
+      contact: {
+        eyebrow: "BUXDEV / Contacto",
+        titleStart: "Hablemos de",
+        titleAccent: "tu próximo proyecto.",
+        description:
+          "Cuéntanos qué necesitas y comparte el contexto necesario para comenzar la conversación.",
+      },
     },
     hero: {
       title: "BUXDEV",
@@ -37,7 +79,7 @@ export const translations = {
       title: "Nosotros",
       company: "BUXDEV",
       experience:
-        "Contamos con más de 2 años dedicándonos al desarrollo de software multiplataforma, con ingenieros de gran conocimiento comprometidos con la excelencia.",
+        "Contamos con más de 3 años dedicándonos al desarrollo de software multiplataforma, con ingenieros de gran conocimiento comprometidos con la excelencia.",
       mission: {
         title: "Nuestra Misión",
         text: "Ayudar a pequeñas, medianas y grandes empresas a llegar a más público objetivo mediante soluciones tecnológicas innovadoras.",
@@ -91,26 +133,45 @@ export const translations = {
         question: "Duda",
       },
       phone: "Número de celular",
+      countryCode: "Código de país",
       email: "Correo electrónico",
+      emailPlaceholder: "tu@email.com",
       description: "Descripción",
       descriptionPlaceholder: "Cuéntanos sobre tu proyecto...",
       submit: "Enviar",
+      submitting: "Enviando...",
+      directTitle: "Contacto directo",
+      directDescription:
+        "Si lo prefieres, también puedes escribirnos o llamarnos mediante nuestros canales de contacto.",
+      successTitle: "¡Mensaje enviado!",
+      successDescription: "Nos pondremos en contacto contigo pronto.",
+      errorTitle: "No pudimos enviar el mensaje",
+      errorDescription: "Intenta nuevamente o utiliza nuestros datos de contacto directo.",
     },
     portfolio: {
       title: "Nuestros Trabajos",
-      subtitle: "Proyectos que hemos desarrollado",
+      subtitle: "Una selección en preparación",
       empty: "Próximamente mostraremos nuestros proyectos destacados",
+      stateLabel: "Portafolio en preparación",
+      stateTitle: "Estamos preparando una selección de trabajos.",
+      stateDescription:
+        "Publicaremos cada proyecto cuando podamos presentarlo con información real y suficiente.",
     },
     footer: {
       services: "Servicios",
       company: "Empresa",
       contact: "Contacto",
+      navigationLabel: "Navegación del pie de página",
       email: "info@buxdev.com",
       phone: "+52 734-126-7957",
-      rights: "© 2025 BUXDEV. Todos los derechos reservados.",
+      rights: "Todos los derechos reservados.",
+      signature: "SOFTWARE / PRODUCTO / MÉXICO",
     },
     chat: {
       title: "Ayuda",
+      open: "Abrir ayuda",
+      close: "Cerrar ayuda",
+      back: "Volver a las preguntas",
       questions: {
         whoWeAre: "¿Quiénes somos?",
         whatWeDo: "¿Qué hacemos?",
@@ -118,7 +179,7 @@ export const translations = {
       },
       answers: {
         whoWeAre:
-          "Somos BUXDEV, una empresa de desarrollo de software con más de 2 años de experiencia ayudando a empresas a crecer digitalmente.",
+          "Somos BUXDEV, una empresa de desarrollo de software con más de 3 años de experiencia ayudando a empresas a crecer digitalmente.",
         whatWeDo:
           "Desarrollamos páginas web, tiendas en línea, aplicaciones web y móviles, además de servicios de rediseño y SEO.",
         contact: "Contáctanos: info@buxdev.com | +52 734-126-7957",
@@ -135,11 +196,53 @@ export const translations = {
     },
     header: {
       projectCta: "Let’s talk",
+      homeLabel: "BUXDEV — Home",
+      primaryNavigation: "Primary navigation",
+      mobileNavigation: "Mobile navigation",
       themeToLight: "Switch to light theme",
       themeToDark: "Switch to dark theme",
       language: "Change language",
       openMenu: "Open menu",
       closeMenu: "Close menu",
+    },
+    common: {
+      learnMore: "Learn more",
+      viewAbout: "Meet BUXDEV",
+      viewServices: "View all services",
+      viewWork: "View work",
+      startProject: "Tell us about your project",
+      comingSoon: "Coming soon",
+      service: "Service",
+    },
+    pages: {
+      about: {
+        eyebrow: "BUXDEV / About",
+        titleStart: "Software engineering",
+        titleAccent: "with excellence.",
+        description:
+          "Over two years building cross-platform software with knowledge, precision, and commitment.",
+      },
+      services: {
+        eyebrow: "BUXDEV / Services",
+        titleStart: "Technology to",
+        titleAccent: "move your business forward.",
+        description:
+          "We build websites, commerce experiences, and applications; we also modernize platforms and improve their search presence.",
+      },
+      work: {
+        eyebrow: "BUXDEV / Work",
+        titleStart: "Our projects,",
+        titleAccent: "coming soon to this space.",
+        description:
+          "We are preparing a selection of work to present it with the context and detail it deserves.",
+      },
+      contact: {
+        eyebrow: "BUXDEV / Contact",
+        titleStart: "Let’s talk about",
+        titleAccent: "your next project.",
+        description:
+          "Tell us what you need and share the context required to start the conversation.",
+      },
     },
     hero: {
       title: "BUXDEV",
@@ -163,7 +266,7 @@ export const translations = {
       title: "About Us",
       company: "BUXDEV",
       experience:
-        "We have over 2 years dedicated to multiplatform software development, with highly knowledgeable engineers committed to excellence.",
+        "We have over 3 years dedicated to multiplatform software development, with highly knowledgeable engineers committed to excellence.",
       mission: {
         title: "Our Mission",
         text: "Help small, medium and large companies reach more target audiences through innovative technological solutions.",
@@ -217,26 +320,45 @@ export const translations = {
         question: "Question",
       },
       phone: "Phone number",
+      countryCode: "Country code",
       email: "Email",
+      emailPlaceholder: "you@email.com",
       description: "Description",
       descriptionPlaceholder: "Tell us about your project...",
       submit: "Submit",
+      submitting: "Sending...",
+      directTitle: "Direct contact",
+      directDescription:
+        "If you prefer, you can also email or call us through our direct contact channels.",
+      successTitle: "Message sent",
+      successDescription: "We will get in touch with you soon.",
+      errorTitle: "We could not send the message",
+      errorDescription: "Try again or use our direct contact details.",
     },
     portfolio: {
       title: "Our Work",
-      subtitle: "Projects we have developed",
+      subtitle: "A selection in progress",
       empty: "Coming soon: our featured projects",
+      stateLabel: "Portfolio in progress",
+      stateTitle: "We are preparing a selection of work.",
+      stateDescription:
+        "We will publish each project when we can present it with real and sufficient information.",
     },
     footer: {
       services: "Services",
       company: "Company",
       contact: "Contact",
+      navigationLabel: "Footer navigation",
       email: "info@buxdev.com",
       phone: "+52 734-126-7957",
-      rights: "© 2025 BUXDEV. All rights reserved.",
+      rights: "All rights reserved.",
+      signature: "SOFTWARE / PRODUCT / MEXICO",
     },
     chat: {
       title: "Help",
+      open: "Open help",
+      close: "Close help",
+      back: "Back to questions",
       questions: {
         whoWeAre: "Who are we?",
         whatWeDo: "What do we do?",
@@ -244,7 +366,7 @@ export const translations = {
       },
       answers: {
         whoWeAre:
-          "We are BUXDEV, a software development company with over 2 years of experience helping businesses grow digitally.",
+          "We are BUXDEV, a software development company with over 3 years of experience helping businesses grow digitally.",
         whatWeDo: "We develop websites, online stores, web and mobile applications, plus redesign and SEO services.",
         contact: "Contact us: info@buxdev.com | +52 734-126-7957",
       },

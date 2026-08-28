@@ -1,0 +1,677 @@
+.section {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(5.5rem, 11vw, 10rem) var(--page-gutter);
+  overflow: hidden;
+  background:
+    radial-gradient(circle at 90% 16%, rgb(35 86 167 / 9%), transparent 28rem),
+    var(--background-elevated);
+}
+
+.section::before,
+.section::after {
+  position: absolute;
+  left: 50%;
+  z-index: -1;
+  content: "";
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.section::before {
+  inset-block: 0;
+  width: min(calc(100% - (2 * var(--page-gutter))), var(--container-max));
+  border-right: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+}
+
+.section::after {
+  inset-block: 0;
+  width: min(100%, 76rem);
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 6rem 6rem;
+  opacity: 0.18;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 88%, transparent);
+}
+
+.container {
+  width: min(100%, var(--container-max));
+  margin-inline: auto;
+}
+
+.header {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.58fr);
+  gap: clamp(2rem, 7vw, 7rem);
+  align-items: end;
+  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+}
+
+.eyebrow {
+  margin: 0 0 1.25rem;
+  color: var(--foreground-subtle);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  font-weight: 550;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.eyebrow::before {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  margin-right: 0.65rem;
+  border-radius: 50%;
+  vertical-align: middle;
+  content: "";
+  background: var(--brand);
+  box-shadow: 0 0 0 0.22rem var(--brand-soft);
+}
+
+.title {
+  max-width: 52rem;
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(2.7rem, 6vw, 5.25rem);
+  font-weight: 720;
+  letter-spacing: -0.068em;
+  line-height: 0.98;
+  text-wrap: balance;
+}
+
+.subtitle {
+  max-width: 29rem;
+  margin: 0;
+  color: var(--foreground-muted);
+  font-size: clamp(1rem, 1.6vw, 1.16rem);
+  letter-spacing: -0.025em;
+  line-height: 1.7;
+}
+
+.bento {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.service {
+  position: relative;
+  display: flex;
+  min-width: 0;
+  min-height: 25rem;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: clamp(1.4rem, 2.7vw, 2.25rem);
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 3.5%), transparent 34%),
+    color-mix(in srgb, var(--surface) 82%, transparent);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 4%),
+    0 28px 70px rgb(0 0 0 / 10%);
+  transition:
+    border-color 220ms ease,
+    background-color 220ms ease,
+    transform 220ms ease;
+}
+
+.service::after {
+  position: absolute;
+  inset: 0;
+  content: "";
+  background: radial-gradient(circle at 65% 20%, rgb(35 86 167 / 9%), transparent 52%);
+  pointer-events: none;
+}
+
+.service:hover {
+  border-color: color-mix(in srgb, var(--brand) 38%, var(--border-strong));
+  background-color: var(--surface-hover);
+  transform: translateY(-2px);
+}
+
+.spanSeven {
+  grid-column: span 7;
+}
+
+.spanFive {
+  grid-column: span 5;
+}
+
+.spanFour {
+  grid-column: span 4;
+}
+
+.spanEight {
+  grid-column: span 8;
+}
+
+.serviceTop,
+.serviceContent {
+  position: relative;
+  z-index: 2;
+}
+
+.serviceTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: var(--foreground-subtle);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.625rem;
+  letter-spacing: 0.08em;
+}
+
+.serviceIcon {
+  display: inline-flex;
+  width: 2.35rem;
+  height: 2.35rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: rgb(255 255 255 / 2%);
+  color: color-mix(in srgb, var(--brand) 72%, var(--foreground));
+}
+
+.serviceIcon svg {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 1.45;
+}
+
+.visual {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 29rem);
+  height: 11.5rem;
+  align-self: center;
+  margin-block: 1rem;
+  transition: transform 260ms ease;
+}
+
+.service:hover .visual {
+  transform: translateY(-0.2rem);
+}
+
+.serviceContent h3 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(1.35rem, 2.4vw, 2rem);
+  font-weight: 630;
+  letter-spacing: -0.045em;
+  line-height: 1.08;
+}
+
+.serviceContent p {
+  max-width: 33rem;
+  margin: 0.75rem 0 0;
+  color: var(--foreground-muted);
+  font-size: 0.9rem;
+  letter-spacing: -0.018em;
+  line-height: 1.62;
+}
+
+.browserWindow,
+.appWindow,
+.productWindow,
+.redesignWindow,
+.searchWindow {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--background-elevated) 90%, transparent);
+  box-shadow: 0 18px 48px rgb(0 0 0 / 18%);
+}
+
+.windowBar {
+  display: flex;
+  height: 2rem;
+  align-items: center;
+  gap: 0.3rem;
+  padding-inline: 0.75rem;
+  border-bottom: 1px solid var(--border);
+}
+
+.windowBar span {
+  width: 0.28rem;
+  height: 0.28rem;
+  border-radius: 50%;
+  background: var(--foreground-subtle);
+  opacity: 0.48;
+}
+
+.windowBar span:first-child {
+  background: var(--brand-hover);
+  opacity: 0.9;
+}
+
+.browserBody {
+  display: grid;
+  grid-template-columns: 4rem 1fr;
+  height: calc(100% - 2rem);
+}
+
+.browserSide,
+.appSide {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 1rem 0.7rem;
+  border-right: 1px solid var(--border);
+}
+
+.browserSide span,
+.appSide span,
+.copyLines span,
+.resultLines span {
+  height: 0.28rem;
+  border-radius: 999px;
+  background: var(--foreground-subtle);
+  opacity: 0.25;
+}
+
+.browserSide span:first-child,
+.appSide span:first-child {
+  background: var(--brand-hover);
+  opacity: 0.75;
+}
+
+.browserMain {
+  padding: 1rem;
+}
+
+.copyLines {
+  display: flex;
+  width: 58%;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.copyLines span:first-child {
+  height: 0.5rem;
+  background: var(--foreground-muted);
+  opacity: 0.45;
+}
+
+.browserCards {
+  display: grid;
+  grid-template-columns: 1.35fr 0.65fr;
+  gap: 0.55rem;
+  height: 4.1rem;
+  margin-top: 1rem;
+}
+
+.browserCards span {
+  border: 1px solid var(--border);
+  border-radius: calc(var(--radius-sm) - 0.15rem);
+  background: linear-gradient(135deg, var(--brand-soft), transparent);
+}
+
+.productWindow {
+  display: grid;
+  grid-template-columns: 1fr 0.8fr;
+  padding: 1rem;
+  gap: 1rem;
+}
+
+.productPreview {
+  position: relative;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background:
+    radial-gradient(circle at 50% 44%, rgb(35 86 167 / 28%), transparent 2.8rem),
+    linear-gradient(135deg, rgb(35 86 167 / 10%), transparent);
+}
+
+.productPreview::before,
+.productPreview::after {
+  position: absolute;
+  border: 1px solid color-mix(in srgb, var(--brand) 45%, transparent);
+  border-radius: 50%;
+  content: "";
+}
+
+.productPreview::before {
+  inset: 25%;
+}
+
+.productPreview::after {
+  inset: 38%;
+  background: var(--brand-soft);
+}
+
+.checkout {
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.checkout span {
+  height: 0.35rem;
+  border-radius: 999px;
+  background: var(--foreground-subtle);
+  opacity: 0.3;
+}
+
+.checkout span:nth-child(2) {
+  width: 70%;
+}
+
+.checkout span:last-child {
+  height: 1.8rem;
+  margin-top: 0.35rem;
+  background: var(--brand);
+  opacity: 0.72;
+}
+
+.appWindow {
+  display: grid;
+  grid-template-columns: 4.5rem 1fr;
+}
+
+.appMain {
+  padding: 1rem;
+}
+
+.appMetric {
+  width: 44%;
+  height: 1.2rem;
+  border-radius: 0.35rem;
+  background: linear-gradient(90deg, var(--brand-soft), transparent);
+}
+
+.appGraph {
+  position: relative;
+  height: 5rem;
+  margin-top: 1rem;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background-image: linear-gradient(to top, var(--border) 1px, transparent 1px);
+  background-size: 100% 1.25rem;
+}
+
+.appGraph::before {
+  position: absolute;
+  right: -10%;
+  bottom: 0.3rem;
+  left: -10%;
+  height: 2.4rem;
+  content: "";
+  border-top: 2px solid var(--brand-hover);
+  border-radius: 50%;
+  transform: rotate(-6deg);
+  box-shadow: 0 -0.4rem 1.4rem rgb(35 86 167 / 18%);
+}
+
+.phoneShell {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6.1rem;
+  height: 11rem;
+  padding: 0.35rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 1.15rem;
+  background: var(--background-elevated);
+  box-shadow:
+    0 24px 55px rgb(0 0 0 / 25%),
+    0 0 3rem rgb(35 86 167 / 11%);
+  transform: translate(-50%, -50%) rotate(3deg);
+}
+
+.phoneScreen {
+  display: flex;
+  height: 100%;
+  padding: 1.35rem 0.6rem 0.65rem;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: 0.85rem;
+  background:
+    radial-gradient(circle at 70% 16%, var(--brand-soft), transparent 3rem),
+    var(--surface);
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.phoneScreen::before {
+  position: absolute;
+  top: 0.62rem;
+  left: 50%;
+  width: 1.7rem;
+  height: 0.24rem;
+  border-radius: 999px;
+  content: "";
+  background: var(--foreground-subtle);
+  opacity: 0.45;
+  transform: translateX(-50%);
+}
+
+.phoneScreen span {
+  height: 0.4rem;
+  border-radius: 999px;
+  background: var(--foreground-subtle);
+  opacity: 0.3;
+}
+
+.phoneScreen span:first-child {
+  width: 55%;
+  height: 0.65rem;
+  background: var(--foreground-muted);
+}
+
+.phoneScreen span:nth-child(3) {
+  height: 3.4rem;
+  border: 1px solid var(--border);
+  border-radius: 0.55rem;
+  background: linear-gradient(135deg, var(--brand-soft), transparent);
+  opacity: 1;
+}
+
+.redesignWindow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.designHalf {
+  display: flex;
+  justify-content: center;
+  padding: 1.3rem;
+  flex-direction: column;
+  gap: 0.7rem;
+}
+
+.designHalf + .designHalf {
+  position: relative;
+  border-left: 1px solid color-mix(in srgb, var(--brand) 48%, var(--border));
+  background: linear-gradient(135deg, var(--brand-soft), transparent);
+}
+
+.designHalf span {
+  height: 0.35rem;
+  border-radius: 999px;
+  background: var(--foreground-subtle);
+  opacity: 0.27;
+}
+
+.designHalf span:first-child {
+  width: 56%;
+  height: 0.65rem;
+}
+
+.designHalf span:last-child {
+  height: 3.4rem;
+  border-radius: var(--radius-sm);
+}
+
+.designHalf + .designHalf span:first-child {
+  background: var(--brand-hover);
+  opacity: 0.65;
+}
+
+.searchWindow {
+  padding: 1.2rem;
+}
+
+.searchBar {
+  display: flex;
+  height: 2.25rem;
+  align-items: center;
+  gap: 0.55rem;
+  padding-inline: 0.8rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 36%, var(--border));
+  border-radius: 999px;
+  background: var(--surface);
+}
+
+.searchBar svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: var(--brand-hover);
+  stroke-width: 1.55;
+}
+
+.searchBar span {
+  width: 48%;
+  height: 0.3rem;
+  border-radius: 999px;
+  background: var(--foreground-subtle);
+  opacity: 0.32;
+}
+
+.resultLines {
+  display: flex;
+  width: 78%;
+  margin: 1.2rem 0 0 0.5rem;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.resultLines span:first-child,
+.resultLines span:nth-child(4) {
+  width: 62%;
+  height: 0.48rem;
+  background: var(--brand-hover);
+  opacity: 0.52;
+}
+
+.resultLines span:nth-child(3) {
+  width: 72%;
+}
+
+.sectionFooter {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: 2rem;
+}
+
+.sectionLink {
+  display: inline-flex;
+  min-height: 2.8rem;
+  align-items: center;
+  gap: 0.6rem;
+  padding-inline: 1.2rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 62%, transparent);
+  color: var(--foreground);
+  font-size: 0.75rem;
+  font-weight: 620;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.sectionLink svg {
+  width: 0.95rem;
+  height: 0.95rem;
+  stroke-width: 1.6;
+  transition: transform 180ms ease;
+}
+
+.sectionLink:hover {
+  border-color: color-mix(in srgb, var(--brand) 58%, var(--border-strong));
+  background: var(--surface-hover);
+  transform: translateY(-1px);
+}
+
+.sectionLink:hover svg {
+  transform: translate(0.1rem, -0.1rem);
+}
+
+@media (max-width: 64rem) {
+  .service {
+    min-height: 23rem;
+  }
+
+  .spanSeven,
+  .spanFive,
+  .spanFour,
+  .spanEight {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 48rem) {
+  .header {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    align-items: start;
+  }
+
+  .subtitle {
+    max-width: 35rem;
+  }
+
+  .bento {
+    grid-template-columns: 1fr;
+  }
+
+  .spanSeven,
+  .spanFive,
+  .spanFour,
+  .spanEight {
+    grid-column: 1;
+  }
+}
+
+@media (max-width: 40rem) {
+  .section {
+    padding-block: 5rem;
+  }
+
+  .service {
+    min-height: 22rem;
+    padding: 1.25rem;
+  }
+
+  .visual {
+    height: 10.5rem;
+  }
+
+  .sectionFooter,
+  .sectionLink {
+    width: 100%;
+  }
+
+  .sectionLink {
+    justify-content: center;
+  }
+}

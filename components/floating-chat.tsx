@@ -1,14 +1,17 @@
 "use client"
 
-import { useState } from "react"
-import { MessageCircle, X } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { useEffect, useRef, useState } from "react"
+import { ArrowLeft, ArrowUpRight, MessageCircle, X } from "lucide-react"
+
 import { useLanguage } from "@/hooks/use-language"
+
+import styles from "./floating-chat.module.css"
 
 export function FloatingChat() {
   const [isOpen, setIsOpen] = useState(false)
   const [selectedQuestion, setSelectedQuestion] = useState<string | null>(null)
+  const closeButtonRef = useRef<HTMLButtonElement>(null)
+  const triggerButtonRef = useRef<HTMLButtonElement>(null)
   const { t } = useLanguage()
 
   const questions = [
@@ -17,59 +20,99 @@ export function FloatingChat() {
     { key: "contact", label: t.chat.questions.contact, answer: t.chat.answers.contact },
   ]
 
+  useEffect(() => {
+    if (!isOpen) return
+
+    closeButtonRef.current?.focus()
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape") return
+
+      setIsOpen(false)
+      setSelectedQuestion(null)
+      triggerButtonRef.current?.focus()
+    }
+
+    window.addEventListener("keydown", handleKeyDown)
+    return () => window.removeEventListener("keydown", handleKeyDown)
+  }, [isOpen])
+
+  const closeChat = () => {
+    setIsOpen(false)
+    setSelectedQuestion(null)
+    triggerButtonRef.current?.focus()
+  }
+
   return (
-    <div className="fixed bottom-6 right-6 z-50">
+    <div className={styles.chat}>
       {isOpen && (
-        <Card className="mb-4 w-80 shadow-lg">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg">{t.chat.title}</CardTitle>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => {
-                setIsOpen(false)
-                setSelectedQuestion(null)
-              }}
-              className="h-6 w-6"
+        <section
+          id="buxdev-help-panel"
+          className={styles.panel}
+          role="dialog"
+          aria-modal="false"
+          aria-labelledby="buxdev-help-title"
+        >
+          <header className={styles.panelHeader}>
+            <div>
+              <span aria-hidden="true" />
+              <h2 id="buxdev-help-title">{t.chat.title}</h2>
+            </div>
+            <button
+              ref={closeButtonRef}
+              type="button"
+              onClick={closeChat}
+              className={styles.closeButton}
+              aria-label={t.chat.close}
             >
-              <X className="h-4 w-4" />
-            </Button>
-          </CardHeader>
-          <CardContent className="space-y-2">
+              <X aria-hidden="true" />
+            </button>
+          </header>
+
+          <div className={styles.panelBody}>
             {selectedQuestion ? (
-              <div className="space-y-3">
-                <p className="text-sm text-muted-foreground">
+              <div className={styles.answer} aria-live="polite">
+                <p>
                   {questions.find((q) => q.key === selectedQuestion)?.answer}
                 </p>
-                <Button variant="outline" size="sm" onClick={() => setSelectedQuestion(null)} className="w-full">
-                  ← Volver
-                </Button>
+                <button type="button" onClick={() => setSelectedQuestion(null)} className={styles.backButton}>
+                  <ArrowLeft aria-hidden="true" />
+                  <span>{t.chat.back}</span>
+                </button>
               </div>
             ) : (
-              <div className="space-y-2">
+              <div className={styles.questions}>
                 {questions.map((question) => (
-                  <Button
+                  <button
+                    type="button"
                     key={question.key}
-                    variant="outline"
-                    className="w-full justify-start text-left h-auto py-2 bg-transparent"
+                    className={styles.question}
                     onClick={() => setSelectedQuestion(question.key)}
                   >
-                    <span className="text-sm">{question.label}</span>
-                  </Button>
+                    <span>{question.label}</span>
+                    <ArrowUpRight aria-hidden="true" />
+                  </button>
                 ))}
               </div>
             )}
-          </CardContent>
-        </Card>
+          </div>
+        </section>
       )}
 
-      <Button
-        size="icon"
-        onClick={() => setIsOpen(!isOpen)}
-        className="h-14 w-14 rounded-full shadow-lg bg-[#2c4c9b] hover:bg-[#4a6bc7] text-white"
+      <button
+        ref={triggerButtonRef}
+        type="button"
+        onClick={() => {
+          setIsOpen((current) => !current)
+          if (isOpen) setSelectedQuestion(null)
+        }}
+        className={styles.trigger}
+        aria-label={isOpen ? t.chat.close : t.chat.open}
+        aria-expanded={isOpen}
+        aria-controls="buxdev-help-panel"
       >
-        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
-      </Button>
+        {isOpen ? <X aria-hidden="true" /> : <MessageCircle aria-hidden="true" />}
+      </button>
     </div>
   )
 }

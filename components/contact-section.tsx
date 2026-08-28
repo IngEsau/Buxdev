@@ -9,10 +9,12 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
+import { ArrowUpRight, Mail, Phone, Send } from "lucide-react"
 
 import { sendEmail } from "@/services/email"
+
+import styles from "./contact-section.module.css"
 
 const countryCodes = [
   { code: "+1", country: "US/CA" },
@@ -26,6 +28,7 @@ const countryCodes = [
 export function ContactSection() {
   const { t } = useLanguage()
   const { toast } = useToast()
+  const [isSubmitting, setIsSubmitting] = useState(false)
   const [formData, setFormData] = useState({
     type: "",
     countryCode: "+52",
@@ -43,22 +46,23 @@ export function ContactSection() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (isSubmitting) return
 
-    // sendEmail pasando los datos del formulario
+    setIsSubmitting(true)
+
     try {
       await sendEmail({
-        type: `${formData.type}`,  // Asunto del email
-        email: formData.email,  // El correo que el usuario ingresa
+        type: `${formData.type}`,
+        email: formData.email,
         cellphone: `${formData.countryCode} ${formData.phone}`,
-        description: `${formData.description}\n\n`, // Contenido del correo
+        description: `${formData.description}\n\n`,
       })
 
       toast({
-        title: "¡Mensaje enviado!",
-        description: "Nos pondremos en contacto contigo pronto.",
+        title: t.contact.successTitle,
+        description: t.contact.successDescription,
       })
 
-      // Resetear el formulario
       setFormData({
         type: "",
         countryCode: "+52",
@@ -66,113 +70,178 @@ export function ContactSection() {
         email: "",
         description: "",
       })
-
     } catch (error) {
       toast({
-        title: "Error",
-        description: "Hubo un problema al enviar el mensaje. Intenta nuevamente.",
+        title: t.contact.errorTitle,
+        description: t.contact.errorDescription,
         variant: "destructive",
       })
       console.error(error)
+    } finally {
+      setIsSubmitting(false)
     }
   }
 
   return (
-    <section id="contacto" className="py-20 lg:py-32 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <div className="max-w-3xl mx-auto space-y-12">
-          {/* Header */}
-          <div className="text-center space-y-4">
-            <h2 className="text-4xl md:text-6xl font-bold text-balance">{t.contact.title}</h2>
-            <p className="text-lg md:text-xl text-muted-foreground">{t.contact.subtitle}</p>
+    <section id="contacto" className={styles.section} aria-labelledby="contact-title">
+      <div className={styles.technicalGrid} aria-hidden="true" />
+      <div className={styles.ambientLight} aria-hidden="true" />
+
+      <div className={styles.container}>
+        <div className={styles.layout}>
+          <div className={styles.intro}>
+            <p className={styles.eyebrow}>
+              <span aria-hidden="true" />
+              {t.contact.title}
+            </p>
+
+            <div className={styles.copy}>
+              <h2 id="contact-title">{t.contact.subtitle}</h2>
+              <p>{t.contact.directDescription}</p>
+            </div>
+
+            <address className={styles.contactList}>
+              <a href={`mailto:${t.footer.email}`} className={styles.contactLink}>
+                <span className={styles.contactIcon} aria-hidden="true">
+                  <Mail />
+                </span>
+                <span>
+                  <small>{t.contact.email}</small>
+                  <strong>{t.footer.email}</strong>
+                </span>
+                <ArrowUpRight aria-hidden="true" />
+              </a>
+
+              <a href={`tel:${t.footer.phone}`} className={styles.contactLink}>
+                <span className={styles.contactIcon} aria-hidden="true">
+                  <Phone />
+                </span>
+                <span>
+                  <small>{t.contact.phone}</small>
+                  <strong>{t.footer.phone}</strong>
+                </span>
+                <ArrowUpRight aria-hidden="true" />
+              </a>
+            </address>
+
+            <div className={styles.signal} aria-hidden="true">
+              <span />
+              <span />
+              <span />
+              <span />
+              <span />
+            </div>
           </div>
 
-          {/* Contact Form */}
-          <Card className="border-2">
-            <CardHeader>
-              <CardTitle>{t.contact.formTitle}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="space-y-2">
-                  <Label htmlFor="type">{t.contact.formTitle}</Label>
+          <div className={styles.formPanel}>
+            <div className={styles.formPanelHeader}>
+              <span className={styles.formIndex}>01</span>
+              <div>
+                <p>{t.contact.title}</p>
+                <h3 id="contact-form-title">{t.contact.formTitle}</h3>
+              </div>
+              <span className={styles.formStatus} aria-hidden="true" />
+            </div>
+
+            <form
+              onSubmit={handleSubmit}
+              className={styles.form}
+              aria-labelledby="contact-form-title"
+              aria-busy={isSubmitting}
+            >
+              <div className={styles.field}>
+                <Label htmlFor="type">{t.contact.formTitle}</Label>
+                <Select
+                  value={formData.type}
+                  onValueChange={(value) => setFormData({ ...formData, type: value })}
+                  disabled={isSubmitting}
+                  required
+                >
+                  <SelectTrigger id="type" className={styles.selectTrigger}>
+                    <SelectValue placeholder={t.contact.formTitle} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="cotizacion">{t.contact.options.quote}</SelectItem>
+                    <SelectItem value="informacion">{t.contact.options.info}</SelectItem>
+                    <SelectItem value="duda">{t.contact.options.question}</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className={styles.field}>
+                <Label id="phone-label" htmlFor="phone">{t.contact.phone}</Label>
+                <div className={styles.phoneField}>
                   <Select
-                    value={formData.type}
-                    onValueChange={(value) => setFormData({ ...formData, type: value })}
-                    required
+                    value={formData.countryCode}
+                    onValueChange={(value) => setFormData({ ...formData, countryCode: value })}
+                    disabled={isSubmitting}
                   >
-                    <SelectTrigger id="type">
-                      <SelectValue placeholder={t.contact.formTitle} />
+                    <SelectTrigger
+                      id="country-code"
+                      className={`${styles.selectTrigger} ${styles.countryCode}`}
+                      aria-label={t.contact.countryCode}
+                    >
+                      <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="cotizacion">{t.contact.options.quote}</SelectItem>
-                      <SelectItem value="informacion">{t.contact.options.info}</SelectItem>
-                      <SelectItem value="duda">{t.contact.options.question}</SelectItem>
+                      {countryCodes.map((item) => (
+                        <SelectItem key={item.code} value={item.code}>
+                          {item.code} {item.country}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="phone">{t.contact.phone}</Label>
-                  <div className="flex gap-2">
-                    <Select
-                      value={formData.countryCode}
-                      onValueChange={(value) => setFormData({ ...formData, countryCode: value })}
-                    >
-                      <SelectTrigger className="w-28">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countryCodes.map((item) => (
-                          <SelectItem key={item.code} value={item.code}>
-                            {item.code} {item.country}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    <Input
-                      id="phone"
-                      type="tel"
-                      value={formData.phone}
-                      onChange={(e) => handlePhoneChange(e.target.value)}
-                      placeholder="1234567890"
-                      required
-                      maxLength={10}
-                      className="flex-1"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="email">{t.contact.email}</Label>
                   <Input
-                    id="email"
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="tu@email.com"
+                    id="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => handlePhoneChange(e.target.value)}
+                    placeholder="1234567890"
                     required
+                    maxLength={10}
+                    inputMode="numeric"
+                    autoComplete="tel-national"
+                    className={styles.input}
+                    disabled={isSubmitting}
                   />
                 </div>
+              </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="description">{t.contact.description}</Label>
-                  <Textarea
-                    id="description"
-                    value={formData.description}
-                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                    placeholder={t.contact.descriptionPlaceholder}
-                    required
-                    rows={5}
-                  />
-                </div>
+              <div className={styles.field}>
+                <Label htmlFor="email">{t.contact.email}</Label>
+                <Input
+                  id="email"
+                  type="email"
+                  value={formData.email}
+                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  placeholder={t.contact.emailPlaceholder}
+                  required
+                  autoComplete="email"
+                  className={styles.input}
+                  disabled={isSubmitting}
+                />
+              </div>
 
-                <Button type="submit" className="w-full bg-[#2c4c9b] hover:bg-[#4a6bc7] text-white">
-                  {t.contact.submit}
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+              <div className={styles.field}>
+                <Label htmlFor="description">{t.contact.description}</Label>
+                <Textarea
+                  id="description"
+                  value={formData.description}
+                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  placeholder={t.contact.descriptionPlaceholder}
+                  required
+                  rows={5}
+                  className={styles.textarea}
+                  disabled={isSubmitting}
+                />
+              </div>
+
+              <Button type="submit" className={styles.submitButton} disabled={isSubmitting}>
+                <span>{isSubmitting ? t.contact.submitting : t.contact.submit}</span>
+                <Send aria-hidden="true" />
+              </Button>
+            </form>
+          </div>
         </div>
       </div>
     </section>

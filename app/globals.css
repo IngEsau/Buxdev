@@ -31,7 +31,7 @@
 
   --container-max: 75rem;
   --page-gutter: clamp(1.25rem, 4vw, 2.5rem);
-  --header-height: 5rem;
+  --header-height: 5.5rem;
 
   /* shadcn/Tailwind compatibility */
   --card: var(--surface);
@@ -226,8 +226,10 @@
   *::before,
   *::after {
     scroll-behavior: auto !important;
+    animation-delay: 0ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+    transition-delay: 0ms !important;
     transition-duration: 0.01ms !important;
   }
 }

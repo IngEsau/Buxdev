@@ -1,0 +1,220 @@
+.footer {
+  position: relative;
+  padding: clamp(4rem, 8vw, 7rem) var(--page-gutter) 2rem;
+  overflow: hidden;
+  border-top: 1px solid var(--border);
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--background-elevated) 88%, transparent), var(--background)),
+    var(--background);
+}
+
+.grid {
+  position: absolute;
+  inset: 0 auto 0 50%;
+  width: min(calc(100% - (2 * var(--page-gutter))), var(--container-max));
+  border-right: 1px solid var(--border);
+  border-left: 1px solid var(--border);
+  background-image: linear-gradient(to right, var(--border) 1px, transparent 1px);
+  background-size: clamp(4.25rem, 7.5vw, 7.5rem) 100%;
+  opacity: 0.34;
+  transform: translateX(-50%);
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 92%);
+  mask-image: linear-gradient(to bottom, #000, transparent 92%);
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  width: min(100%, var(--container-max));
+  margin-inline: auto;
+}
+
+.top {
+  display: grid;
+  grid-template-columns: minmax(16rem, 1.25fr) minmax(10rem, 0.65fr) minmax(17rem, 0.8fr);
+  gap: clamp(3rem, 7vw, 7rem);
+  padding-bottom: clamp(3rem, 6vw, 5rem);
+}
+
+.brandBlock {
+  max-width: 28rem;
+}
+
+.logoLink {
+  position: relative;
+  display: block;
+  width: 7rem;
+  height: 4.9rem;
+  margin-bottom: 1.25rem;
+  border-radius: var(--radius-sm);
+  transition: opacity 180ms ease;
+}
+
+.logoLink:hover {
+  opacity: 0.78;
+}
+
+.logoOnLight,
+.logoOnDark {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 7rem;
+  height: auto;
+  transform: translateY(-50%);
+}
+
+.logoOnDark {
+  display: none;
+}
+
+:global(.dark) .logoOnLight {
+  display: none;
+}
+
+:global(.dark) .logoOnDark {
+  display: block;
+}
+
+.brandBlock > p {
+  max-width: 26rem;
+  margin: 0;
+  color: var(--foreground-muted);
+  font-size: 0.85rem;
+  letter-spacing: -0.02em;
+  line-height: 1.7;
+}
+
+.navigation > p,
+.contact > p {
+  margin: 0 0 1.2rem;
+  color: var(--foreground-subtle);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.navigation ul {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem 1.5rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.navigation a {
+  color: var(--foreground-muted);
+  font-size: 0.8rem;
+  font-weight: 520;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.navigation a:hover {
+  color: var(--foreground);
+}
+
+.contact {
+  min-width: 0;
+}
+
+.contact > a {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 3.4rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground-muted);
+  font-size: 0.78rem;
+  text-decoration: none;
+  transition:
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.contact > a:first-of-type {
+  border-top: 1px solid var(--border);
+}
+
+.contact > a svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  stroke-width: 1.45;
+}
+
+.contact > a svg:last-child {
+  color: var(--foreground-subtle);
+  transition: transform 180ms ease;
+}
+
+.contact > a:hover {
+  border-color: var(--border-strong);
+  color: var(--foreground);
+}
+
+.contact > a:hover svg:last-child {
+  transform: translate(0.1rem, -0.1rem);
+}
+
+.bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  min-height: 4rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-strong);
+  color: var(--foreground-subtle);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bottom p {
+  margin: 0;
+}
+
+.bottom > span {
+  text-align: right;
+}
+
+@media (max-width: 56rem) {
+  .top {
+    grid-template-columns: 1.15fr 0.85fr;
+  }
+
+  .brandBlock {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 37.5rem) {
+  .footer {
+    padding-right: 1rem;
+    padding-left: 1rem;
+  }
+
+  .top {
+    grid-template-columns: 1fr;
+    gap: 2.75rem;
+  }
+
+  .brandBlock {
+    grid-column: auto;
+  }
+
+  .bottom {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .bottom > span {
+    text-align: left;
+  }
+}

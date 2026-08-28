@@ -1,32 +1,17 @@
-"use client"
-
-import { useThemeEffect } from "@/hooks/use-theme"
-import { Navbar } from "@/components/navbar"
-import { HeroSection } from "@/components/hero-section"
 import { AboutSection } from "@/components/about-section"
-import { ServicesSection } from "@/components/services-section"
-import { ContactSection } from "@/components/contact-section"
+import { FinalCta } from "@/components/final-cta"
+import { HeroSection } from "@/components/hero-section"
 import { PortfolioSection } from "@/components/portfolio-section"
-import { Footer } from "@/components/footer"
-import { FloatingChat } from "@/components/floating-chat"
-import { Toaster } from "@/components/ui/toaster"
+import { ServicesSection } from "@/components/services-section"
 
 export default function Page() {
-  useThemeEffect()
-
   return (
-    <>
-      <Navbar />
-      <main>
-        <HeroSection />
-        <AboutSection />
-        <ServicesSection />
-        <ContactSection />
-        <PortfolioSection />
-      </main>
-      <Footer />
-      <FloatingChat />
-      <Toaster />
-    </>
+    <main>
+      <HeroSection />
+      <AboutSection />
+      <ServicesSection />
+      <PortfolioSection />
+      <FinalCta />
+    </main>
   )
 }

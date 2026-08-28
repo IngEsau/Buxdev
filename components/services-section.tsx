@@ -1,46 +1,194 @@
 "use client"
 
-import { useLanguage } from "@/hooks/use-language"
-import { Globe, ShoppingCart, Code, Smartphone, Sparkles, Search } from "lucide-react"
-import { CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { AnimatedCard } from "@/components/animated-card"
+import Link from "next/link"
+import type { LucideIcon } from "lucide-react"
+import { ArrowUpRight, Code2, Globe2, Search, ShoppingCart, Smartphone, Sparkles } from "lucide-react"
 
-const icons = [Globe, ShoppingCart, Code, Smartphone, Sparkles, Search]
+import { useLanguage } from "@/hooks/use-language"
+
+import styles from "./services-section.module.css"
+
+type ServiceVisualKind = "web" | "commerce" | "app" | "mobile" | "redesign" | "search"
+
+const serviceDesigns: Array<{
+  Icon: LucideIcon
+  visual: ServiceVisualKind
+  span: string
+}> = [
+  { Icon: Globe2, visual: "web", span: styles.spanSeven },
+  { Icon: ShoppingCart, visual: "commerce", span: styles.spanFive },
+  { Icon: Code2, visual: "app", span: styles.spanFour },
+  { Icon: Smartphone, visual: "mobile", span: styles.spanEight },
+  { Icon: Sparkles, visual: "redesign", span: styles.spanSeven },
+  { Icon: Search, visual: "search", span: styles.spanFive },
+]
+
+function ServiceVisual({ kind }: { kind: ServiceVisualKind }) {
+  if (kind === "web") {
+    return (
+      <div className={styles.visual} aria-hidden="true">
+        <div className={styles.browserWindow}>
+          <div className={styles.windowBar}>
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className={styles.browserBody}>
+            <div className={styles.browserSide}>
+              <span />
+              <span />
+              <span />
+            </div>
+            <div className={styles.browserMain}>
+              <div className={styles.copyLines}>
+                <span />
+                <span />
+                <span />
+              </div>
+              <div className={styles.browserCards}>
+                <span />
+                <span />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (kind === "commerce") {
+    return (
+      <div className={styles.visual} aria-hidden="true">
+        <div className={styles.productWindow}>
+          <div className={styles.productPreview} />
+          <div className={styles.checkout}>
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (kind === "app") {
+    return (
+      <div className={styles.visual} aria-hidden="true">
+        <div className={styles.appWindow}>
+          <div className={styles.appSide}>
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className={styles.appMain}>
+            <div className={styles.appMetric} />
+            <div className={styles.appGraph} />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (kind === "mobile") {
+    return (
+      <div className={styles.visual} aria-hidden="true">
+        <div className={styles.phoneShell}>
+          <div className={styles.phoneScreen}>
+            <span />
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (kind === "redesign") {
+    return (
+      <div className={styles.visual} aria-hidden="true">
+        <div className={styles.redesignWindow}>
+          <div className={styles.designHalf}>
+            <span />
+            <span />
+            <span />
+          </div>
+          <div className={styles.designHalf}>
+            <span />
+            <span />
+            <span />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div className={styles.visual} aria-hidden="true">
+      <div className={styles.searchWindow}>
+        <div className={styles.searchBar}>
+          <Search />
+          <span />
+        </div>
+        <div className={styles.resultLines}>
+          <span />
+          <span />
+          <span />
+          <span />
+          <span />
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export function ServicesSection() {
   const { t } = useLanguage()
 
   return (
-    <section id="servicios" className="py-20 lg:py-32">
-      <div className="container mx-auto px-4">
-        <div className="max-w-6xl mx-auto space-y-12">
-          {/* Header */}
-          <div className="text-center space-y-4">
-            <h2 className="text-4xl md:text-6xl font-bold text-balance">{t.services.title}</h2>
-            <p className="text-lg md:text-xl text-muted-foreground">{t.services.subtitle}</p>
+    <section id="servicios" className={styles.section} aria-labelledby="home-services-title">
+      <div className={styles.container}>
+        <header className={styles.header}>
+          <div>
+            <p className={styles.eyebrow}>{t.nav.servicios}</p>
+            <h2 id="home-services-title" className={styles.title}>
+              {t.services.title}
+            </h2>
           </div>
+          <p className={styles.subtitle}>{t.services.subtitle}</p>
+        </header>
 
-          {/* Services Grid */}
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {t.services.items.map((service, index) => {
-              const Icon = icons[index]
-              return (
-                <AnimatedCard
-                  key={index}
-                >
-                  <CardHeader>
-                    <div className="h-12 w-12 rounded-lg bg-[#2c4c9b]/10 flex items-center justify-center mb-4 group-hover:bg-[#2c4c9b]/20 transition-colors">
-                      <Icon className="h-6 w-6 text-[#2c4c9b]" />
-                    </div>
-                    <CardTitle className="text-xl">{service.title}</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <CardDescription className="text-base leading-relaxed">{service.description}</CardDescription>
-                  </CardContent>
-                </AnimatedCard>
-              )
-            })}
-          </div>
+        <div className={styles.bento}>
+          {t.services.items.map((service, index) => {
+            const design = serviceDesigns[index]
+            const Icon = design.Icon
+
+            return (
+              <article key={service.title} className={`${styles.service} ${design.span}`}>
+                <div className={styles.serviceTop}>
+                  <span>{String(index + 1).padStart(2, "0")}</span>
+                  <span className={styles.serviceIcon}>
+                    <Icon aria-hidden="true" />
+                  </span>
+                </div>
+
+                <ServiceVisual kind={design.visual} />
+
+                <div className={styles.serviceContent}>
+                  <h3>{service.title}</h3>
+                  <p>{service.description}</p>
+                </div>
+              </article>
+            )
+          })}
+        </div>
+
+        <div className={styles.sectionFooter}>
+          <Link href="/services" className={styles.sectionLink}>
+            <span>{t.nav.servicios}</span>
+            <ArrowUpRight aria-hidden="true" />
+          </Link>
         </div>
       </div>
     </section>

@@ -115,7 +115,7 @@ export function HeroSection() {
 
               <div className={styles.coreGlow} />
               <div className={styles.brandCore}>
-                <Image src="/buxdev-mark.svg" alt="" width={92} height={100} />
+                <Image src="/brand/buxdev/mark-on-dark.svg" alt="" width={375} height={404} />
               </div>
 
               <div className={styles.canvasLabel}>

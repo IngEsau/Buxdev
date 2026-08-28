@@ -1,40 +1,31 @@
-"use client"
+import type { Metadata } from "next"
 
-import { useEffect } from "react"
-import { useThemeEffect } from "@/hooks/use-theme"
-import { Navbar } from "@/components/navbar"
-import { HeroSection } from "@/components/hero-section"
-import { AboutSection } from "@/components/about-section"
-import { ServicesSection } from "@/components/services-section"
-import { ContactSection } from "@/components/contact-section"
-import { PortfolioSection } from "@/components/portfolio-section"
-import { Footer } from "@/components/footer"
-import { FloatingChat } from "@/components/floating-chat"
-import { Toaster } from "@/components/ui/toaster"
+import { AboutPageContent } from "@/components/about-page"
+import { PageHero } from "@/components/page-hero"
+
+export const metadata: Metadata = {
+  title: "Nosotros",
+  description:
+    "Conoce a BUXDEV, empresa mexicana dedicada al desarrollo de software multiplataforma y comprometida con la excelencia.",
+  alternates: {
+    canonical: "/about/",
+  },
+  openGraph: {
+    type: "website",
+    locale: "es_MX",
+    siteName: "BUXDEV",
+    url: "/about/",
+    title: "Nosotros | BUXDEV",
+    description:
+      "Experiencia, misión, visión y valores de BUXDEV como empresa de desarrollo de software multiplataforma.",
+  },
+}
 
 export default function Page() {
-  useThemeEffect()
-
-  useEffect(() => {
-    const element = document.getElementById("nosotros")
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" })
-    }
-  }, [])
-
   return (
-    <>
-      <Navbar />
-      <main>
-        <HeroSection />
-        <AboutSection />
-        <ServicesSection />
-        <ContactSection />
-        <PortfolioSection />
-      </main>
-      <Footer />
-      <FloatingChat />
-      <Toaster />
-    </>
+    <main>
+      <PageHero page="about" />
+      <AboutPageContent />
+    </main>
   )
 }

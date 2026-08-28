@@ -40,10 +40,12 @@
 }
 
 .logoLink {
+  --logo-y-offset: 0.125rem;
+
   position: relative;
   display: inline-flex;
-  width: 7.25rem;
-  height: 2.75rem;
+  width: 7rem;
+  height: 4.75rem;
   align-items: center;
   justify-content: flex-start;
   justify-self: start;
@@ -58,8 +60,11 @@
 .logoOnLight,
 .logoOnDark {
   position: absolute;
-  width: 7.25rem;
+  top: 50%;
+  left: 0;
+  width: 7rem;
   height: auto;
+  transform: translateY(calc(-50% + var(--logo-y-offset)));
 }
 
 .logoOnDark {
@@ -362,6 +367,10 @@
   .logoOnLight,
   .logoOnDark {
     width: 6.6rem;
+  }
+
+  .logoLink {
+    --logo-y-offset: 0rem;
   }
 }
 

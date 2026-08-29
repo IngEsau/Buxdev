@@ -1,23 +1,20 @@
 .footer {
   position: relative;
-  padding: clamp(4rem, 8vw, 7rem) var(--page-gutter) 2rem;
+  padding: clamp(6.5rem, 10vw, 8rem) var(--page-gutter) clamp(3rem, 5vw, 4.5rem);
   overflow: hidden;
-  border-top: 1px solid var(--border);
   background:
-    linear-gradient(to bottom, color-mix(in srgb, var(--background-elevated) 88%, transparent), var(--background)),
+    linear-gradient(to bottom, color-mix(in srgb, var(--background-elevated) 68%, transparent), var(--background) 54%),
     var(--background);
 }
 
 .grid {
   position: absolute;
   inset: 0;
-  border-right: 1px solid var(--border);
-  border-left: 1px solid var(--border);
   background-image: linear-gradient(to right, var(--border) 1px, transparent 1px);
   background-size: clamp(4.25rem, 7.5vw, 7.5rem) 100%;
-  opacity: 0.34;
-  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 92%);
-  mask-image: linear-gradient(to bottom, #000, transparent 92%);
+  opacity: 0.2;
+  -webkit-mask-image: linear-gradient(to bottom, #000, transparent 82%);
+  mask-image: linear-gradient(to bottom, #000, transparent 82%);
   pointer-events: none;
 }
 
@@ -29,21 +26,21 @@
 
 .top {
   display: grid;
-  grid-template-columns: minmax(16rem, 1.25fr) minmax(10rem, 0.65fr) minmax(17rem, 0.8fr);
-  gap: clamp(3rem, 7vw, 7rem);
-  padding-bottom: clamp(3rem, 6vw, 5rem);
+  grid-template-columns: minmax(15rem, 1.18fr) minmax(9rem, 0.72fr) minmax(17rem, 1fr);
+  gap: clamp(3.5rem, 8vw, 8rem);
+  align-items: start;
+  padding-bottom: clamp(4rem, 7vw, 6rem);
 }
 
 .brandBlock {
-  max-width: 28rem;
+  min-width: 0;
 }
 
 .logoLink {
   position: relative;
   display: block;
-  width: 7rem;
-  height: 4.9rem;
-  margin-bottom: 1.25rem;
+  width: 8rem;
+  height: 5.5rem;
   border-radius: var(--radius-sm);
   transition: opacity 180ms ease;
 }
@@ -57,7 +54,7 @@
   position: absolute;
   top: 50%;
   left: 0;
-  width: 7rem;
+  width: 8rem;
   height: auto;
   transform: translateY(-50%);
 }
@@ -74,18 +71,9 @@
   display: block;
 }
 
-.brandBlock > p {
-  max-width: 26rem;
-  margin: 0;
-  color: var(--foreground-muted);
-  font-size: 0.85rem;
-  letter-spacing: -0.02em;
-  line-height: 1.7;
-}
-
 .navigation > p,
 .contact > p {
-  margin: 0 0 1.2rem;
+  margin: 0 0 1.6rem;
   color: var(--foreground-subtle);
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 0.6rem;
@@ -94,17 +82,17 @@
 }
 
 .navigation ul {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0.8rem 1.5rem;
+  display: flex;
+  gap: 0.9rem;
   padding: 0;
   margin: 0;
+  flex-direction: column;
   list-style: none;
 }
 
 .navigation a {
   color: var(--foreground-muted);
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 520;
   letter-spacing: -0.015em;
   text-decoration: none;
@@ -120,56 +108,46 @@
 }
 
 .contact > a {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  display: flex;
+  width: fit-content;
+  max-width: 100%;
   align-items: center;
-  gap: 0.7rem;
-  min-height: 3.4rem;
-  border-bottom: 1px solid var(--border);
+  gap: 0.8rem;
   color: var(--foreground-muted);
-  font-size: 0.78rem;
+  font-size: 0.82rem;
+  letter-spacing: -0.015em;
   text-decoration: none;
-  transition:
-    border-color 180ms ease,
-    color 180ms ease;
+  transition: color 180ms ease;
 }
 
-.contact > a:first-of-type {
-  border-top: 1px solid var(--border);
+.contact > a + a {
+  margin-top: 1.15rem;
 }
 
 .contact > a svg {
-  width: 0.9rem;
-  height: 0.9rem;
+  width: 0.95rem;
+  height: 0.95rem;
+  flex: 0 0 auto;
+  color: color-mix(in srgb, var(--brand) 68%, var(--foreground-muted));
   stroke-width: 1.45;
 }
 
-.contact > a svg:last-child {
-  color: var(--foreground-subtle);
-  transition: transform 180ms ease;
-}
-
 .contact > a:hover {
-  border-color: var(--border-strong);
   color: var(--foreground);
-}
-
-.contact > a:hover svg:last-child {
-  transform: translate(0.1rem, -0.1rem);
 }
 
 .bottom {
   display: flex;
+  min-height: 4rem;
   align-items: center;
   justify-content: space-between;
   gap: 2rem;
-  min-height: 4rem;
-  padding-top: 1.5rem;
+  padding-top: clamp(2rem, 3.5vw, 3rem);
   border-top: 1px solid var(--border-strong);
   color: var(--foreground-subtle);
   font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.55rem;
-  letter-spacing: 0.08em;
+  font-size: 0.58rem;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
 }
 
@@ -177,16 +155,24 @@
   margin: 0;
 }
 
-.bottom > span {
-  text-align: right;
+.legal {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: clamp(1.5rem, 3vw, 2.75rem);
+}
+
+.legal span {
+  color: var(--foreground-subtle);
+  cursor: default;
 }
 
 @media (max-width: 56rem) {
   .top {
-    grid-template-columns: 1.15fr 0.85fr;
+    grid-template-columns: minmax(12rem, 1fr) minmax(9rem, 0.75fr);
   }
 
-  .brandBlock {
+  .contact {
     grid-column: 1 / -1;
   }
 }
@@ -199,20 +185,22 @@
 
   .top {
     grid-template-columns: 1fr;
-    gap: 2.75rem;
+    gap: 3.5rem;
   }
 
-  .brandBlock {
+  .contact {
     grid-column: auto;
   }
 
   .bottom {
     align-items: flex-start;
     flex-direction: column;
-    gap: 0.75rem;
+    gap: 1.5rem;
   }
 
-  .bottom > span {
-    text-align: left;
+  .legal {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.9rem;
   }
 }

@@ -5,8 +5,6 @@ import { ArrowUpRight } from "lucide-react"
 
 import { useLanguage } from "@/hooks/use-language"
 
-import { AboutPrinciples } from "./about-principles"
-
 import styles from "./about-section.module.css"
 
 export function AboutSection() {
@@ -26,10 +24,8 @@ export function AboutSection() {
             </h2>
           </div>
 
-          <p className={styles.lead}>{t.about.experience}</p>
+          <p className={styles.lead}>{t.about.preview}</p>
         </div>
-
-        <AboutPrinciples />
 
         <div className={styles.sectionFooter}>
           <Link
@@ -37,7 +33,7 @@ export function AboutSection() {
             className={styles.sectionLink}
             aria-label={`${t.nav.nosotros}: ${t.about.company}`}
           >
-            <span>{t.nav.nosotros}</span>
+            <span>{t.common.viewAbout}</span>
             <ArrowUpRight aria-hidden="true" />
           </Link>
         </div>

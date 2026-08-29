@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight, Mail, Phone } from "lucide-react"
+import { Mail, Phone } from "lucide-react"
 
 import { useLanguage } from "@/hooks/use-language"
 
@@ -42,7 +42,6 @@ export function Footer() {
                 className={styles.logoOnDark}
               />
             </Link>
-            <p>{t.hero.description}</p>
           </div>
 
           <nav className={styles.navigation} aria-label={t.footer.navigationLabel}>
@@ -61,21 +60,22 @@ export function Footer() {
             <a href={`mailto:${t.footer.email}`}>
               <Mail aria-hidden="true" />
               <span>{t.footer.email}</span>
-              <ArrowUpRight aria-hidden="true" />
             </a>
             <a href={`tel:${t.footer.phone}`}>
               <Phone aria-hidden="true" />
               <span>{t.footer.phone}</span>
-              <ArrowUpRight aria-hidden="true" />
             </a>
           </div>
         </div>
 
         <div className={styles.bottom}>
           <p>
-            © <time dateTime={String(year)}>{year}</time> BUXDEV. {t.footer.rights}
+            © <time dateTime={String(year)}>{year}</time> BUXDEV
           </p>
-          <span>{t.footer.signature}</span>
+          <div className={styles.legal} aria-label={t.footer.legalLabel}>
+            <span aria-disabled="true">{t.footer.privacy}</span>
+            <span aria-disabled="true">{t.footer.terms}</span>
+          </div>
         </div>
       </div>
     </footer>

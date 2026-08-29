@@ -78,8 +78,8 @@ export const translations = {
     about: {
       title: "Nosotros",
       company: "BUXDEV",
-      experience:
-        "Contamos con más de 3 años dedicándonos al desarrollo de software multiplataforma, con ingenieros de gran conocimiento comprometidos con la excelencia.",
+      preview: "Más de 3 años desarrollando software multiplataforma.",
+      experience: "Más de 3 años desarrollando software multiplataforma, comprometidos con la excelencia.",
       mission: {
         title: "Nuestra Misión",
         text: "Ayudar a pequeñas, medianas y grandes empresas a llegar a más público objetivo mediante soluciones tecnológicas innovadoras.",
@@ -162,10 +162,11 @@ export const translations = {
       company: "Empresa",
       contact: "Contacto",
       navigationLabel: "Navegación del pie de página",
+      legalLabel: "Información legal",
       email: "info@buxdev.com",
       phone: "+52 1 220 139 9038",
-      rights: "Todos los derechos reservados.",
-      signature: "SOFTWARE / PRODUCTO / MÉXICO",
+      privacy: "Política de privacidad",
+      terms: "Términos y Condiciones",
     },
     chat: {
       title: "Ayuda",
@@ -265,8 +266,8 @@ export const translations = {
     about: {
       title: "About Us",
       company: "BUXDEV",
-      experience:
-        "We have over 3 years dedicated to multiplatform software development, with highly knowledgeable engineers committed to excellence.",
+      preview: "Over 3 years building cross-platform software.",
+      experience: "Over 3 years building cross-platform software, committed to excellence.",
       mission: {
         title: "Our Mission",
         text: "Help small, medium and large companies reach more target audiences through innovative technological solutions.",
@@ -349,10 +350,11 @@ export const translations = {
       company: "Company",
       contact: "Contact",
       navigationLabel: "Footer navigation",
+      legalLabel: "Legal information",
       email: "info@buxdev.com",
       phone: "+52 1 220 139 9038",
-      rights: "All rights reserved.",
-      signature: "SOFTWARE / PRODUCT / MEXICO",
+      privacy: "Privacy Policy",
+      terms: "Terms and Conditions",
     },
     chat: {
       title: "Help",

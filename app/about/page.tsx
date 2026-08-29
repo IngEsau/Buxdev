@@ -1,7 +1,6 @@
 import type { Metadata } from "next"
 
 import { AboutPageContent } from "@/components/about-page"
-import { PageHero } from "@/components/page-hero"
 
 export const metadata: Metadata = {
   title: "Nosotros",
@@ -24,7 +23,6 @@ export const metadata: Metadata = {
 export default function Page() {
   return (
     <main>
-      <PageHero page="about" />
       <AboutPageContent />
     </main>
   )

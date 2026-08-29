@@ -14,15 +14,9 @@ export function AboutPageContent() {
       <div className={styles.grid} aria-hidden="true" />
       <div className={styles.inner}>
         <div className={styles.introduction}>
-          <div className={styles.index} aria-hidden="true">
-            <span>01</span>
-            <i />
-            <span>BUXDEV</span>
-          </div>
-
+          <p className={styles.kicker}>{t.about.title}</p>
           <div className={styles.introCopy}>
-            <p className={styles.kicker}>{t.about.title}</p>
-            <h2 id="about-story-title">{t.about.company}</h2>
+            <h1 id="about-story-title">{t.about.company}</h1>
             <p className={styles.lead}>{t.about.experience}</p>
           </div>
         </div>

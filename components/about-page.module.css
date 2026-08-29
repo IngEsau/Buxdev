@@ -1,7 +1,8 @@
 .about {
   position: relative;
   isolation: isolate;
-  padding: clamp(5.5rem, 10vw, 10rem) var(--page-gutter);
+  padding: calc(var(--header-height) + clamp(4.5rem, 8vw, 7rem)) var(--page-gutter)
+    clamp(6rem, 10vw, 9rem);
   overflow: hidden;
   background: var(--background);
 }
@@ -43,42 +44,18 @@
 }
 
 .introduction {
-  display: grid;
-  grid-template-columns: minmax(8rem, 0.35fr) minmax(0, 1fr);
-  gap: clamp(2rem, 6vw, 6rem);
-  align-items: start;
-  padding-bottom: clamp(5rem, 9vw, 8.5rem);
-}
-
-.index {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  align-items: center;
-  gap: 0.75rem;
-  padding-top: 0.65rem;
-  color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
-  font-size: 0.58rem;
-  letter-spacing: 0.1em;
-}
-
-.index i {
-  height: 1px;
-  background: linear-gradient(90deg, var(--border-strong), transparent);
-}
-
-.index span:last-child {
-  grid-column: 1 / -1;
-  color: var(--foreground-muted);
+  padding-bottom: clamp(5rem, 9vw, 8rem);
 }
 
 .introCopy {
-  max-width: 54rem;
-  justify-self: end;
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.9fr) minmax(20rem, 1.1fr);
+  gap: clamp(3rem, 8vw, 8rem);
+  align-items: end;
 }
 
 .kicker {
-  margin: 0 0 1.25rem;
+  margin: 0 0 clamp(2.5rem, 5vw, 4.5rem);
   color: color-mix(in srgb, var(--brand) 66%, var(--foreground));
   font-family: var(--font-geist-mono), ui-monospace, monospace;
   font-size: 0.66rem;
@@ -86,10 +63,10 @@
   text-transform: uppercase;
 }
 
-.introCopy h2 {
+.introCopy h1 {
   margin: 0;
   color: var(--foreground);
-  font-size: clamp(3.75rem, 10vw, 8.5rem);
+  font-size: clamp(4rem, 9vw, 8rem);
   font-weight: 760;
   font-kerning: normal;
   letter-spacing: var(--display-letter-spacing);
@@ -97,28 +74,25 @@
 }
 
 .lead {
-  max-width: 49rem;
-  margin: clamp(2rem, 4vw, 3.5rem) 0 0;
-  color: var(--foreground-muted);
-  font-size: clamp(1.2rem, 2.3vw, 2rem);
-  font-weight: 480;
+  max-width: 36rem;
+  margin: 0 0 0.35rem;
+  color: color-mix(in srgb, var(--foreground) 84%, var(--foreground-muted));
+  font-size: clamp(1.5rem, 2.35vw, 2rem);
+  font-weight: 460;
   letter-spacing: -0.015em;
   line-height: 1.45;
   text-wrap: balance;
 }
 
 @media (max-width: 48rem) {
-  .introduction {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-  }
-
-  .index {
-    max-width: 12rem;
-  }
-
   .introCopy {
-    justify-self: start;
+    grid-template-columns: 1fr;
+    gap: 2.25rem;
+    align-items: start;
+  }
+
+  .lead {
+    max-width: 34rem;
   }
 }
 
@@ -128,11 +102,11 @@
     padding-left: 1rem;
   }
 
-  .introCopy h2 {
+  .introCopy h1 {
     font-size: clamp(3.25rem, 18vw, 5.5rem);
   }
 
   .lead {
-    font-size: 1.125rem;
+    font-size: 1.25rem;
   }
 }

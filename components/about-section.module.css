@@ -1,22 +1,13 @@
 .section {
   position: relative;
   isolation: isolate;
-  padding: clamp(5.5rem, 11vw, 10rem) var(--page-gutter);
+  padding: clamp(6rem, 10vw, 9rem) var(--page-gutter);
   overflow: hidden;
+  border-top: 1px solid var(--border);
   background:
-    radial-gradient(circle at 8% 42%, rgb(35 86 167 / 8%), transparent 27rem),
+    radial-gradient(circle at 12% 50%, rgb(35 86 167 / 9%), transparent 30rem),
+    linear-gradient(to bottom, color-mix(in srgb, var(--background-elevated) 24%, transparent), transparent 62%),
     var(--background);
-}
-
-.section::before {
-  position: absolute;
-  top: 0;
-  left: 50%;
-  width: min(calc(100% - (2 * var(--page-gutter))), var(--container-max));
-  height: 1px;
-  content: "";
-  background: linear-gradient(90deg, transparent, var(--border-strong) 12%, var(--border-strong) 88%, transparent);
-  transform: translateX(-50%);
 }
 
 .grid {
@@ -27,7 +18,7 @@
   border-left: 1px solid var(--border);
   background-image: linear-gradient(to right, var(--border) 1px, transparent 1px);
   background-size: clamp(4.25rem, 7.5vw, 7.5rem) 100%;
-  opacity: 0.38;
+  opacity: 0.3;
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
   mask-image: linear-gradient(to bottom, transparent, #000 8%, #000 92%, transparent);
   pointer-events: none;
@@ -35,13 +26,13 @@
 
 .glow {
   position: absolute;
-  top: 18%;
-  left: 50%;
+  top: 8%;
+  left: 28%;
   z-index: -1;
-  width: min(72vw, 58rem);
+  width: min(68vw, 54rem);
   aspect-ratio: 1.35;
   border-radius: 50%;
-  background: rgb(35 86 167 / 12%);
+  background: rgb(35 86 167 / 10%);
   filter: blur(7rem);
   transform: translateX(-50%);
   pointer-events: none;
@@ -58,7 +49,6 @@
   grid-template-columns: minmax(13rem, 0.72fr) minmax(0, 1.28fr);
   gap: clamp(2.5rem, 7vw, 7rem);
   align-items: end;
-  padding-bottom: clamp(3.5rem, 7vw, 6rem);
 }
 
 .identity {
@@ -100,11 +90,11 @@
 }
 
 .lead {
-  max-width: 48rem;
+  max-width: 37rem;
   margin: 0;
-  color: var(--foreground);
-  font-size: clamp(1.35rem, 2.8vw, 2.35rem);
-  font-weight: 520;
+  color: color-mix(in srgb, var(--foreground) 88%, var(--foreground-muted));
+  font-size: clamp(1.25rem, 2.15vw, 1.8rem);
+  font-weight: 500;
   letter-spacing: -0.015em;
   line-height: 1.3;
   text-wrap: balance;
@@ -113,7 +103,7 @@
 .sectionFooter {
   display: flex;
   justify-content: flex-end;
-  padding-top: 2rem;
+  padding-top: clamp(2.75rem, 5vw, 4.5rem);
 }
 
 .sectionLink {

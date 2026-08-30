@@ -16,6 +16,13 @@ const pageIcons: Record<PageHeroName, LucideIcon> = {
   contact: Mail,
 }
 
+const pageNavigationKeys = {
+  about: "nosotros",
+  services: "servicios",
+  work: "trabajos",
+  contact: "contacto",
+} as const
+
 interface PageHeroProps {
   page: PageHeroName
 }
@@ -24,6 +31,7 @@ export function PageHero({ page }: PageHeroProps) {
   const { t } = useLanguage()
   const copy = t.pages[page]
   const Icon = pageIcons[page]
+  const visualLabel = t.nav[pageNavigationKeys[page]]
 
   return (
     <section className={styles.hero} aria-labelledby={`${page}-page-title`}>
@@ -52,7 +60,7 @@ export function PageHero({ page }: PageHeroProps) {
                 <i />
                 <i />
               </span>
-              <span className={styles.path}>buxdev / {page}</span>
+              <span className={styles.path}>buxdev / {visualLabel.toLowerCase()}</span>
               <Braces />
             </div>
 
@@ -72,7 +80,7 @@ export function PageHero({ page }: PageHeroProps) {
             <div className={styles.frameFooter}>
               <span>01</span>
               <strong>BUXDEV</strong>
-              <span>{page.toUpperCase()}</span>
+              <span>{visualLabel.toUpperCase()}</span>
             </div>
           </div>
         </div>

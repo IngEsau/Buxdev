@@ -7,15 +7,25 @@ type SendEmailParams = {
   description: string
 }
 
+const emailServiceConfig = {
+  serviceId: process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID?.trim() ?? "",
+  templateId: process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID?.trim() ?? "",
+  publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY?.trim() ?? "",
+}
+
+export function isEmailServiceConfigured() {
+  return Object.values(emailServiceConfig).every(Boolean)
+}
+
 export const sendEmail = async ({
   type,
   email,
   cellphone,
   description,
 }: SendEmailParams) => {
-  const serviceId = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID!
-  const templateId = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID!
-  const publicKey = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY!
+  if (!isEmailServiceConfigured()) {
+    throw new Error("Email service is not configured")
+  }
 
   const templateParams = {
     type,
@@ -25,5 +35,10 @@ export const sendEmail = async ({
     time: new Date().toLocaleString(),
   }
 
-  return emailjs.send(serviceId, templateId, templateParams, publicKey)
+  return emailjs.send(
+    emailServiceConfig.serviceId,
+    emailServiceConfig.templateId,
+    templateParams,
+    emailServiceConfig.publicKey,
+  )
 }

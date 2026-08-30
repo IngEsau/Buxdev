@@ -1,9 +1,30 @@
 import type React from "react"
 import type { Metadata } from "next"
 import { Geist_Mono, Montserrat } from "next/font/google"
-import { Analytics } from "@vercel/analytics/next"
 import { SiteShell } from "@/components/site-shell"
 import "./globals.css"
+
+const initialPreferencesScript = `
+  (() => {
+    const root = document.documentElement;
+    const readPreference = (key, fallback) => {
+      try {
+        const value = JSON.parse(localStorage.getItem(key) || "null");
+        return value?.state ?? fallback;
+      } catch {
+        return fallback;
+      }
+    };
+    const theme = readPreference("buxdev-theme", { theme: "dark" }).theme;
+    const language = readPreference("buxdev-language", { language: "es" }).language;
+    root.classList.toggle("dark", theme !== "light");
+    root.lang = language === "en" ? "en" : "es";
+    if (language === "en") {
+      root.setAttribute("data-language-pending", "true");
+      window.setTimeout(() => root.removeAttribute("data-language-pending"), 1500);
+    }
+  })();
+`
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -63,9 +84,14 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es" className="dark" data-scroll-behavior="smooth" suppressHydrationWarning>
+      <head>
+        <script
+          id="buxdev-initial-preferences"
+          dangerouslySetInnerHTML={{ __html: initialPreferencesScript }}
+        />
+      </head>
       <body className={`${montserrat.variable} ${geistMono.variable} font-sans antialiased`}>
         <SiteShell>{children}</SiteShell>
-        <Analytics />
       </body>
     </html>
   )

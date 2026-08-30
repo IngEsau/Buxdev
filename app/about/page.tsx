@@ -22,7 +22,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <main>
+    <main id="main-content" tabIndex={-1}>
       <AboutPageContent />
     </main>
   )

@@ -44,7 +44,7 @@ export function WorkPageContent() {
                 <span />
                 <span />
               </div>
-              <p>BUXDEV / WORK</p>
+              <p>BUXDEV / {t.nav.trabajos.toUpperCase()}</p>
               <ScanLine />
             </div>
 

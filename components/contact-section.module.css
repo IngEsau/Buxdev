@@ -273,6 +273,16 @@
   box-shadow: 0 0 0.8rem var(--brand-hover);
 }
 
+.formStatus[data-state="error"],
+.formStatus[data-state="validation-error"] {
+  background: var(--destructive);
+  box-shadow: 0 0 0.8rem color-mix(in srgb, var(--destructive) 72%, transparent);
+}
+
+.formStatus[data-state="success"] {
+  background: var(--brand-hover);
+}
+
 .form {
   position: relative;
   z-index: 1;
@@ -281,9 +291,63 @@
   padding: clamp(1.5rem, 4vw, 2.5rem);
 }
 
+.formFeedback {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.75rem;
+  align-items: start;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface-hover) 74%, transparent);
+  color: var(--foreground-muted);
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+.formFeedback[data-variant="error"] {
+  border-color: color-mix(in srgb, var(--destructive) 45%, var(--border));
+  background: color-mix(in srgb, var(--destructive) 9%, var(--surface));
+}
+
+.formFeedback[data-variant="success"] {
+  border-color: color-mix(in srgb, var(--brand-hover) 48%, var(--border));
+  background: color-mix(in srgb, var(--brand) 10%, var(--surface));
+}
+
+.formFeedback > svg {
+  width: 1rem;
+  height: 1rem;
+  margin-top: 0.1rem;
+  color: var(--brand-hover);
+}
+
+.formFeedback[data-variant="error"] > svg {
+  color: var(--destructive);
+}
+
+.formFeedback strong,
+.formFeedback p {
+  margin: 0;
+}
+
+.formFeedback strong {
+  display: block;
+  margin-bottom: 0.18rem;
+  color: var(--foreground);
+  font-weight: 650;
+}
+
 .field {
   display: grid;
   gap: 0.65rem;
+}
+
+.fieldError {
+  margin: -0.1rem 0 0;
+  color: color-mix(in srgb, var(--destructive) 82%, var(--foreground));
+  font-size: 0.75rem;
+  line-height: 1.45;
 }
 
 .field label {
@@ -332,6 +396,12 @@
   box-shadow: 0 0 0 3px var(--focus-ring);
 }
 
+.selectTrigger[aria-invalid="true"],
+.input[aria-invalid="true"],
+.textarea[aria-invalid="true"] {
+  border-color: color-mix(in srgb, var(--destructive) 72%, var(--border-strong));
+}
+
 .phoneField {
   display: grid;
   grid-template-columns: 8rem minmax(0, 1fr);
@@ -360,12 +430,34 @@
   background: var(--brand-hover);
 }
 
+.submitButton:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.submitButton:disabled:hover {
+  background: var(--brand);
+}
+
 .submitButton svg {
   transition: transform 180ms ease;
 }
 
 .submitButton:hover svg {
   transform: translate(0.12rem, -0.12rem);
+}
+
+.submitButton:hover .loadingIcon {
+  transform: none;
+}
+
+.loadingIcon {
+  animation: contact-spinner 900ms linear infinite;
+}
+
+@keyframes contact-spinner {
+  to {
+    transform: rotate(1turn);
+  }
 }
 
 @media (max-width: 60rem) {
@@ -449,5 +541,9 @@
   .contactLink > svg,
   .submitButton svg {
     transition: none;
+  }
+
+  .loadingIcon {
+    animation: none;
   }
 }

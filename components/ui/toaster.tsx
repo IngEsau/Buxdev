@@ -9,12 +9,14 @@ import {
   ToastTitle,
   ToastViewport,
 } from '@/components/ui/toast'
+import { useLanguage } from '@/hooks/use-language'
 
 export function Toaster() {
   const { toasts } = useToast()
+  const { t } = useLanguage()
 
   return (
-    <ToastProvider>
+    <ToastProvider label={t.common.notificationLabel}>
       {toasts.map(function ({ id, title, description, action, ...props }) {
         return (
           <Toast key={id} {...props}>
@@ -25,7 +27,7 @@ export function Toaster() {
               )}
             </div>
             {action}
-            <ToastClose />
+            <ToastClose aria-label={t.common.closeNotification} />
           </Toast>
         )
       })}

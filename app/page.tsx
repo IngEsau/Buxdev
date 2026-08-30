@@ -6,7 +6,7 @@ import { ServicesSection } from "@/components/services-section"
 
 export default function Page() {
   return (
-    <main>
+    <main id="main-content" tabIndex={-1}>
       <HeroSection />
       <AboutSection />
       <ServicesSection />

@@ -17,7 +17,7 @@ export function AboutPrinciples() {
           <Target aria-hidden="true" />
         </div>
         <div>
-          <h3>{t.about.mission.title}</h3>
+          <h2>{t.about.mission.title}</h2>
           <p>{t.about.mission.text}</p>
         </div>
       </article>
@@ -28,7 +28,7 @@ export function AboutPrinciples() {
           <Eye aria-hidden="true" />
         </div>
         <div>
-          <h3>{t.about.vision.title}</h3>
+          <h2>{t.about.vision.title}</h2>
           <p>{t.about.vision.text}</p>
         </div>
       </article>
@@ -39,7 +39,7 @@ export function AboutPrinciples() {
             <span>03</span>
             <Heart aria-hidden="true" />
           </div>
-          <h3>{t.about.values.title}</h3>
+          <h2>{t.about.values.title}</h2>
         </div>
 
         <ol>

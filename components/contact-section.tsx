@@ -3,16 +3,15 @@
 import type React from "react"
 
 import { useState } from "react"
-import { useLanguage } from "@/hooks/use-language"
+import { ArrowUpRight, CircleAlert, CircleCheck, LoaderCircle, Mail, Phone, Send } from "lucide-react"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { useToast } from "@/hooks/use-toast"
-import { ArrowUpRight, Mail, Phone, Send } from "lucide-react"
-
-import { sendEmail } from "@/services/email"
+import { Textarea } from "@/components/ui/textarea"
+import { useLanguage } from "@/hooks/use-language"
+import { isEmailServiceConfigured, sendEmail } from "@/services/email"
 
 import styles from "./contact-section.module.css"
 
@@ -25,62 +24,177 @@ const countryCodes = [
   { code: "+57", country: "CO" },
 ]
 
+const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+const maxDescriptionLength = 2000
+
+type ContactFormData = {
+  type: string
+  countryCode: string
+  phone: string
+  email: string
+  description: string
+}
+
+type ValidatedField = "type" | "phone" | "email" | "description"
+type ContactErrorKey =
+  | "typeRequired"
+  | "phoneRequired"
+  | "phoneInvalid"
+  | "emailRequired"
+  | "emailInvalid"
+  | "descriptionRequired"
+  | "descriptionTooLong"
+type FormErrors = Partial<Record<ValidatedField, ContactErrorKey>>
+type SubmissionStatus = "idle" | "submitting" | "success" | "error"
+
+const createInitialFormData = (): ContactFormData => ({
+  type: "",
+  countryCode: "+52",
+  phone: "",
+  email: "",
+  description: "",
+})
+
+const normalizeNationalPhone = (phone: string, countryCode: string) => {
+  const value = phone.trim()
+  const digits = value.replace(/\D/g, "")
+
+  if (!/^\+?[\d\s().-]+$/.test(value)) return null
+  if (!value.startsWith("+")) return digits
+
+  const countryDigits = countryCode.replace(/\D/g, "")
+  return digits.startsWith(countryDigits) ? digits.slice(countryDigits.length) : null
+}
+
+const getPhoneError = (phone: string, countryCode: string): ContactErrorKey | undefined => {
+  if (!phone.trim()) return "phoneRequired"
+
+  const nationalDigits = normalizeNationalPhone(phone, countryCode)
+  if (!nationalDigits) return "phoneInvalid"
+
+  const internationalLength = `${countryCode}${nationalDigits}`.replace(/\D/g, "").length
+  return nationalDigits.length < 7 || internationalLength > 15 ? "phoneInvalid" : undefined
+}
+
 export function ContactSection() {
   const { t } = useLanguage()
-  const { toast } = useToast()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [formData, setFormData] = useState({
-    type: "",
-    countryCode: "+52",
-    phone: "",
-    email: "",
-    description: "",
-  })
+  const [status, setStatus] = useState<SubmissionStatus>("idle")
+  const [errors, setErrors] = useState<FormErrors>({})
+  const [formData, setFormData] = useState<ContactFormData>(createInitialFormData)
+  const emailServiceAvailable = isEmailServiceConfigured()
+  const isSubmitting = status === "submitting"
+  const hasValidationErrors = Object.keys(errors).length > 0
+  const formDisabled = isSubmitting || !emailServiceAvailable
+  const phoneHref = `tel:${t.footer.phone.replace(/[^\d+]/g, "")}`
 
-  const handlePhoneChange = (value: string) => {
-    const cleaned = value.replace(/\D/g, "")
-    if (cleaned.length <= 10) {
-      setFormData({ ...formData, phone: cleaned })
+  const clearTransientStatus = () => {
+    if (status === "success" || status === "error") {
+      setStatus("idle")
     }
   }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (isSubmitting) return
+  const clearFieldError = (field: ValidatedField) => {
+    setErrors((current) => {
+      if (!current[field]) return current
 
-    setIsSubmitting(true)
+      const next = { ...current }
+      delete next[field]
+      return next
+    })
+  }
+
+  const updateField = <Field extends keyof ContactFormData>(field: Field, value: ContactFormData[Field]) => {
+    setFormData((current) => ({ ...current, [field]: value }))
+
+    if (field === "countryCode") {
+      setErrors((current) => {
+        if (!current.phone) return current
+
+        const phoneError = getPhoneError(formData.phone, value)
+        const next = { ...current }
+
+        if (phoneError) next.phone = phoneError
+        else delete next.phone
+
+        return next
+      })
+    } else if (field === "type" || field === "phone" || field === "email" || field === "description") {
+      clearFieldError(field)
+    }
+    clearTransientStatus()
+  }
+
+  const validateForm = () => {
+    const nextErrors: FormErrors = {}
+    const email = formData.email.trim()
+    const description = formData.description.trim()
+
+    if (!formData.type) nextErrors.type = "typeRequired"
+
+    const phoneError = getPhoneError(formData.phone, formData.countryCode)
+    if (phoneError) nextErrors.phone = phoneError
+
+    if (!email) {
+      nextErrors.email = "emailRequired"
+    } else if (!emailPattern.test(email)) {
+      nextErrors.email = "emailInvalid"
+    }
+
+    if (!description) {
+      nextErrors.description = "descriptionRequired"
+    } else if (description.length > maxDescriptionLength) {
+      nextErrors.description = "descriptionTooLong"
+    }
+
+    return nextErrors
+  }
+
+  const focusFirstInvalidField = (nextErrors: FormErrors) => {
+    const firstInvalidField = (Object.keys(nextErrors) as ValidatedField[])[0]
+    if (!firstInvalidField) return
+
+    window.requestAnimationFrame(() => document.getElementById(firstInvalidField)?.focus())
+  }
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (isSubmitting || !emailServiceAvailable) return
+
+    const nextErrors = validateForm()
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors)
+      setStatus("idle")
+      focusFirstInvalidField(nextErrors)
+      return
+    }
+
+    const nationalDigits = normalizeNationalPhone(formData.phone, formData.countryCode)
+    if (!nationalDigits) return
+
+    setErrors({})
+    setStatus("submitting")
 
     try {
       await sendEmail({
-        type: `${formData.type}`,
-        email: formData.email,
-        cellphone: `${formData.countryCode} ${formData.phone}`,
-        description: `${formData.description}\n\n`,
+        type: formData.type,
+        email: formData.email.trim(),
+        cellphone: `${formData.countryCode}${nationalDigits}`,
+        description: formData.description.trim(),
       })
 
-      toast({
-        title: t.contact.successTitle,
-        description: t.contact.successDescription,
-      })
+      setStatus("success")
+      setFormData(createInitialFormData())
+    } catch {
+      setStatus("error")
 
-      setFormData({
-        type: "",
-        countryCode: "+52",
-        phone: "",
-        email: "",
-        description: "",
-      })
-    } catch (error) {
-      toast({
-        title: t.contact.errorTitle,
-        description: t.contact.errorDescription,
-        variant: "destructive",
-      })
-      console.error(error)
-    } finally {
-      setIsSubmitting(false)
+      if (process.env.NODE_ENV === "development") {
+        console.error("[contact] EmailJS request failed")
+      }
     }
   }
+
+  const feedbackVisible =
+    !emailServiceAvailable || hasValidationErrors || status === "success" || status === "error"
 
   return (
     <section id="contacto" className={styles.section} aria-labelledby="contact-title">
@@ -112,7 +226,7 @@ export function ContactSection() {
                 <ArrowUpRight aria-hidden="true" />
               </a>
 
-              <a href={`tel:${t.footer.phone}`} className={styles.contactLink}>
+              <a href={phoneHref} className={styles.contactLink}>
                 <span className={styles.contactIcon} aria-hidden="true">
                   <Phone />
                 </span>
@@ -140,24 +254,94 @@ export function ContactSection() {
                 <p>{t.contact.title}</p>
                 <h3 id="contact-form-title">{t.contact.formTitle}</h3>
               </div>
-              <span className={styles.formStatus} aria-hidden="true" />
+              <span
+                className={styles.formStatus}
+                data-state={!emailServiceAvailable ? "error" : hasValidationErrors ? "validation-error" : status}
+                aria-hidden="true"
+              />
             </div>
 
             <form
               onSubmit={handleSubmit}
               className={styles.form}
               aria-labelledby="contact-form-title"
+              aria-describedby={feedbackVisible ? "contact-form-feedback" : undefined}
               aria-busy={isSubmitting}
+              noValidate
             >
+              {!emailServiceAvailable && (
+                <div
+                  id="contact-form-feedback"
+                  className={styles.formFeedback}
+                  data-variant="error"
+                  role="status"
+                >
+                  <CircleAlert aria-hidden="true" />
+                  <div>
+                    <strong>{t.contact.unavailableTitle}</strong>
+                    <p>{t.contact.unavailableDescription}</p>
+                  </div>
+                </div>
+              )}
+
+              {emailServiceAvailable && hasValidationErrors && (
+                <div
+                  id="contact-form-feedback"
+                  className={styles.formFeedback}
+                  data-variant="error"
+                  role="alert"
+                >
+                  <CircleAlert aria-hidden="true" />
+                  <p>{t.contact.validationSummary}</p>
+                </div>
+              )}
+
+              {emailServiceAvailable && status === "success" && (
+                <div
+                  id="contact-form-feedback"
+                  className={styles.formFeedback}
+                  data-variant="success"
+                  role="status"
+                >
+                  <CircleCheck aria-hidden="true" />
+                  <div>
+                    <strong>{t.contact.successTitle}</strong>
+                    <p>{t.contact.successDescription}</p>
+                  </div>
+                </div>
+              )}
+
+              {emailServiceAvailable && status === "error" && (
+                <div
+                  id="contact-form-feedback"
+                  className={styles.formFeedback}
+                  data-variant="error"
+                  role="alert"
+                >
+                  <CircleAlert aria-hidden="true" />
+                  <div>
+                    <strong>{t.contact.errorTitle}</strong>
+                    <p>{t.contact.errorDescription}</p>
+                  </div>
+                </div>
+              )}
+
               <div className={styles.field}>
                 <Label htmlFor="type">{t.contact.formTitle}</Label>
                 <Select
+                  name="type"
                   value={formData.type}
-                  onValueChange={(value) => setFormData({ ...formData, type: value })}
-                  disabled={isSubmitting}
+                  onValueChange={(value) => updateField("type", value)}
+                  disabled={formDisabled}
                   required
                 >
-                  <SelectTrigger id="type" className={styles.selectTrigger}>
+                  <SelectTrigger
+                    id="type"
+                    className={styles.selectTrigger}
+                    aria-required="true"
+                    aria-invalid={Boolean(errors.type)}
+                    aria-describedby={errors.type ? "type-error" : undefined}
+                  >
                     <SelectValue placeholder={t.contact.formTitle} />
                   </SelectTrigger>
                   <SelectContent>
@@ -166,15 +350,23 @@ export function ContactSection() {
                     <SelectItem value="duda">{t.contact.options.question}</SelectItem>
                   </SelectContent>
                 </Select>
+                {errors.type && (
+                  <p id="type-error" className={styles.fieldError}>
+                    {t.contact.errors[errors.type]}
+                  </p>
+                )}
               </div>
 
               <div className={styles.field}>
-                <Label id="phone-label" htmlFor="phone">{t.contact.phone}</Label>
+                <Label id="phone-label" htmlFor="phone">
+                  {t.contact.phone}
+                </Label>
                 <div className={styles.phoneField}>
                   <Select
+                    name="countryCode"
                     value={formData.countryCode}
-                    onValueChange={(value) => setFormData({ ...formData, countryCode: value })}
-                    disabled={isSubmitting}
+                    onValueChange={(value) => updateField("countryCode", value)}
+                    disabled={formDisabled}
                   >
                     <SelectTrigger
                       id="country-code"
@@ -193,52 +385,86 @@ export function ContactSection() {
                   </Select>
                   <Input
                     id="phone"
+                    name="phone"
                     type="tel"
                     value={formData.phone}
-                    onChange={(e) => handlePhoneChange(e.target.value)}
+                    onChange={(event) => updateField("phone", event.target.value)}
                     placeholder="1234567890"
                     required
-                    maxLength={10}
-                    inputMode="numeric"
+                    inputMode="tel"
                     autoComplete="tel-national"
                     className={styles.input}
-                    disabled={isSubmitting}
+                    disabled={formDisabled}
+                    aria-invalid={Boolean(errors.phone)}
+                    aria-describedby={errors.phone ? "phone-error" : undefined}
                   />
                 </div>
+                {errors.phone && (
+                  <p id="phone-error" className={styles.fieldError}>
+                    {t.contact.errors[errors.phone]}
+                  </p>
+                )}
               </div>
 
               <div className={styles.field}>
                 <Label htmlFor="email">{t.contact.email}</Label>
                 <Input
                   id="email"
+                  name="email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                  onChange={(event) => updateField("email", event.target.value)}
                   placeholder={t.contact.emailPlaceholder}
                   required
+                  maxLength={254}
                   autoComplete="email"
                   className={styles.input}
-                  disabled={isSubmitting}
+                  disabled={formDisabled}
+                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={errors.email ? "email-error" : undefined}
                 />
+                {errors.email && (
+                  <p id="email-error" className={styles.fieldError}>
+                    {t.contact.errors[errors.email]}
+                  </p>
+                )}
               </div>
 
               <div className={styles.field}>
                 <Label htmlFor="description">{t.contact.description}</Label>
                 <Textarea
                   id="description"
+                  name="description"
                   value={formData.description}
-                  onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                  onChange={(event) => updateField("description", event.target.value)}
                   placeholder={t.contact.descriptionPlaceholder}
                   required
                   rows={5}
                   className={styles.textarea}
-                  disabled={isSubmitting}
+                  disabled={formDisabled}
+                  aria-invalid={Boolean(errors.description)}
+                  aria-describedby={errors.description ? "description-error" : undefined}
                 />
+                {errors.description && (
+                  <p id="description-error" className={styles.fieldError}>
+                    {t.contact.errors[errors.description]}
+                  </p>
+                )}
               </div>
 
-              <Button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                <span>{isSubmitting ? t.contact.submitting : t.contact.submit}</span>
-                <Send aria-hidden="true" />
+              <Button type="submit" className={styles.submitButton} disabled={formDisabled}>
+                <span>
+                  {!emailServiceAvailable
+                    ? t.contact.unavailableSubmit
+                    : isSubmitting
+                      ? t.contact.submitting
+                      : t.contact.submit}
+                </span>
+                {isSubmitting ? (
+                  <LoaderCircle className={styles.loadingIcon} aria-hidden="true" />
+                ) : (
+                  <Send aria-hidden="true" />
+                )}
               </Button>
             </form>
           </div>

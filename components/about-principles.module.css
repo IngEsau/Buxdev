@@ -78,7 +78,7 @@
   stroke-width: 1.4;
 }
 
-.principle h3 {
+.principle h2 {
   max-width: 24rem;
   margin: 0 0 1.25rem;
   color: var(--foreground);
@@ -97,7 +97,7 @@
   line-height: 1.75;
 }
 
-.valuesHeading h3 {
+.valuesHeading h2 {
   margin-top: clamp(3.25rem, 7vw, 6rem);
 }
 
@@ -166,7 +166,7 @@
     grid-template-columns: 1fr;
   }
 
-  .valuesHeading h3 {
+  .valuesHeading h2 {
     margin-top: 3rem;
   }
 }

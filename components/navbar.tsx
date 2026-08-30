@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ArrowUpRight, Check, Globe2, Menu, Moon, Sun, X } from "lucide-react"
+import { ArrowUpRight, Globe2, Menu, Moon, Sun, X } from "lucide-react"
 
 import {
   DropdownMenu,
   DropdownMenuContent,
-  DropdownMenuItem,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { useLanguage } from "@/hooks/use-language"
@@ -26,17 +27,30 @@ const navigation = [
   { key: "contacto", href: "/contact" },
 ] as const
 
+interface NavbarContentProps {
+  pathname: string
+}
+
 export function Navbar() {
+  const pathname = usePathname()
+
+  return <NavbarContent key={pathname} pathname={pathname} />
+}
+
+function NavbarContent({ pathname }: NavbarContentProps) {
   const [isOpen, setIsOpen] = useState(false)
   const [scrolled, setScrolled] = useState(false)
+  const [languageMenuOpen, setLanguageMenuOpen] = useState<"desktop" | "mobile" | null>(null)
+  const headerRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
-  const pathname = usePathname()
   const { t, language, setLanguage } = useLanguage()
   const { theme, toggleTheme } = useTheme()
   const normalizedPathname = pathname.replace(/\/+$/, "") || "/"
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 16)
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 16)
+    }
 
     handleScroll()
     window.addEventListener("scroll", handleScroll, { passive: true })
@@ -44,14 +58,49 @@ export function Navbar() {
   }, [])
 
   useEffect(() => {
-    document.documentElement.lang = language
-  }, [language])
+    const desktopQuery = window.matchMedia("(min-width: 56.0625rem)")
+    const handleDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) setIsOpen(false)
+      setLanguageMenuOpen(null)
+    }
+
+    desktopQuery.addEventListener("change", handleDesktop)
+    return () => desktopQuery.removeEventListener("change", handleDesktop)
+  }, [])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const root = document.documentElement
+    const previousOverflow = root.style.overflow
+    root.style.overflow = "hidden"
+
+    return () => {
+      root.style.overflow = previousOverflow
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const handlePointerDown = (event: PointerEvent) => {
+      const target = event.target
+      if (!(target instanceof Node)) return
+      if (headerRef.current?.contains(target)) return
+      if (target instanceof Element && target.closest('[data-slot="dropdown-menu-content"]')) return
+
+      setIsOpen(false)
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown, true)
+    return () => document.removeEventListener("pointerdown", handlePointerDown, true)
+  }, [isOpen])
 
   useEffect(() => {
     if (!isOpen) return
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape") return
+      if (event.key !== "Escape" || event.defaultPrevented || languageMenuOpen) return
 
       setIsOpen(false)
       menuButtonRef.current?.focus()
@@ -61,17 +110,20 @@ export function Navbar() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown)
     }
-  }, [isOpen])
+  }, [isOpen, languageMenuOpen])
 
   const themeLabel = theme === "dark" ? t.header.themeToLight : t.header.themeToDark
 
-  const renderLanguageMenu = (tabIndex?: number) => (
-    <DropdownMenu>
+  const renderLanguageMenu = (scope: "desktop" | "mobile", tabIndex?: number) => (
+    <DropdownMenu
+      open={languageMenuOpen === scope}
+      onOpenChange={(open) => setLanguageMenuOpen(open ? scope : null)}
+    >
       <DropdownMenuTrigger asChild>
         <button
           type="button"
           className={styles.utilityButton}
-          aria-label={t.header.language}
+          aria-label={`${t.header.language}: ${language === "es" ? "Español" : "English"}`}
           tabIndex={tabIndex}
         >
           <Globe2 aria-hidden="true" />
@@ -79,20 +131,25 @@ export function Navbar() {
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className={styles.languageMenu}>
-        <DropdownMenuItem onClick={() => setLanguage("es")} className={styles.languageOption}>
-          <span>Español</span>
-          {language === "es" && <Check aria-hidden="true" />}
-        </DropdownMenuItem>
-        <DropdownMenuItem onClick={() => setLanguage("en")} className={styles.languageOption}>
-          <span>English</span>
-          {language === "en" && <Check aria-hidden="true" />}
-        </DropdownMenuItem>
+        <DropdownMenuRadioGroup
+          value={language}
+          onValueChange={(value) => {
+            if (value === "es" || value === "en") setLanguage(value)
+          }}
+        >
+          <DropdownMenuRadioItem value="es" className={styles.languageOption}>
+            Español
+          </DropdownMenuRadioItem>
+          <DropdownMenuRadioItem value="en" className={styles.languageOption}>
+            English
+          </DropdownMenuRadioItem>
+        </DropdownMenuRadioGroup>
       </DropdownMenuContent>
     </DropdownMenu>
   )
 
   return (
-    <header className={cn(styles.header, scrolled && styles.scrolled)}>
+    <header ref={headerRef} className={cn(styles.header, scrolled && styles.scrolled)}>
       <div className={styles.headerInner}>
         <Link
           href="/"
@@ -106,7 +163,7 @@ export function Navbar() {
             width={613}
             height={404}
             className={styles.logoOnLight}
-            priority
+            loading="eager"
           />
           <Image
             src="/brand/buxdev/logo-on-dark.svg"
@@ -114,7 +171,7 @@ export function Navbar() {
             width={613}
             height={404}
             className={styles.logoOnDark}
-            priority
+            loading="eager"
           />
         </Link>
 
@@ -133,10 +190,15 @@ export function Navbar() {
         </nav>
 
         <div className={styles.desktopActions}>
-          <button type="button" onClick={toggleTheme} className={styles.iconButton} aria-label={themeLabel}>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className={styles.iconButton}
+            aria-label={themeLabel}
+          >
             {theme === "dark" ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
           </button>
-          {renderLanguageMenu()}
+          {renderLanguageMenu("desktop")}
           <Link href="/contact" className={styles.headerCta}>
             <span>{t.header.projectCta}</span>
             <ArrowUpRight aria-hidden="true" />
@@ -144,7 +206,12 @@ export function Navbar() {
         </div>
 
         <div className={styles.mobileActions}>
-          <button type="button" onClick={toggleTheme} className={styles.iconButton} aria-label={themeLabel}>
+          <button
+            type="button"
+            onClick={toggleTheme}
+            className={styles.iconButton}
+            aria-label={themeLabel}
+          >
             {theme === "dark" ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
           </button>
           <button
@@ -185,7 +252,7 @@ export function Navbar() {
         </div>
 
         <div className={styles.mobileMenuFooter}>
-          {renderLanguageMenu(isOpen ? 0 : -1)}
+          {renderLanguageMenu("mobile", isOpen ? 0 : -1)}
           <Link
             href="/contact"
             className={styles.mobileCta}

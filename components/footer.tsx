@@ -19,6 +19,7 @@ const navigation = [
 export function Footer() {
   const { t } = useLanguage()
   const year = new Date().getFullYear()
+  const phoneHref = `tel:${t.footer.phone.replace(/[^\d+]/g, "")}`
 
   return (
     <footer className={styles.footer}>
@@ -61,7 +62,7 @@ export function Footer() {
               <Mail aria-hidden="true" />
               <span>{t.footer.email}</span>
             </a>
-            <a href={`tel:${t.footer.phone}`}>
+            <a href={phoneHref}>
               <Phone aria-hidden="true" />
               <span>{t.footer.phone}</span>
             </a>

@@ -169,11 +169,13 @@
     background: var(--background);
   }
 
+  html[data-language-pending="true"] body {
+    visibility: hidden;
+  }
+
   body {
-    min-width: 20rem;
     min-height: 100vh;
     margin: 0;
-    overflow-x: clip;
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-montserrat), Montserrat, ui-sans-serif, system-ui, sans-serif;
@@ -194,6 +196,27 @@
     outline: 2px solid var(--ring);
     outline-offset: 3px;
   }
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 200;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--background-elevated);
+  color: var(--foreground);
+  font-size: 0.8125rem;
+  font-weight: 650;
+  text-decoration: none;
+  transform: translateY(calc(-100% - 1rem));
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
 }
 
 @keyframes border-traverse {

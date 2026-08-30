@@ -58,7 +58,7 @@ export function HeroSection() {
 
           <div className={`${styles.sidePanel} ${styles.leftPanel}`}>
             <div className={styles.panelHeader}>
-              <span>01 / EXPERIENCIA</span>
+              <span>{t.hero.interface.experience}</span>
               <Code2 />
             </div>
             <div className={styles.interfacePreview}>
@@ -80,7 +80,7 @@ export function HeroSection() {
             </div>
             <div className={styles.panelFooter}>
               <span className={styles.statusDot} />
-              INTERFAZ RESPONSIVE
+              {t.hero.interface.responsiveInterface}
             </div>
           </div>
 
@@ -91,7 +91,7 @@ export function HeroSection() {
                 <span />
                 <span />
               </div>
-              <span className={styles.windowPath}>buxdev / producto</span>
+              <span className={styles.windowPath}>{t.hero.interface.productPath}</span>
               <GitBranch />
             </div>
 
@@ -115,34 +115,34 @@ export function HeroSection() {
 
               <div className={styles.coreGlow} />
               <div className={styles.brandCore}>
-                <Image src="/brand/buxdev/mark-on-dark.svg" alt="" width={375} height={404} />
+                <Image src="/brand/buxdev/mark-on-dark.svg" alt="" width={375} height={404} preload />
               </div>
 
               <div className={styles.canvasLabel}>
                 <span className={styles.statusDot} />
-                NÚCLEO DE PRODUCTO
+                {t.hero.interface.productCore}
               </div>
             </div>
 
             <div className={styles.systemMetrics}>
               <div>
-                <span>ESTADO</span>
-                <strong>OPERATIVO</strong>
+                <span>{t.hero.interface.status}</span>
+                <strong>{t.hero.interface.operational}</strong>
               </div>
               <div>
-                <span>CAPAS</span>
+                <span>{t.hero.interface.layers}</span>
                 <strong>WEB · APP · API</strong>
               </div>
               <div>
-                <span>ENTREGA</span>
-                <strong>ITERATIVA</strong>
+                <span>{t.hero.interface.delivery}</span>
+                <strong>{t.hero.interface.iterative}</strong>
               </div>
             </div>
           </div>
 
           <div className={`${styles.sidePanel} ${styles.rightPanel}`}>
             <div className={styles.panelHeader}>
-              <span>02 / SISTEMAS</span>
+              <span>{t.hero.interface.systems}</span>
               <ServerCog />
             </div>
             <div className={styles.serviceStack}>
@@ -150,41 +150,41 @@ export function HeroSection() {
                 <span className={styles.serviceIcon}>
                   <Braces />
                 </span>
-                <span>Aplicación</span>
-                <span className={styles.serviceState}>ACTIVA</span>
+                <span>{t.hero.interface.application}</span>
+                <span className={styles.serviceState}>{t.hero.interface.active}</span>
               </div>
               <div>
                 <span className={styles.serviceIcon}>
                   <Database />
                 </span>
-                <span>Servicios</span>
-                <span className={styles.serviceState}>LISTOS</span>
+                <span>{t.hero.interface.services}</span>
+                <span className={styles.serviceState}>{t.hero.interface.ready}</span>
               </div>
               <div>
                 <span className={styles.serviceIcon}>
                   <MonitorSmartphone />
                 </span>
-                <span>Interfaces</span>
-                <span className={styles.serviceState}>SYNC</span>
+                <span>{t.hero.interface.interfaces}</span>
+                <span className={styles.serviceState}>{t.hero.interface.synced}</span>
               </div>
             </div>
             <div className={styles.panelFooter}>
               <span className={styles.statusDot} />
-              SISTEMA CONECTADO
+              {t.hero.interface.connectedSystem}
             </div>
           </div>
 
           <div className={styles.capabilityRail}>
             <span>
-              <Code2 /> DESARROLLO WEB
+              <Code2 /> {t.hero.interface.webDevelopment}
             </span>
             <i />
             <span>
-              <MonitorSmartphone /> APLICACIONES
+              <MonitorSmartphone /> {t.hero.interface.applications}
             </span>
             <i />
             <span>
-              <Boxes /> PRODUCTO DIGITAL
+              <Boxes /> {t.hero.interface.digitalProduct}
             </span>
           </div>
         </div>

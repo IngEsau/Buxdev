@@ -230,6 +230,11 @@
   transform: translateY(-1px);
 }
 
+.headerCta:active,
+.mobileCta:active {
+  transform: translateY(0);
+}
+
 .languageMenu {
   min-width: 9.5rem;
   border-color: var(--border-strong);
@@ -381,7 +386,7 @@
 
   .mobileMenuFooter {
     align-items: stretch;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
 
   .mobileMenuFooter > div,

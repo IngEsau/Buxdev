@@ -291,6 +291,16 @@
   padding: clamp(1.5rem, 4vw, 2.5rem);
 }
 
+.honeypot {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
 .formFeedback {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr);

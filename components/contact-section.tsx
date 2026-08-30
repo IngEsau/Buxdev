@@ -2,7 +2,7 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useRef, useState } from "react"
 import Link from "next/link"
 import { ArrowUpRight, CircleAlert, CircleCheck, LoaderCircle, Mail, Phone, Send } from "lucide-react"
 
@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/hooks/use-language"
-import { isEmailServiceConfigured, sendEmail } from "@/services/email"
+import { ContactRequestError, sendContactRequest } from "@/services/contact"
 
 import styles from "./contact-section.module.css"
 
@@ -36,6 +36,7 @@ type ContactFormData = {
   description: string
   privacyAcknowledged: boolean
   whatsappConsent: boolean
+  website: string
 }
 
 type ValidatedField = "type" | "phone" | "email" | "description" | "privacyAcknowledged"
@@ -49,7 +50,7 @@ type ContactErrorKey =
   | "descriptionTooLong"
   | "privacyRequired"
 type FormErrors = Partial<Record<ValidatedField, ContactErrorKey>>
-type SubmissionStatus = "idle" | "submitting" | "success" | "error"
+type SubmissionStatus = "idle" | "submitting" | "success" | "error" | "unavailable"
 
 const fieldIds: Record<ValidatedField, string> = {
   type: "type",
@@ -67,6 +68,7 @@ const createInitialFormData = (): ContactFormData => ({
   description: "",
   privacyAcknowledged: false,
   whatsappConsent: false,
+  website: "",
 })
 
 const normalizeNationalPhone = (phone: string, countryCode: string) => {
@@ -95,10 +97,11 @@ export function ContactSection() {
   const [status, setStatus] = useState<SubmissionStatus>("idle")
   const [errors, setErrors] = useState<FormErrors>({})
   const [formData, setFormData] = useState<ContactFormData>(createInitialFormData)
-  const emailServiceAvailable = isEmailServiceConfigured()
+  const submissionInFlight = useRef(false)
   const isSubmitting = status === "submitting"
+  const isUnavailable = status === "unavailable"
   const hasValidationErrors = Object.keys(errors).length > 0
-  const formDisabled = isSubmitting || !emailServiceAvailable
+  const formDisabled = isSubmitting || isUnavailable
   const phoneHref = `tel:${t.footer.phone.replace(/[^\d+]/g, "")}`
 
   const clearTransientStatus = () => {
@@ -182,7 +185,7 @@ export function ContactSection() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (isSubmitting || !emailServiceAvailable) return
+    if (submissionInFlight.current || isSubmitting || isUnavailable) return
 
     const nextErrors = validateForm()
     if (Object.keys(nextErrors).length > 0) {
@@ -197,30 +200,29 @@ export function ContactSection() {
 
     setErrors({})
     setStatus("submitting")
+    submissionInFlight.current = true
 
     try {
-      await sendEmail({
+      await sendContactRequest({
         type: formData.type,
         email: formData.email.trim(),
         cellphone: `${formData.countryCode}${nationalDigits}`,
         description: formData.description.trim(),
         privacyAcknowledged: formData.privacyAcknowledged,
         whatsappConsent: formData.whatsappConsent,
+        website: formData.website,
       })
 
       setStatus("success")
       setFormData(createInitialFormData())
-    } catch {
-      setStatus("error")
-
-      if (process.env.NODE_ENV === "development") {
-        console.error("[contact] EmailJS request failed")
-      }
+    } catch (error) {
+      setStatus(error instanceof ContactRequestError && error.status === 503 ? "unavailable" : "error")
+    } finally {
+      submissionInFlight.current = false
     }
   }
 
-  const feedbackVisible =
-    !emailServiceAvailable || hasValidationErrors || status === "success" || status === "error"
+  const feedbackVisible = hasValidationErrors || status === "success" || status === "error" || isUnavailable
 
   return (
     <section id="contacto" className={styles.section} aria-labelledby="contact-title">
@@ -282,7 +284,7 @@ export function ContactSection() {
               </div>
               <span
                 className={styles.formStatus}
-                data-state={!emailServiceAvailable ? "error" : hasValidationErrors ? "validation-error" : status}
+                data-state={isUnavailable ? "error" : hasValidationErrors ? "validation-error" : status}
                 aria-hidden="true"
               />
             </div>
@@ -295,7 +297,7 @@ export function ContactSection() {
               aria-busy={isSubmitting}
               noValidate
             >
-              {!emailServiceAvailable && (
+              {isUnavailable && (
                 <div
                   id="contact-form-feedback"
                   className={styles.formFeedback}
@@ -310,7 +312,7 @@ export function ContactSection() {
                 </div>
               )}
 
-              {emailServiceAvailable && hasValidationErrors && (
+              {!isUnavailable && hasValidationErrors && (
                 <div
                   id="contact-form-feedback"
                   className={styles.formFeedback}
@@ -322,7 +324,7 @@ export function ContactSection() {
                 </div>
               )}
 
-              {emailServiceAvailable && status === "success" && (
+              {status === "success" && (
                 <div
                   id="contact-form-feedback"
                   className={styles.formFeedback}
@@ -337,7 +339,7 @@ export function ContactSection() {
                 </div>
               )}
 
-              {emailServiceAvailable && status === "error" && (
+              {status === "error" && (
                 <div
                   id="contact-form-feedback"
                   className={styles.formFeedback}
@@ -351,6 +353,19 @@ export function ContactSection() {
                   </div>
                 </div>
               )}
+
+              <div className={styles.honeypot} aria-hidden="true">
+                <label htmlFor="website">Sitio web</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  value={formData.website}
+                  onChange={(event) => updateField("website", event.target.value)}
+                  autoComplete="off"
+                  tabIndex={-1}
+                />
+              </div>
 
               <div className={styles.field}>
                 <Label htmlFor="type">{t.contact.formTitle}</Label>
@@ -532,7 +547,7 @@ export function ContactSection() {
 
               <Button type="submit" className={styles.submitButton} disabled={formDisabled}>
                 <span>
-                  {!emailServiceAvailable
+                  {isUnavailable
                     ? t.contact.unavailableSubmit
                     : isSubmitting
                       ? t.contact.submitting

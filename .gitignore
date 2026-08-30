@@ -12,6 +12,11 @@
 .env*
 !.env.example
 
+# private PHP configuration (examples remain versioned)
+/private/
+/server/config/*.php
+!/server/config/*.example.php
+
 # logs and tooling caches
 npm-debug.log*
 yarn-debug.log*

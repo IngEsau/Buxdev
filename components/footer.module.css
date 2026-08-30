@@ -162,9 +162,14 @@
   gap: clamp(1.5rem, 3vw, 2.75rem);
 }
 
-.legal span {
+.legal a {
   color: var(--foreground-subtle);
-  cursor: default;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.legal a:hover {
+  color: var(--foreground);
 }
 
 @media (max-width: 56rem) {

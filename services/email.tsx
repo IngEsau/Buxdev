@@ -5,6 +5,8 @@ type SendEmailParams = {
   email: string
   cellphone: string
   description: string
+  privacyAcknowledged: boolean
+  whatsappConsent: boolean
 }
 
 const emailServiceConfig = {
@@ -22,6 +24,8 @@ export const sendEmail = async ({
   email,
   cellphone,
   description,
+  privacyAcknowledged,
+  whatsappConsent,
 }: SendEmailParams) => {
   if (!isEmailServiceConfigured()) {
     throw new Error("Email service is not configured")
@@ -32,6 +36,8 @@ export const sendEmail = async ({
     email,
     cellphone,
     description,
+    privacy_acknowledged: privacyAcknowledged ? "Sí" : "No",
+    whatsapp_consent: whatsappConsent ? "Sí" : "No",
     time: new Date().toLocaleString(),
   }
 

@@ -74,8 +74,8 @@ export function Footer() {
             © <time dateTime={String(year)}>{year}</time> BUXDEV
           </p>
           <div className={styles.legal} aria-label={t.footer.legalLabel}>
-            <span aria-disabled="true">{t.footer.privacy}</span>
-            <span aria-disabled="true">{t.footer.terms}</span>
+            <Link href="/privacidad">{t.footer.privacy}</Link>
+            <Link href="/terminos">{t.footer.terms}</Link>
           </div>
         </div>
       </div>

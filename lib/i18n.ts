@@ -177,6 +177,14 @@ export const translations = {
       unavailableDescription:
         "Puedes escribirnos o llamarnos mediante los datos de contacto directo.",
       unavailableSubmit: "Envío no disponible",
+      privacyNotice:
+        "Daniel Esaú Negrete Aguilar, responsable de BUXDEV, tratará el correo electrónico, número de teléfono, tipo de proyecto y descripción que proporciones para atender y dar seguimiento a tu solicitud, responderte por correo electrónico y, cuando lo autorices, continuar la comunicación mediante WhatsApp. Puedes solicitar la limitación del uso de tus datos o ejercer tus derechos ARCO en privacidad@buxdev.com. Consulta el",
+      privacyNoticeLink: "Aviso de Privacidad integral",
+      privacyAcknowledgementPrefix: "He leído el",
+      privacyAcknowledgementLink: "Aviso de Privacidad",
+      privacyAcknowledgementSuffix: ".",
+      whatsappConsent:
+        "Acepto continuar el seguimiento de mi solicitud mediante WhatsApp al número proporcionado.",
       errors: {
         typeRequired: "Selecciona una opción.",
         phoneRequired: "Ingresa tu número de teléfono.",
@@ -185,6 +193,7 @@ export const translations = {
         emailInvalid: "Ingresa un correo electrónico válido.",
         descriptionRequired: "Cuéntanos brevemente qué necesitas.",
         descriptionTooLong: "La descripción no puede superar los 2000 caracteres.",
+        privacyRequired: "Debes confirmar que has leído el Aviso de Privacidad.",
       },
     },
     portfolio: {
@@ -204,7 +213,7 @@ export const translations = {
       legalLabel: "Información legal",
       email: "info@buxdev.com",
       phone: "+52 1 220 139 9038",
-      privacy: "Política de privacidad",
+      privacy: "Aviso de Privacidad",
       terms: "Términos y Condiciones",
     },
     chat: {
@@ -229,6 +238,10 @@ export const translations = {
       title: "Página no encontrada",
       description: "Lo sentimos, la página que buscas no existe.",
       back: "Volver al inicio",
+    },
+    legal: {
+      languageNotice: "El contenido jurídico oficial se presenta en español.",
+      switchToSpanish: "Cambiar interfaz a español",
     },
   },
   en: {
@@ -408,6 +421,14 @@ export const translations = {
       unavailableTitle: "Form temporarily unavailable",
       unavailableDescription: "You can email or call us using our direct contact details.",
       unavailableSubmit: "Sending unavailable",
+      privacyNotice:
+        "Daniel Esaú Negrete Aguilar, responsable de BUXDEV, tratará el correo electrónico, número de teléfono, tipo de proyecto y descripción que proporciones para atender y dar seguimiento a tu solicitud, responderte por correo electrónico y, cuando lo autorices, continuar la comunicación mediante WhatsApp. Puedes solicitar la limitación del uso de tus datos o ejercer tus derechos ARCO en privacidad@buxdev.com. Consulta el",
+      privacyNoticeLink: "Aviso de Privacidad integral",
+      privacyAcknowledgementPrefix: "He leído el",
+      privacyAcknowledgementLink: "Aviso de Privacidad",
+      privacyAcknowledgementSuffix: ".",
+      whatsappConsent:
+        "Acepto continuar el seguimiento de mi solicitud mediante WhatsApp al número proporcionado.",
       errors: {
         typeRequired: "Select an option.",
         phoneRequired: "Enter your phone number.",
@@ -416,6 +437,7 @@ export const translations = {
         emailInvalid: "Enter a valid email address.",
         descriptionRequired: "Briefly tell us what you need.",
         descriptionTooLong: "The description cannot exceed 2000 characters.",
+        privacyRequired: "You must confirm that you have read the Aviso de Privacidad.",
       },
     },
     portfolio: {
@@ -435,8 +457,8 @@ export const translations = {
       legalLabel: "Legal information",
       email: "info@buxdev.com",
       phone: "+52 1 220 139 9038",
-      privacy: "Privacy Policy",
-      terms: "Terms and Conditions",
+      privacy: "Aviso de Privacidad",
+      terms: "Términos y Condiciones",
     },
     chat: {
       title: "Help",
@@ -459,6 +481,10 @@ export const translations = {
       title: "Page not found",
       description: "Sorry, the page you are looking for does not exist.",
       back: "Back to home",
+    },
+    legal: {
+      languageNotice: "The official legal content is provided in Spanish.",
+      switchToSpanish: "Switch interface to Spanish",
     },
   },
 }

@@ -1,0 +1,64 @@
+# BUXDEV static export: canonical URLs, error handling and delivery policy.
+
+ErrorDocument 404 /404.html
+
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+
+  # Let cPanel/AutoSSL serve certificate challenges without canonical redirects.
+  RewriteRule ^\.well-known/acme-challenge(?:/|$) - [L]
+
+  # The contact API is a real PHP endpoint. Never redirect or rewrite its POST requests.
+  RewriteRule ^api/contact\.php$ - [L]
+
+  # Collapse explicit Next export entry points into their clean canonical URLs.
+  RewriteCond %{THE_REQUEST} \s/+index\.html(?:[?\s]) [NC]
+  RewriteRule ^index\.html$ https://buxdev.com/ [R=301,L,NE]
+
+  RewriteCond %{THE_REQUEST} \s+/(?:about|services|work|contact|privacidad|terminos)/index\.html(?:[?\s]) [NC]
+  RewriteRule ^(about|services|work|contact|privacidad|terminos)/index\.html$ https://buxdev.com/$1/ [R=301,L,NE]
+
+  # Keep the exported page routes on the trailing-slash convention without a redirect chain.
+  RewriteCond %{THE_REQUEST} \s+/(?:about|services|work|contact|privacidad|terminos)(?:[?\s]) [NC]
+  RewriteRule ^(about|services|work|contact|privacidad|terminos)$ https://buxdev.com/$1/ [R=301,L,NE]
+
+  # Resolve HTTP and WWW variants directly to the only canonical origin.
+  RewriteCond %{HTTPS} !=on [OR]
+  RewriteCond %{HTTP_HOST} !^buxdev\.com$ [NC]
+  RewriteRule ^ https://buxdev.com%{REQUEST_URI} [R=301,L,NE]
+
+  # Direct access to Next's error artifacts must remain a real 404.
+  RewriteCond %{ENV:REDIRECT_STATUS} ^$
+  RewriteCond %{THE_REQUEST} \s/+404\.html(?:[?\s]) [NC]
+  RewriteRule ^404\.html$ - [R=404,L]
+
+  RewriteCond %{ENV:REDIRECT_STATUS} ^$
+  RewriteRule ^(?:404|_not-found)(?:/.*)?$ - [R=404,L]
+</IfModule>
+
+<IfModule mod_setenvif.c>
+  SetEnvIf Request_URI "^/_next/static/" BUXDEV_IMMUTABLE=1
+  SetEnvIf Request_URI "^/api/contact\.php$" BUXDEV_CONTACT_API=1
+</IfModule>
+
+<IfModule mod_headers.c>
+  # Next fingerprints files below _next/static, so these assets are safe to cache for one year.
+  Header always set Cache-Control "public, max-age=31536000, immutable" env=BUXDEV_IMMUTABLE
+
+  # Documents and crawler directives must revalidate after every deployment.
+  <FilesMatch "\.(?:html?)$">
+    Header always set Cache-Control "no-cache, max-age=0, must-revalidate"
+  </FilesMatch>
+  <FilesMatch "^(?:robots\.txt|sitemap\.xml)$">
+    Header always set Cache-Control "no-cache, max-age=0, must-revalidate"
+  </FilesMatch>
+
+  # Defense in depth: the PHP endpoint also emits no-store itself.
+  Header always set Cache-Control "no-store, max-age=0" env=BUXDEV_CONTACT_API
+</IfModule>
+
+<IfModule mod_filter.c>
+  <IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/css text/plain text/javascript text/xml application/javascript application/json application/xml image/svg+xml
+  </IfModule>
+</IfModule>

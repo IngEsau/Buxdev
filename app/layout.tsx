@@ -2,6 +2,12 @@ import type React from "react"
 import type { Metadata } from "next"
 import { Geist_Mono, Montserrat } from "next/font/google"
 import { SiteShell } from "@/components/site-shell"
+import {
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_TITLE,
+  SITE_URL,
+} from "@/lib/seo"
 import "./globals.css"
 
 const initialPreferencesScript = `
@@ -39,29 +45,26 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://buxdev.com"),
+  metadataBase: SITE_URL,
   title: {
-    default: "BUXDEV - Desarrollo de Software Multiplataforma",
+    default: SITE_TITLE,
     template: "%s | BUXDEV",
   },
-  description:
-    "Empresa mexicana de desarrollo de software con más de 3 años de experiencia. Páginas web, tiendas en línea, web apps, mobile apps y más.",
-  applicationName: "BUXDEV",
-  alternates: {
-    canonical: "/",
-  },
+  description: SITE_DESCRIPTION,
+  applicationName: SITE_NAME,
+  creator: SITE_NAME,
+  publisher: SITE_NAME,
   openGraph: {
     type: "website",
     locale: "es_MX",
-    url: "/",
-    siteName: "BUXDEV",
-    title: "BUXDEV - Desarrollo de Software Multiplataforma",
-    description:
-      "Desarrollo de páginas web, tiendas en línea y aplicaciones multiplataforma para impulsar negocios e ideas.",
+    siteName: SITE_NAME,
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
-  robots: {
-    index: true,
-    follow: true,
+  twitter: {
+    card: "summary",
+    title: SITE_TITLE,
+    description: SITE_DESCRIPTION,
   },
   icons: {
     icon: [

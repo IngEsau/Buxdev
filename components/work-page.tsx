@@ -25,11 +25,11 @@ export function WorkPageContent() {
           <p>{t.portfolio.stateDescription}</p>
 
           <div className={styles.actions}>
-            <Link href="/services" className={styles.secondaryAction}>
+            <Link href="/services/" className={styles.secondaryAction}>
               <span>{t.common.viewServices}</span>
               <FolderKanban aria-hidden="true" />
             </Link>
-            <Link href="/contact" className={styles.primaryAction}>
+            <Link href="/contact/" className={styles.primaryAction}>
               <span>{t.common.startProject}</span>
               <ArrowUpRight aria-hidden="true" />
             </Link>

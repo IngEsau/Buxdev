@@ -10,10 +10,10 @@ import styles from "./footer.module.css"
 
 const navigation = [
   { key: "inicio", href: "/" },
-  { key: "nosotros", href: "/about" },
-  { key: "servicios", href: "/services" },
-  { key: "trabajos", href: "/work" },
-  { key: "contacto", href: "/contact" },
+  { key: "nosotros", href: "/about/" },
+  { key: "servicios", href: "/services/" },
+  { key: "trabajos", href: "/work/" },
+  { key: "contacto", href: "/contact/" },
 ] as const
 
 export function Footer() {
@@ -74,8 +74,8 @@ export function Footer() {
             © <time dateTime={String(year)}>{year}</time> BUXDEV
           </p>
           <div className={styles.legal} aria-label={t.footer.legalLabel}>
-            <Link href="/privacidad">{t.footer.privacy}</Link>
-            <Link href="/terminos">{t.footer.terms}</Link>
+            <Link href="/privacidad/">{t.footer.privacy}</Link>
+            <Link href="/terminos/">{t.footer.terms}</Link>
           </div>
         </div>
       </div>

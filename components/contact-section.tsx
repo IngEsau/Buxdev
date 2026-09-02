@@ -497,7 +497,7 @@ export function ContactSection() {
                 {language === "en" && <small lang="en">{t.legal.languageNotice}</small>}
                 <p>
                   {t.contact.privacyNotice}{" "}
-                  <Link href="/privacidad">{t.contact.privacyNoticeLink}</Link>.
+                  <Link href="/privacidad/">{t.contact.privacyNoticeLink}</Link>.
                 </p>
               </div>
 
@@ -520,7 +520,7 @@ export function ContactSection() {
                   />
                   <label htmlFor="privacy-acknowledged" lang="es">
                     {t.contact.privacyAcknowledgementPrefix}{" "}
-                    <Link href="/privacidad">{t.contact.privacyAcknowledgementLink}</Link>
+                    <Link href="/privacidad/">{t.contact.privacyAcknowledgementLink}</Link>
                     {t.contact.privacyAcknowledgementSuffix}
                   </label>
                 </div>

@@ -185,7 +185,7 @@ export function ServicesSection() {
         </div>
 
         <div className={styles.sectionFooter}>
-          <Link href="/services" className={styles.sectionLink}>
+          <Link href="/services/" className={styles.sectionLink}>
             <span>{t.nav.servicios}</span>
             <ArrowUpRight aria-hidden="true" />
           </Link>

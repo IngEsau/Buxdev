@@ -205,7 +205,7 @@ export function ServicesPageContent() {
 
         <div className={styles.ctaRow}>
           <p>{t.contact.subtitle}</p>
-          <Link href="/contact" className={styles.cta}>
+          <Link href="/contact/" className={styles.cta}>
             <span>{t.common.startProject}</span>
             <ArrowUpRight aria-hidden="true" />
           </Link>

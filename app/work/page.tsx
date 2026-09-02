@@ -1,23 +1,14 @@
-import type { Metadata } from "next"
-
 import { PageHero } from "@/components/page-hero"
 import { WorkPageContent } from "@/components/work-page"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Trabajos",
-  description: "Portafolio de trabajos de BUXDEV. Próximamente se publicará una selección de proyectos destacados.",
-  alternates: {
-    canonical: "/work/",
-  },
-  openGraph: {
-    type: "website",
-    locale: "es_MX",
-    siteName: "BUXDEV",
-    url: "/work/",
-    title: "Trabajos | BUXDEV",
-    description: "Próximamente: una selección de proyectos desarrollados por BUXDEV.",
-  },
-}
+export const metadata = createPageMetadata({
+  title: "Trabajos de Desarrollo de Software",
+  description:
+    "Consulta el espacio de trabajos de BUXDEV, donde próximamente presentaremos una selección de proyectos con información real y suficiente.",
+  path: "/work/",
+  index: false,
+})
 
 export default function Page() {
   return (

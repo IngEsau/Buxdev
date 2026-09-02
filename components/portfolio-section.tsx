@@ -63,7 +63,7 @@ export function PortfolioSection() {
         </div>
 
         <div className={styles.sectionFooter}>
-          <Link href="/work" className={styles.sectionLink}>
+          <Link href="/work/" className={styles.sectionLink}>
             <span>{t.nav.trabajos}</span>
             <ArrowUpRight aria-hidden="true" />
           </Link>

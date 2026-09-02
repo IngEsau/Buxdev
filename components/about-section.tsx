@@ -29,7 +29,7 @@ export function AboutSection() {
 
         <div className={styles.sectionFooter}>
           <Link
-            href="/about"
+            href="/about/"
             className={styles.sectionLink}
             aria-label={`${t.nav.nosotros}: ${t.about.company}`}
           >

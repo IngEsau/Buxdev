@@ -21,11 +21,13 @@ import styles from "./navbar.module.css"
 
 const navigation = [
   { key: "inicio", href: "/" },
-  { key: "nosotros", href: "/about" },
-  { key: "servicios", href: "/services" },
-  { key: "trabajos", href: "/work" },
-  { key: "contacto", href: "/contact" },
+  { key: "nosotros", href: "/about/" },
+  { key: "servicios", href: "/services/" },
+  { key: "trabajos", href: "/work/" },
+  { key: "contacto", href: "/contact/" },
 ] as const
+
+const normalizePathname = (value: string) => value.replace(/\/+$/, "") || "/"
 
 interface NavbarContentProps {
   pathname: string
@@ -45,7 +47,7 @@ function NavbarContent({ pathname }: NavbarContentProps) {
   const menuButtonRef = useRef<HTMLButtonElement>(null)
   const { t, language, setLanguage } = useLanguage()
   const { theme, toggleTheme } = useTheme()
-  const normalizedPathname = pathname.replace(/\/+$/, "") || "/"
+  const normalizedPathname = normalizePathname(pathname)
 
   useEffect(() => {
     const handleScroll = () => {
@@ -182,7 +184,7 @@ function NavbarContent({ pathname }: NavbarContentProps) {
               href={item.href}
               className={styles.navLink}
               onClick={() => setIsOpen(false)}
-              aria-current={normalizedPathname === item.href ? "page" : undefined}
+              aria-current={normalizedPathname === normalizePathname(item.href) ? "page" : undefined}
             >
               {t.nav[item.key]}
             </Link>
@@ -199,7 +201,7 @@ function NavbarContent({ pathname }: NavbarContentProps) {
             {theme === "dark" ? <Sun aria-hidden="true" /> : <Moon aria-hidden="true" />}
           </button>
           {renderLanguageMenu("desktop")}
-          <Link href="/contact" className={styles.headerCta}>
+          <Link href="/contact/" className={styles.headerCta}>
             <span>{t.header.projectCta}</span>
             <ArrowUpRight aria-hidden="true" />
           </Link>
@@ -243,7 +245,7 @@ function NavbarContent({ pathname }: NavbarContentProps) {
               className={styles.mobileLink}
               onClick={() => setIsOpen(false)}
               tabIndex={isOpen ? 0 : -1}
-              aria-current={normalizedPathname === item.href ? "page" : undefined}
+              aria-current={normalizedPathname === normalizePathname(item.href) ? "page" : undefined}
             >
               <span>{t.nav[item.key]}</span>
               <ArrowUpRight aria-hidden="true" />
@@ -254,7 +256,7 @@ function NavbarContent({ pathname }: NavbarContentProps) {
         <div className={styles.mobileMenuFooter}>
           {renderLanguageMenu("mobile", isOpen ? 0 : -1)}
           <Link
-            href="/contact"
+            href="/contact/"
             className={styles.mobileCta}
             onClick={() => setIsOpen(false)}
             tabIndex={isOpen ? 0 : -1}

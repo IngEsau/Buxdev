@@ -1,30 +1,32 @@
-"use client"
+import type { Metadata } from "next"
 
-import Link from "next/link"
+import { NotFoundPage } from "@/components/not-found-page"
+import { SITE_NAME } from "@/lib/seo"
 
-import { Button } from "@/components/ui/button"
-import { useLanguage } from "@/hooks/use-language"
+const notFoundTitle = "Página no encontrada | " + SITE_NAME
+const notFoundDescription =
+  "La página solicitada no existe. Regresa al inicio de BUXDEV o utiliza la navegación del sitio."
+
+export const metadata: Metadata = {
+  title: {
+    absolute: notFoundTitle,
+  },
+  description: notFoundDescription,
+  openGraph: {
+    type: "website",
+    locale: "es_MX",
+    siteName: SITE_NAME,
+    title: notFoundTitle,
+    description: notFoundDescription,
+  },
+  twitter: {
+    card: "summary",
+    title: notFoundTitle,
+    description: notFoundDescription,
+  },
+  // Next adds noindex to not-found responses. Omitting robots avoids a duplicate tag; follow remains the default.
+}
 
 export default function NotFound() {
-  const { t } = useLanguage()
-
-  return (
-    <main
-      id="main-content"
-      tabIndex={-1}
-      className="min-h-screen flex items-center justify-center bg-background px-5"
-      aria-labelledby="not-found-title"
-    >
-      <div className="text-center">
-        <h1 className="text-6xl font-bold text-primary mb-4">404</h1>
-        <h2 id="not-found-title" className="text-2xl font-semibold mb-4">
-          {t.notFound.title}
-        </h2>
-        <p className="text-muted-foreground mb-8">{t.notFound.description}</p>
-        <Button asChild>
-          <Link href="/">{t.notFound.back}</Link>
-        </Button>
-      </div>
-    </main>
-  )
+  return <NotFoundPage />
 }

@@ -4,6 +4,7 @@ set -Eeuo pipefail
 
 readonly PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 readonly BUILD_DIR="${PROJECT_ROOT}/out"
+readonly APACHE_CONFIG="${BUILD_DIR}/.htaccess"
 readonly CONTACT_ENDPOINT="${PROJECT_ROOT}/server/api/contact.php"
 
 DEPLOY_ENV_FILE="${DEPLOY_ENV_FILE:-${PROJECT_ROOT}/.env.deploy}"
@@ -139,6 +140,7 @@ main() {
   local remote_dir
   local remote_dir_escaped
   local build_dir_escaped
+  local apache_config_escaped
   local contact_endpoint_escaped
   local build_file_count
   local build_size
@@ -171,6 +173,7 @@ main() {
 
   [[ -f "${BUILD_DIR}/index.html" ]] || fail "El build no generó out/index.html."
   [[ -d "${BUILD_DIR}/_next" ]] || fail "El build no generó out/_next."
+  [[ -f "$APACHE_CONFIG" ]] || fail "El build no publicó public/.htaccess en out/.htaccess."
   [[ -f "$CONTACT_ENDPOINT" ]] || fail "No se encontró server/api/contact.php."
 
   if command -v php >/dev/null 2>&1; then
@@ -184,6 +187,7 @@ main() {
 
   remote_dir_escaped="$(lftp_quote "$remote_dir")"
   build_dir_escaped="$(lftp_quote "$BUILD_DIR")"
+  apache_config_escaped="$(lftp_quote "$APACHE_CONFIG")"
   contact_endpoint_escaped="$(lftp_quote "$CONTACT_ENDPOINT")"
 
   log "Cuenta cPanel: ${FTP_ACCOUNT_PATH}"
@@ -195,6 +199,7 @@ main() {
     build_size="$(du -sh "$BUILD_DIR" | cut -f1)"
     log "Preflight seguro terminado: TLS, credenciales y destino son válidos."
     log "Build preparado: ${build_file_count} archivos, ${build_size}."
+    log "Configuración Apache preparada: public/.htaccess → .htaccess."
     log "Endpoint PHP preparado: server/api/contact.php → api/contact.php."
     log "No se ejecutaron comandos de transferencia ni borrado."
     return 0
@@ -216,9 +221,10 @@ mirror --reverse --delete --no-perms --parallel=4 --verbose=0 \\
   \"${build_dir_escaped}\" .
 mkdir -p -f api
 put \"${contact_endpoint_escaped}\" -o \"api/contact.php\"
+put \"${apache_config_escaped}\" -o \".htaccess\"
 "
 
-  log "Deploy terminado: out/ y api/contact.php fueron sincronizados sin tocar la configuración privada."
+  log "Deploy terminado: out/, api/contact.php y .htaccess fueron sincronizados sin tocar la configuración privada."
 }
 
 main "$@"

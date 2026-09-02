@@ -41,11 +41,11 @@ export function HeroSection() {
           <p className={styles.description}>{t.hero.description}</p>
 
           <div className={styles.heroActions}>
-            <Link href="/contact" className={styles.primaryAction}>
+            <Link href="/contact/" className={styles.primaryAction}>
               <span>{t.hero.primaryCta}</span>
               <ArrowUpRight aria-hidden="true" />
             </Link>
-            <Link href="/work" className={styles.secondaryAction}>
+            <Link href="/work/" className={styles.secondaryAction}>
               <span>{t.hero.secondaryCta}</span>
               <Layers3 aria-hidden="true" />
             </Link>
@@ -115,7 +115,7 @@ export function HeroSection() {
 
               <div className={styles.coreGlow} />
               <div className={styles.brandCore}>
-                <Image src="/brand/buxdev/mark-on-dark.svg" alt="" width={375} height={404} preload />
+                <Image src="/brand/buxdev/mark-on-dark.svg" alt="" width={375} height={404} />
               </div>
 
               <div className={styles.canvasLabel}>

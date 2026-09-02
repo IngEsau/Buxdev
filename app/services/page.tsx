@@ -1,25 +1,13 @@
-import type { Metadata } from "next"
-
 import { PageHero } from "@/components/page-hero"
 import { ServicesPageContent } from "@/components/services-page"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Servicios",
+export const metadata = createPageMetadata({
+  title: "Servicios de Desarrollo de Software",
   description:
-    "Páginas web, tiendas en línea, web apps, aplicaciones móviles, rediseño y SEO desarrollados por BUXDEV.",
-  alternates: {
-    canonical: "/services/",
-  },
-  openGraph: {
-    type: "website",
-    locale: "es_MX",
-    siteName: "BUXDEV",
-    url: "/services/",
-    title: "Servicios | BUXDEV",
-    description:
-      "Servicios de desarrollo web, comercio electrónico, aplicaciones, rediseño y optimización para buscadores.",
-  },
-}
+    "Explora los servicios de BUXDEV: páginas web, tiendas en línea, web apps, aplicaciones móviles, rediseño y optimización SEO.",
+  path: "/services/",
+})
 
 export default function Page() {
   return (

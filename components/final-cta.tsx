@@ -25,11 +25,11 @@ export function FinalCta() {
             <p className={styles.description}>{t.hero.description}</p>
 
             <div className={styles.actions}>
-              <Link href="/contact" className={styles.primaryAction}>
+              <Link href="/contact/" className={styles.primaryAction}>
                 <span>{t.hero.primaryCta}</span>
                 <ArrowUpRight aria-hidden="true" />
               </Link>
-              <Link href="/services" className={styles.secondaryAction}>
+              <Link href="/services/" className={styles.secondaryAction}>
                 <span>{t.nav.servicios}</span>
                 <Layers3 aria-hidden="true" />
               </Link>

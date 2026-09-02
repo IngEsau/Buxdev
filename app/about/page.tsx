@@ -1,24 +1,12 @@
-import type { Metadata } from "next"
-
 import { AboutPageContent } from "@/components/about-page"
+import { createPageMetadata } from "@/lib/seo"
 
-export const metadata: Metadata = {
-  title: "Nosotros",
+export const metadata = createPageMetadata({
+  title: "Nosotros e Ingeniería de Software",
   description:
-    "Conoce a BUXDEV, empresa mexicana dedicada al desarrollo de software multiplataforma y comprometida con la excelencia.",
-  alternates: {
-    canonical: "/about/",
-  },
-  openGraph: {
-    type: "website",
-    locale: "es_MX",
-    siteName: "BUXDEV",
-    url: "/about/",
-    title: "Nosotros | BUXDEV",
-    description:
-      "Experiencia, misión, visión y valores de BUXDEV como empresa de desarrollo de software multiplataforma.",
-  },
-}
+    "Conoce la experiencia, misión, visión y valores de BUXDEV y nuestro enfoque en el desarrollo de software multiplataforma.",
+  path: "/about/",
+})
 
 export default function Page() {
   return (

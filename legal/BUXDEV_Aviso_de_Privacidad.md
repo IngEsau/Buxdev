@@ -117,9 +117,11 @@ BUXDEV utiliza tecnologías necesarias, como el almacenamiento local del navegad
 
 Las tecnologías analíticas son opcionales y permanecen desactivadas de forma predeterminada. La persona usuaria puede rechazarlas, autorizarlas o revocar posteriormente su decisión mediante el panel **Preferencias de privacidad** disponible en el pie de página.
 
-**Al momento de la publicación de esta versión del aviso, Google Analytics y Google Tag Manager no se encuentran habilitados en el sitio para recopilar información de visitantes.** Si en el futuro se habilita Google Analytics 4, sólo deberá cargarse después de que la persona usuaria otorgue su consentimiento expreso para analítica.
+BUXDEV ha integrado **Google Tag Manager** como administrador y cargador de etiquetas. Bajo la modalidad básica de consentimiento, el contenedor de Google Tag Manager permanece completamente bloqueado mientras no exista una autorización expresa para analítica.
 
-Rechazar analítica no limita el acceso al contenido, la navegación, las funciones esenciales ni el formulario de contacto. Para conocer las tecnologías utilizadas, sus finalidades y la forma de cambiar las preferencias, consulte la [Política de Cookies](/cookies/).
+**Google Analytics 4 se utiliza únicamente después del consentimiento analítico**, mediante las etiquetas que se configuren y publiquen dentro de Google Tag Manager, para realizar medición agregada de visitas, interacción general, rendimiento y uso del sitio. BUXDEV no habilita mediante esta integración almacenamiento publicitario, remarketing ni personalización de anuncios.
+
+Rechazar analítica impide la carga del contenedor y no limita el acceso al contenido, la navegación, las funciones esenciales ni el formulario de contacto. La autorización puede revocarse posteriormente desde **Preferencias de privacidad**. Para conocer las tecnologías utilizadas, sus finalidades y la forma de cambiar las preferencias, consulte la [Política de Cookies](/cookies/).
 
 ## 11. Aviso de privacidad simplificado para medios electrónicos
 

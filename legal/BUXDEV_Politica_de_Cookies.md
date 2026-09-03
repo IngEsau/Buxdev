@@ -10,13 +10,15 @@ Esta política explica qué tecnologías utiliza actualmente **buxdev.com**, cu�
 
 ## 2. Tecnologías que utiliza actualmente BUXDEV
 
-Actualmente BUXDEV utiliza almacenamiento local del navegador para recordar:
+BUXDEV utiliza almacenamiento local del navegador para recordar:
 
 - la preferencia de tema claro u oscuro;
 - el idioma elegido para la interfaz;
 - la decisión sobre tecnologías analíticas opcionales.
 
-Al momento de esta actualización, BUXDEV no ha habilitado Google Analytics 4, Google Tag Manager, Google Ads ni otras tecnologías de analítica o publicidad para recopilar información de visitantes.
+Además, BUXDEV ha integrado Google Tag Manager como administrador y cargador de etiquetas. Bajo la modalidad básica de consentimiento, el contenedor no se descarga ni se ejecuta hasta que la persona usuaria acepta expresamente la categoría de analítica.
+
+Google Tag Manager no se presenta como una cookie. Su función es administrar las etiquetas analíticas configuradas dentro del contenedor. BUXDEV no utiliza Google Ads, remarketing ni personalización publicitaria mediante esta integración.
 
 ## 3. Tecnologías necesarias
 
@@ -32,21 +34,28 @@ Esta preferencia no contiene nombre, correo electrónico, teléfono, dirección 
 
 ## 5. Analítica opcional
 
-La categoría de analítica es opcional y comienza desactivada. Su finalidad futura será comprender de manera general las visitas, la interacción, el rendimiento y el uso del sitio para mejorar la experiencia.
+La categoría de analítica es opcional y comienza desactivada. Al autorizarla, Google Tag Manager puede cargar Google Analytics 4 para comprender de manera agregada las visitas, la interacción general, el rendimiento y el uso del sitio con la finalidad de mejorar la experiencia.
 
 Rechazar esta categoría mantiene la analítica desactivada. Navegar, desplazarse, permanecer en el sitio, utilizar el formulario o cerrar el panel no equivale a otorgar consentimiento.
 
-## 6. Uso futuro de Google Analytics 4
+## 6. Google Tag Manager y Google Analytics 4
 
-Google Analytics 4 sólo podrá habilitarse cuando haya sido implementado y la persona usuaria haya autorizado expresamente la categoría de analítica. Hasta entonces no se carga ni recopila información mediante esa herramienta.
+Google Analytics 4 se carga mediante las etiquetas configuradas y publicadas dentro de Google Tag Manager, únicamente después de que la persona usuaria autoriza expresamente la categoría de analítica. Sin esa autorización, el contenedor permanece bloqueado y no se envían solicitudes de consentimiento ni medición a Google.
 
-Antes de activar cualquier servicio de medición, BUXDEV deberá revisar y actualizar esta política cuando resulte necesario, documentar las tecnologías efectivamente utilizadas y aplicar la configuración de consentimiento correspondiente.
+Cuando la etiqueta de Google Analytics 4 está activa después del consentimiento, puede utilizar las siguientes cookies propias:
+
+- **_ga:** se utiliza para distinguir usuarios. Su duración predeterminada es de 2 años.
+- **_ga_<container-id>:** se utiliza para mantener el estado de la sesión. Su duración predeterminada es de 2 años.
+
+La duración efectiva puede ser menor debido a restricciones del navegador, eliminación manual de datos u otras configuraciones de privacidad. Esta relación no incluye cookies de Google Ads ni otras cookies que BUXDEV no haya configurado u observado.
 
 ## 7. Cómo cambiar o revocar las preferencias
 
 Puede abrir el panel en cualquier momento mediante el botón **Preferencias de privacidad** disponible en el pie de página. Desde ese panel puede autorizar o rechazar la categoría de analítica.
 
-Si previamente autorizó analítica y después la rechaza, la preferencia guardada se actualiza inmediatamente. También puede eliminar los datos almacenados por buxdev.com desde la configuración de su navegador; en la siguiente visita el sitio volverá a solicitar su elección.
+Si previamente autorizó analítica y después la rechaza, la preferencia guardada se actualiza inmediatamente, el sitio elimina las cookies propias cuyo nombre sea **_ga** o comience con **_ga_** y realiza una recarga controlada para impedir que Google Tag Manager vuelva a cargarse. No se eliminan las preferencias de idioma, tema ni otras funcionalidades.
+
+También puede eliminar los datos almacenados por buxdev.com desde la configuración de su navegador; en la siguiente visita el sitio volverá a solicitar su elección.
 
 ## 8. Efectos de rechazar analítica
 

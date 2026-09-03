@@ -239,7 +239,7 @@ export const translations = {
       analyticsStatus: "Opcionales",
       analyticsToggleLabel: "Permitir tecnologías analíticas opcionales",
       analyticsDescription:
-        "Cuando esta medición se habilite y tú la autorices, permitirá conocer visitas, interacción general, rendimiento y uso mediante Google Analytics 4. Actualmente no está activa.",
+        "Al autorizarla, Google Tag Manager puede cargar Google Analytics 4 para medir de forma agregada visitas, interacción general, rendimiento y uso del sitio.",
       moreInformation: "Consulta más detalles en nuestra",
       savePreferences: "Guardar selección",
     },
@@ -510,7 +510,7 @@ export const translations = {
       analyticsStatus: "Optional",
       analyticsToggleLabel: "Allow optional analytics technologies",
       analyticsDescription:
-        "When measurement is enabled and you have authorized it, it will help understand visits, general interaction, performance, and usage through Google Analytics 4. It is not active now.",
+        "When authorized, Google Tag Manager can load Google Analytics 4 to measure visits, general interaction, performance, and site usage in aggregate.",
       moreInformation: "Find more details in our",
       savePreferences: "Save selection",
     },

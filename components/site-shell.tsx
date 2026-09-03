@@ -6,6 +6,7 @@ import { ConsentBanner } from "@/components/consent-banner"
 import { ConsentProvider } from "@/components/consent-provider"
 import { FloatingChat } from "@/components/floating-chat"
 import { Footer } from "@/components/footer"
+import { GoogleTagManager } from "@/components/google-tag-manager"
 import { Navbar } from "@/components/navbar"
 import { PrivacyPreferences } from "@/components/privacy-preferences"
 import { Toaster } from "@/components/ui/toaster"
@@ -24,6 +25,7 @@ export function SiteShell({ children }: SiteShellProps) {
 
   return (
     <ConsentProvider>
+      <GoogleTagManager />
       <a href="#main-content" className="skip-link">
         {t.common.skipToContent}
       </a>

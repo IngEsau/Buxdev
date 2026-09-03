@@ -430,7 +430,7 @@ export function ContactSection() {
                     type="tel"
                     value={formData.phone}
                     onChange={(event) => updateField("phone", event.target.value)}
-                    placeholder="1234567890"
+                    placeholder="222 1254 567"
                     required
                     inputMode="tel"
                     autoComplete="tel-national"

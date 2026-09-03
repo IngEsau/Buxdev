@@ -1,6 +1,6 @@
 # AVISO DE PRIVACIDAD INTEGRAL — BUXDEV
 
-**Última actualización:** 30 de agosto de 2026
+**Última actualización:** 3 de septiembre de 2026
 
 ## 1. Identidad y domicilio del responsable
 
@@ -111,18 +111,15 @@ Las personas que intervengan en el tratamiento deberán mantener la confidencial
 
 Ningún sistema conectado a Internet puede considerarse completamente libre de riesgos; por ello, las medidas se revisarán y ajustarán cuando resulte necesario según la naturaleza y riesgo del tratamiento.
 
-## 10. Cookies, Google Tag Manager y Google Analytics
+## 10. Cookies y tecnologías similares
 
-**Al momento de la publicación de esta versión del aviso, Google Analytics y Google Tag Manager no se encuentran habilitados en el sitio para recopilar información de visitantes.**
+BUXDEV utiliza tecnologías necesarias, como el almacenamiento local del navegador, para mantener el funcionamiento del sitio y recordar las preferencias de idioma, tema y consentimiento. La preferencia de consentimiento no contiene nombre, correo electrónico, teléfono, contenido del formulario ni identificadores creados para rastrear a una persona.
 
-Antes de habilitar Google Tag Manager, Google Analytics u otras tecnologías de medición, análisis, publicidad o rastreo, BUXDEV deberá:
+Las tecnologías analíticas son opcionales y permanecen desactivadas de forma predeterminada. La persona usuaria puede rechazarlas, autorizarlas o revocar posteriormente su decisión mediante el panel **Preferencias de privacidad** disponible en el pie de página.
 
-- actualizar este aviso para describir las tecnologías y finalidades correspondientes;
-- revisar si se requiere un mecanismo de consentimiento o configuración de preferencias;
-- evitar enviar a Google datos que permitan identificar directamente a una persona, incluyendo direcciones de correo electrónico, números telefónicos u otra información personal introducida en formularios;
-- configurar los eventos y parámetros de medición de forma que no incluyan datos personales ingresados por las personas usuarias.
+**Al momento de la publicación de esta versión del aviso, Google Analytics y Google Tag Manager no se encuentran habilitados en el sitio para recopilar información de visitantes.** Si en el futuro se habilita Google Analytics 4, sólo deberá cargarse después de que la persona usuaria otorgue su consentimiento expreso para analítica.
 
-La habilitación de estas herramientas deberá realizarse únicamente después de completar la revisión de privacidad correspondiente.
+Rechazar analítica no limita el acceso al contenido, la navegación, las funciones esenciales ni el formulario de contacto. Para conocer las tecnologías utilizadas, sus finalidades y la forma de cambiar las preferencias, consulte la [Política de Cookies](/cookies/).
 
 ## 11. Aviso de privacidad simplificado para medios electrónicos
 

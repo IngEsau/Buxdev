@@ -6,7 +6,10 @@ import { LegalLanguageNotice } from "@/components/legal-language-notice"
 
 import styles from "./legal-document.module.css"
 
-type LegalSource = "BUXDEV_Aviso_de_Privacidad.md" | "BUXDEV_Terminos_y_Condiciones.md"
+type LegalSource =
+  | "BUXDEV_Aviso_de_Privacidad.md"
+  | "BUXDEV_Terminos_y_Condiciones.md"
+  | "BUXDEV_Politica_de_Cookies.md"
 
 interface LegalDocumentProps {
   source: LegalSource
@@ -21,7 +24,8 @@ type LegalBlock =
   | { type: "separator" }
 
 const noteMarker = "Nota de implementación (NO PUBLICAR EN EL SITIO)"
-const inlinePattern = /(\*\*[^*]+\*\*|https?:\/\/[^\s]+|[\w.+-]+@[\w.-]+\.[A-Za-z]{2,})/g
+const inlinePattern =
+  /(\[[^\]]+\]\((?:\/|https?:\/\/)[^)]+\)|\*\*[^*]+\*\*|https?:\/\/[^\s]+|[\w.+-]+@[\w.-]+\.[A-Za-z]{2,})/g
 
 function renderInline(content: string, keyPrefix: string): ReactNode[] {
   return content.split(inlinePattern).filter(Boolean).map((token, index) => {
@@ -29,6 +33,15 @@ function renderInline(content: string, keyPrefix: string): ReactNode[] {
 
     if (token.startsWith("**") && token.endsWith("**")) {
       return <strong key={key}>{renderInline(token.slice(2, -2), `${key}-strong`)}</strong>
+    }
+
+    const markdownLink = token.match(/^\[([^\]]+)\]\(([^)]+)\)$/)
+    if (markdownLink) {
+      return (
+        <a key={key} href={markdownLink[2]}>
+          {markdownLink[1]}
+        </a>
+      )
     }
 
     if (token.startsWith("http://") || token.startsWith("https://")) {

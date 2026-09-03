@@ -215,6 +215,33 @@ export const translations = {
       phone: "+52 1 220 139 9038",
       privacy: "Aviso de Privacidad",
       terms: "Términos y Condiciones",
+      cookies: "Política de Cookies",
+      preferences: "Preferencias de privacidad",
+    },
+    consent: {
+      bannerTitle: "Tu privacidad, bajo tu control",
+      bannerDescription:
+        "Usamos tecnologías necesarias para que el sitio funcione y, con tu permiso, analíticas para entender cómo se utiliza BUXDEV y mejorar la experiencia.",
+      configure: "Configurar",
+      policyLink: "Política de Cookies",
+      rejectAnalytics: "Rechazar analíticas",
+      acceptAnalytics: "Aceptar analíticas",
+      preferencesTitle: "Preferencias de privacidad",
+      preferencesDescription:
+        "Elige si autorizas las tecnologías analíticas opcionales. Puedes cambiar esta decisión en cualquier momento.",
+      closePreferences: "Cerrar preferencias de privacidad",
+      necessaryTitle: "Necesarias",
+      necessaryStatus: "Siempre activas",
+      alwaysActive: "Siempre activas",
+      necessaryDescription:
+        "Permiten el funcionamiento esencial del sitio y recuerdan tus preferencias de idioma, tema y consentimiento.",
+      analyticsTitle: "Analíticas",
+      analyticsStatus: "Opcionales",
+      analyticsToggleLabel: "Permitir tecnologías analíticas opcionales",
+      analyticsDescription:
+        "Cuando esta medición se habilite y tú la autorices, permitirá conocer visitas, interacción general, rendimiento y uso mediante Google Analytics 4. Actualmente no está activa.",
+      moreInformation: "Consulta más detalles en nuestra",
+      savePreferences: "Guardar selección",
     },
     chat: {
       title: "Ayuda",
@@ -459,6 +486,33 @@ export const translations = {
       phone: "+52 1 220 139 9038",
       privacy: "Aviso de Privacidad",
       terms: "Términos y Condiciones",
+      cookies: "Cookie Policy",
+      preferences: "Privacy preferences",
+    },
+    consent: {
+      bannerTitle: "Your privacy, under your control",
+      bannerDescription:
+        "We use necessary technologies to keep the site working and, with your permission, analytics to understand how BUXDEV is used and improve the experience.",
+      configure: "Configure",
+      policyLink: "Cookie Policy",
+      rejectAnalytics: "Reject analytics",
+      acceptAnalytics: "Accept analytics",
+      preferencesTitle: "Privacy preferences",
+      preferencesDescription:
+        "Choose whether to allow optional analytics technologies. You can change this decision at any time.",
+      closePreferences: "Close privacy preferences",
+      necessaryTitle: "Necessary",
+      necessaryStatus: "Always active",
+      alwaysActive: "Always active",
+      necessaryDescription:
+        "They support the site’s essential operation and remember your language, theme, and consent preferences.",
+      analyticsTitle: "Analytics",
+      analyticsStatus: "Optional",
+      analyticsToggleLabel: "Allow optional analytics technologies",
+      analyticsDescription:
+        "When measurement is enabled and you have authorized it, it will help understand visits, general interaction, performance, and usage through Google Analytics 4. It is not active now.",
+      moreInformation: "Find more details in our",
+      savePreferences: "Save selection",
     },
     chat: {
       title: "Help",

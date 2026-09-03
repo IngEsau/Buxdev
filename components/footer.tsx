@@ -4,6 +4,7 @@ import Image from "next/image"
 import Link from "next/link"
 import { Mail, Phone } from "lucide-react"
 
+import { useConsent } from "@/components/consent-provider"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./footer.module.css"
@@ -18,6 +19,7 @@ const navigation = [
 
 export function Footer() {
   const { t } = useLanguage()
+  const { openPreferences } = useConsent()
   const year = new Date().getFullYear()
   const phoneHref = `tel:${t.footer.phone.replace(/[^\d+]/g, "")}`
 
@@ -76,6 +78,10 @@ export function Footer() {
           <div className={styles.legal} aria-label={t.footer.legalLabel}>
             <Link href="/privacidad/">{t.footer.privacy}</Link>
             <Link href="/terminos/">{t.footer.terms}</Link>
+            <Link href="/cookies/">{t.footer.cookies}</Link>
+            <button type="button" data-consent-preferences-trigger onClick={openPreferences}>
+              {t.footer.preferences}
+            </button>
           </div>
         </div>
       </div>

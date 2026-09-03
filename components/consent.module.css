@@ -1,0 +1,512 @@
+.bannerViewport {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 90;
+  padding:
+    0 var(--page-gutter)
+    max(1rem, env(safe-area-inset-bottom));
+  pointer-events: none;
+}
+
+.banner {
+  display: grid;
+  width: min(100%, var(--container-max));
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1.25rem, 3vw, 2.5rem);
+  align-items: center;
+  margin-inline: auto;
+  padding: clamp(1rem, 2.4vw, 1.4rem);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--brand) 8%, transparent), transparent 44%),
+    color-mix(in srgb, var(--background-elevated) 94%, transparent);
+  box-shadow:
+    0 1.5rem 4rem rgb(0 0 0 / 24%),
+    inset 0 1px rgb(255 255 255 / 4%);
+  backdrop-filter: blur(22px) saturate(125%);
+  pointer-events: auto;
+  animation: consent-enter 220ms ease-out both;
+}
+
+.bannerCopy {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.bannerIcon,
+.dialogIcon,
+.categoryIcon {
+  display: grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid color-mix(in srgb, var(--brand) 42%, var(--border));
+  background: var(--brand-soft);
+  color: color-mix(in srgb, var(--brand-hover) 78%, var(--foreground));
+}
+
+.bannerIcon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.bannerIcon svg,
+.dialogIcon svg,
+.categoryIcon svg {
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 1.65;
+}
+
+.banner h2,
+.dialogHeader h2,
+.category h3 {
+  margin: 0;
+  color: var(--foreground);
+  letter-spacing: -0.025em;
+}
+
+.banner h2 {
+  font-size: 0.94rem;
+  font-weight: 650;
+  line-height: 1.35;
+}
+
+.bannerCopy p {
+  max-width: 51rem;
+  margin: 0.35rem 0 0;
+  color: var(--foreground-muted);
+  font-size: 0.78rem;
+  line-height: 1.62;
+}
+
+.bannerLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin-top: 0.55rem;
+}
+
+.bannerLinks button,
+.bannerLinks a,
+.dialogPolicy a {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: color-mix(in srgb, var(--brand-hover) 78%, var(--foreground));
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 620;
+  line-height: 1.4;
+  text-decoration: underline;
+  text-decoration-color: color-mix(in srgb, currentColor 45%, transparent);
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.bannerActions,
+.dialogActions {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+
+.primaryAction,
+.secondaryAction {
+  min-height: 2.75rem;
+  padding: 0.7rem 1rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.7rem;
+  font-weight: 650;
+  line-height: 1.15;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.primaryAction {
+  border-color: color-mix(in srgb, var(--brand) 80%, var(--foreground));
+  background: var(--brand);
+  color: #fff;
+}
+
+.secondaryAction {
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  color: var(--foreground);
+}
+
+.primaryAction:hover,
+.secondaryAction:hover {
+  transform: translateY(-1px);
+}
+
+.primaryAction:hover {
+  background: var(--brand-hover);
+}
+
+.secondaryAction:hover {
+  border-color: color-mix(in srgb, var(--brand) 42%, var(--border-strong));
+  background: var(--surface-hover);
+}
+
+.dialogOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgb(5 7 11 / 68%);
+  backdrop-filter: blur(8px);
+  animation: consent-fade 180ms ease-out both;
+}
+
+.dialogContent {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 101;
+  width: min(40rem, calc(100vw - 2rem));
+  max-height: min(46rem, calc(100dvh - 2rem));
+  padding: clamp(1.25rem, 3vw, 1.75rem);
+  overflow-y: auto;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--brand) 12%, transparent), transparent 20rem),
+    color-mix(in srgb, var(--background-elevated) 98%, transparent);
+  color: var(--foreground);
+  box-shadow:
+    0 2.5rem 8rem rgb(0 0 0 / 44%),
+    inset 0 1px rgb(255 255 255 / 4%);
+  transform: translate(-50%, -50%);
+  animation: consent-dialog-enter 200ms ease-out both;
+}
+
+.dialogHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 1rem;
+  align-items: start;
+}
+
+.dialogIcon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: var(--radius-md);
+}
+
+.dialogHeader h2 {
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-weight: 650;
+  line-height: 1.2;
+}
+
+.dialogHeader p {
+  margin: 0.55rem 0 0;
+  color: var(--foreground-muted);
+  font-size: 0.8rem;
+  line-height: 1.65;
+}
+
+.closeButton {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--foreground-muted);
+  cursor: pointer;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.closeButton:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
+  color: var(--foreground);
+}
+
+.closeButton svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.categories {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 1.5rem;
+}
+
+.category {
+  padding: 1.1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+}
+
+.categoryHeader {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.categoryIcon {
+  width: 2.15rem;
+  height: 2.15rem;
+  border-radius: 0.55rem;
+}
+
+.category h3 {
+  font-size: 0.9rem;
+  font-weight: 650;
+  line-height: 1.25;
+}
+
+.categoryHeader p {
+  margin: 0.22rem 0 0;
+  color: var(--foreground-subtle);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.categoryDescription {
+  margin: 0.9rem 0 0;
+  color: var(--foreground-muted);
+  font-size: 0.76rem;
+  line-height: 1.65;
+}
+
+.requiredBadge {
+  display: inline-flex;
+  min-height: 2rem;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.4rem 0.65rem;
+  border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--border));
+  border-radius: 999px;
+  background: var(--brand-soft);
+  color: color-mix(in srgb, var(--brand-hover) 72%, var(--foreground));
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.56rem;
+  font-weight: 620;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.requiredBadge svg {
+  width: 0.75rem;
+  height: 0.75rem;
+  stroke-width: 2;
+}
+
+.switch {
+  position: relative;
+  display: inline-flex;
+  cursor: pointer;
+}
+
+.switch input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.switchTrack {
+  position: relative;
+  display: block;
+  width: 3rem;
+  height: 1.7rem;
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  background: var(--surface-hover);
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease;
+}
+
+.switchTrack span {
+  position: absolute;
+  top: 0.22rem;
+  left: 0.22rem;
+  width: 1.12rem;
+  height: 1.12rem;
+  border-radius: 50%;
+  background: var(--foreground-subtle);
+  box-shadow: 0 0.18rem 0.45rem rgb(0 0 0 / 20%);
+  transition:
+    background-color 180ms ease,
+    transform 180ms ease;
+}
+
+.switch input:checked + .switchTrack {
+  border-color: color-mix(in srgb, var(--brand) 78%, var(--foreground));
+  background: var(--brand);
+}
+
+.switch input:checked + .switchTrack span {
+  background: #fff;
+  transform: translateX(1.28rem);
+}
+
+.switch input:focus-visible + .switchTrack {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+
+.dialogPolicy {
+  margin: 1rem 0 0;
+  color: var(--foreground-subtle);
+  font-size: 0.68rem;
+  line-height: 1.6;
+}
+
+.dialogActions {
+  justify-content: flex-end;
+  margin-top: 1.4rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@keyframes consent-enter {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+}
+
+@keyframes consent-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes consent-dialog-enter {
+  from {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 0.5rem)) scale(0.985);
+  }
+}
+
+@media (max-width: 62rem) {
+  .banner {
+    grid-template-columns: 1fr;
+  }
+
+  .bannerActions {
+    justify-content: flex-end;
+  }
+}
+
+@media (max-width: 37.5rem) {
+  .bannerViewport {
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+  }
+
+  .banner {
+    gap: 1rem;
+    padding: 1rem;
+    border-radius: var(--radius-md);
+  }
+
+  .bannerCopy {
+    grid-template-columns: 1fr;
+    gap: 0.65rem;
+  }
+
+  .bannerIcon {
+    width: 2.15rem;
+    height: 2.15rem;
+  }
+
+  .bannerActions,
+  .dialogActions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+    min-height: 3rem;
+    padding-right: 0.75rem;
+    padding-left: 0.75rem;
+    white-space: normal;
+  }
+
+  .dialogContent {
+    width: calc(100vw - 1rem);
+    max-height: calc(100dvh - 1rem);
+    border-radius: var(--radius-lg);
+  }
+
+  .dialogHeader {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .closeButton {
+    position: absolute;
+    top: 0.85rem;
+    right: 0.85rem;
+  }
+
+  .dialogHeader > div {
+    padding-right: 2.25rem;
+  }
+
+  .categoryHeader {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .requiredBadge,
+  .switch {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .banner,
+  .dialogOverlay,
+  .dialogContent {
+    animation: none;
+  }
+
+  .primaryAction,
+  .secondaryAction,
+  .closeButton,
+  .switchTrack,
+  .switchTrack span {
+    transition: none;
+  }
+}

@@ -12,7 +12,13 @@ import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/hooks/use-language"
-import { ContactRequestError, sendContactRequest } from "@/services/contact"
+import { trackGenerateLead } from "@/lib/analytics"
+import {
+  ContactRequestError,
+  isContactLeadType,
+  sendContactRequest,
+  type ContactLeadType,
+} from "@/services/contact"
 
 import styles from "./contact-section.module.css"
 
@@ -29,7 +35,7 @@ const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const maxDescriptionLength = 2000
 
 type ContactFormData = {
-  type: string
+  type: ContactLeadType | ""
   countryCode: string
   phone: string
   email: string
@@ -98,6 +104,8 @@ export function ContactSection() {
   const [errors, setErrors] = useState<FormErrors>({})
   const [formData, setFormData] = useState<ContactFormData>(createInitialFormData)
   const submissionInFlight = useRef(false)
+  const submissionSequence = useRef(0)
+  const trackedSubmissions = useRef(new Set<number>())
   const isSubmitting = status === "submitting"
   const isUnavailable = status === "unavailable"
   const hasValidationErrors = Object.keys(errors).length > 0
@@ -152,7 +160,7 @@ export function ContactSection() {
     const email = formData.email.trim()
     const description = formData.description.trim()
 
-    if (!formData.type) nextErrors.type = "typeRequired"
+    if (!isContactLeadType(formData.type)) nextErrors.type = "typeRequired"
 
     const phoneError = getPhoneError(formData.phone, formData.countryCode)
     if (phoneError) nextErrors.phone = phoneError
@@ -196,15 +204,17 @@ export function ContactSection() {
     }
 
     const nationalDigits = normalizeNationalPhone(formData.phone, formData.countryCode)
-    if (!nationalDigits) return
+    const leadType = formData.type
+    if (!nationalDigits || !isContactLeadType(leadType)) return
 
     setErrors({})
     setStatus("submitting")
     submissionInFlight.current = true
+    const submissionId = ++submissionSequence.current
 
     try {
       await sendContactRequest({
-        type: formData.type,
+        type: leadType,
         email: formData.email.trim(),
         cellphone: `${formData.countryCode}${nationalDigits}`,
         description: formData.description.trim(),
@@ -214,6 +224,10 @@ export function ContactSection() {
       })
 
       setStatus("success")
+      if (!trackedSubmissions.current.has(submissionId)) {
+        trackedSubmissions.current.add(submissionId)
+        trackGenerateLead(leadType)
+      }
       setFormData(createInitialFormData())
     } catch (error) {
       setStatus(error instanceof ContactRequestError && error.status === 503 ? "unavailable" : "error")
@@ -372,7 +386,9 @@ export function ContactSection() {
                 <Select
                   name="type"
                   value={formData.type}
-                  onValueChange={(value) => updateField("type", value)}
+                  onValueChange={(value) => {
+                    if (isContactLeadType(value)) updateField("type", value)
+                  }}
                   disabled={formDisabled}
                   required
                 >

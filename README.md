@@ -26,9 +26,9 @@ El archivo privado está fuera de `public_html`, no se despliega por FTPS y no d
 
 ## Deploy por FTPS
 
-El deploy compila la exportación estática de Next.js, sincroniza el contenido de `out/` y publica únicamente `server/api/contact.php` como `public_html/api/contact.php`. No sube el resto del código fuente, `node_modules`, configuraciones privadas ni archivos locales de entorno.
+El deploy compila la exportación estática de Next.js, verifica `out/` y publica los dos PHP explícitos `server/api/contact.php` y `server/api/contact-security.php` en `public_html/api/`. No sube el resto del código fuente, `node_modules`, configuraciones privadas ni archivos locales de entorno.
 
-Requisitos locales: Node.js, npm y `lftp`.
+Requisitos locales: Node.js, npm, PHP CLI (ctype/JSON) y `lftp`. El deploy ejecuta las pruebas de seguridad con Brevo simulado.
 
 Crea `.env.deploy` en la raíz del proyecto y restringe sus permisos:
 
@@ -50,6 +50,14 @@ CONFIRM_DEPLOY=y \
 npm run deploy:ftp
 ```
 
-La conexión utiliza FTPS explícito en `svgs297.serverneubox.com.mx:21` con el usuario `frontend@buxdev.com`. `ftp.buxdev.com` apunta al mismo servidor, pero no está incluido en su certificado TLS. El script detecta si la cuenta FTP ve `public_html` o si ya está enjaulada en el DocumentRoot. Nunca despliega directamente sobre `/home/buxdevco`; conserva `.well-known`, `cgi-bin`, `.htaccess`, `.ftpquota` y el directorio remoto `api` durante el mirror. Después actualiza exclusivamente `api/contact.php`.
+La conexión utiliza FTPS explícito en `svgs297.serverneubox.com.mx:21` con el usuario `frontend@buxdev.com`. `ftp.buxdev.com` apunta al mismo servidor, pero no está incluido en su certificado TLS. El script detecta si la cuenta FTP ve `public_html` o si ya está enjaulada en el DocumentRoot. Nunca despliega directamente sobre `/home/buxdevco`; conserva `.well-known`, `cgi-bin`, `.htaccess`, `.ftpquota` y el directorio remoto `api` durante el mirror. Después actualiza el helper, el endpoint y el `.htaccess` generado.
 
 Si la detección automática no coincide con la configuración real del usuario FTP, define `FTP_DIR=/public_html` o `FTP_DIR=/` después de verificar el DocumentRoot en cPanel.
+
+## Seguridad del export y del formulario
+
+`npm run build` genera la CSP por hashes en `out/.htaccess` y verifica la allowlist de artefactos. No desplegar la plantilla `public/.htaccess` directamente. El script actualiza el helper `api/contact-security.php` antes del endpoint y finalmente publica el `.htaccess` generado.
+
+El usuario PHP debe poder escribir en `/home/buxdevco/private/contact-security`; estado y logs están fuera del webroot (0700/0600). Los límites son 5 intentos por IP cada 15 minutos y 100 globales por hora. Origin/Fetch Metadata y validación se comprueban en PHP. Configuración Brevo sigue siendo privada y manual.
+
+Consultar [SECURITY_AUDIT.md](SECURITY_AUDIT.md) y [SECURITY_CHECKLIST.md](SECURITY_CHECKLIST.md) para evidencia, pruebas, requisitos del hosting y verificaciones previas al deploy. No se envían correos reales durante las pruebas locales.

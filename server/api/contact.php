@@ -2,6 +2,9 @@
 
 declare(strict_types=1);
 
+ini_set('display_errors', '0');
+require_once __DIR__ . '/contact-security.php';
+
 const BUXDEV_CONTACT_CONFIG_PATH = '/home/buxdevco/private/brevo-config.php';
 const BUXDEV_BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 const BUXDEV_MAX_REQUEST_BYTES = 16384;
@@ -10,6 +13,7 @@ const BUXDEV_MAX_DESCRIPTION_LENGTH = 2000;
 /** @param array<string, mixed> $body */
 function buxdev_json_response(int $status, array $body): never
 {
+    if ($status >= 400) buxdev_security_log((string) ($body['code'] ?? 'INTERNAL_ERROR'), $status);
     http_response_code($status);
     header_remove('X-Powered-By');
     header('Content-Type: application/json; charset=utf-8');
@@ -58,6 +62,10 @@ function buxdev_validate_payload(mixed $payload): ?array
         return null;
     }
 
+    if (array_diff(array_keys($payload), ['type', 'email', 'cellphone', 'description', 'privacyAcknowledged', 'whatsappConsent', 'website']) !== []) {
+        return null;
+    }
+
     $type = $payload['type'] ?? null;
     $email = $payload['email'] ?? null;
     $cellphone = $payload['cellphone'] ?? null;
@@ -83,6 +91,13 @@ function buxdev_validate_payload(mixed $payload): ?array
         'informacion' => 'Información',
         'duda' => 'Duda',
     ];
+
+    // Reject control characters in single-line fields before normalization.
+    if (preg_match('/[\x00-\x1F\x7F]/', $type . $email . $cellphone . $website)
+        || strlen($type) > 100 || strlen($cellphone) > 32
+        || preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $description)) {
+        return null;
+    }
 
     $type = trim($type);
     $email = trim($email);
@@ -142,7 +157,7 @@ function buxdev_load_config(): ?array
     try {
         $config = require BUXDEV_CONTACT_CONFIG_PATH;
     } catch (Throwable) {
-        error_log('BUXDEV contact: private configuration could not be loaded.');
+        buxdev_security_log('CONFIGURATION_FAILED', 503);
         return null;
     }
 
@@ -204,16 +219,6 @@ function buxdev_load_config(): ?array
         'to_email' => $toEmail,
         'allowed_origins' => array_values(array_unique($normalizedOrigins)),
     ];
-}
-
-/** @param list<string> $allowedOrigins */
-function buxdev_origin_is_allowed(string $origin, array $allowedOrigins): bool
-{
-    if ($origin === '') {
-        return true;
-    }
-
-    return in_array(rtrim($origin, '/'), $allowedOrigins, true);
 }
 
 function buxdev_html_escape(string $value): string
@@ -316,20 +321,20 @@ function buxdev_brevo_response_is_success(int $status, string $body): bool
 function buxdev_send_to_brevo(array $payload, array $config): bool
 {
     if (!function_exists('curl_init')) {
-        error_log('BUXDEV contact: cURL extension is unavailable.');
+        buxdev_security_log('CURL_UNAVAILABLE', 502);
         return false;
     }
 
     try {
         $encodedPayload = json_encode($payload, JSON_THROW_ON_ERROR | JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     } catch (JsonException) {
-        error_log('BUXDEV contact: email payload could not be encoded.');
+        buxdev_security_log('EMAIL_ENCODING_FAILED', 502);
         return false;
     }
 
     $handle = curl_init(BUXDEV_BREVO_API_URL);
     if ($handle === false) {
-        error_log('BUXDEV contact: Brevo request could not be initialized.');
+        buxdev_security_log('BREVO_INIT_FAILED', 502);
         return false;
     }
 
@@ -352,16 +357,15 @@ function buxdev_send_to_brevo(array $payload, array $config): bool
 
     $response = curl_exec($handle);
     $status = (int) curl_getinfo($handle, CURLINFO_RESPONSE_CODE);
-    $curlErrorNumber = curl_errno($handle);
     curl_close($handle);
 
     if ($response === false) {
-        error_log(sprintf('BUXDEV contact: Brevo request failed (cURL %d).', $curlErrorNumber));
+        buxdev_security_log('BREVO_NETWORK_FAILED', 502);
         return false;
     }
 
     if (!buxdev_brevo_response_is_success($status, $response)) {
-        error_log(sprintf('BUXDEV contact: Brevo API returned HTTP %d.', $status));
+        buxdev_security_log('BREVO_RESPONSE_FAILED', $status);
         return false;
     }
 
@@ -379,6 +383,23 @@ function buxdev_run_contact_endpoint(): never
     $contentType = strtolower(trim(explode(';', (string) ($_SERVER['CONTENT_TYPE'] ?? ''))[0]));
     if ($contentType !== 'application/json') {
         buxdev_json_response(415, ['success' => false, 'code' => 'UNSUPPORTED_MEDIA_TYPE']);
+    }
+
+    $config = buxdev_load_config();
+    if ($config === null) {
+        buxdev_json_response(503, ['success' => false, 'code' => 'SERVICE_UNAVAILABLE']);
+    }
+    if (!buxdev_request_source_is_allowed($config['allowed_origins'])) {
+        buxdev_json_response(403, ['success' => false, 'code' => 'FORBIDDEN']);
+    }
+    try {
+        $retry = buxdev_rate_limit((string) ($_SERVER['REMOTE_ADDR'] ?? ''));
+    } catch (Throwable) {
+        buxdev_json_response(503, ['success' => false, 'code' => 'SERVICE_UNAVAILABLE']);
+    }
+    if ($retry > 0) {
+        header('Retry-After: ' . $retry);
+        buxdev_json_response(429, ['success' => false, 'code' => 'RATE_LIMITED']);
     }
 
     $contentLengthHeader = (string) ($_SERVER['CONTENT_LENGTH'] ?? '');
@@ -402,18 +423,8 @@ function buxdev_run_contact_endpoint(): never
         buxdev_json_response(400, ['success' => false, 'code' => 'INVALID_REQUEST']);
     }
 
-    $config = buxdev_load_config();
-    if ($config === null) {
-        buxdev_json_response(503, ['success' => false, 'code' => 'SERVICE_UNAVAILABLE']);
-    }
-
-    $origin = trim((string) ($_SERVER['HTTP_ORIGIN'] ?? ''));
-    if (!buxdev_origin_is_allowed($origin, $config['allowed_origins'])) {
-        buxdev_json_response(403, ['success' => false, 'code' => 'FORBIDDEN']);
-    }
-
     if (buxdev_honeypot_is_filled($decodedPayload)) {
-        buxdev_json_response(200, ['success' => true]);
+        buxdev_json_response(400, ['success' => false, 'code' => 'INVALID_REQUEST']);
     }
 
     $submission = buxdev_validate_payload($decodedPayload);
@@ -432,7 +443,7 @@ function buxdev_run_contact_endpoint(): never
 if (!defined('BUXDEV_CONTACT_TEST_MODE')) {
     ini_set('display_errors', '0');
     set_exception_handler(static function (Throwable $error): never {
-        error_log('BUXDEV contact: unexpected endpoint failure.');
+        buxdev_security_log('UNEXPECTED_FAILURE', 500);
         buxdev_json_response(500, ['success' => false, 'code' => 'INTERNAL_ERROR']);
     });
     buxdev_run_contact_endpoint();

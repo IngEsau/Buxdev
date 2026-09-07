@@ -1,20 +1,23 @@
 #!/usr/bin/env bash
 
 set -Eeuo pipefail
+set +x
 
 readonly PROJECT_ROOT="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 readonly BUILD_DIR="${PROJECT_ROOT}/out"
 readonly APACHE_CONFIG="${BUILD_DIR}/.htaccess"
 readonly CONTACT_ENDPOINT="${PROJECT_ROOT}/server/api/contact.php"
+readonly CONTACT_SECURITY="${PROJECT_ROOT}/server/api/contact-security.php"
 
 DEPLOY_ENV_FILE="${DEPLOY_ENV_FILE:-${PROJECT_ROOT}/.env.deploy}"
 
 if [[ -f "$DEPLOY_ENV_FILE" ]]; then
-  set -a
   # shellcheck disable=SC1090
   source "$DEPLOY_ENV_FILE"
-  set +a
 fi
+# FTPS credentials are shell-local, not inherited by npm/install scripts.
+set +x
+export -n FTP_PASS 2>/dev/null || true
 
 FTP_HOST="${FTP_HOST:-svgs297.serverneubox.com.mx}"
 FTP_PORT="${FTP_PORT:-21}"
@@ -142,11 +145,13 @@ main() {
   local build_dir_escaped
   local apache_config_escaped
   local contact_endpoint_escaped
+  local contact_security_escaped
   local build_file_count
   local build_size
 
   require_command npm
   require_command lftp
+  require_command php
 
   [[ -n "${FTP_PASS:-}" && "$FTP_PASS" != "..." ]] ||
     fail "Define FTP_PASS con la contraseña real; nunca se lee desde un archivo versionado."
@@ -161,7 +166,7 @@ main() {
 
   if [[ "$SKIP_INSTALL" != "1" ]]; then
     log "Instalando dependencias reproducibles con npm ci..."
-    npm ci
+    npm ci --ignore-scripts
   fi
 
   log "Validando el proyecto..."
@@ -170,17 +175,17 @@ main() {
 
   log "Generando la exportación estática de Next.js..."
   npm run build
+  npm run security:export
+  npm run test:security
 
   [[ -f "${BUILD_DIR}/index.html" ]] || fail "El build no generó out/index.html."
   [[ -d "${BUILD_DIR}/_next" ]] || fail "El build no generó out/_next."
   [[ -f "$APACHE_CONFIG" ]] || fail "El build no publicó public/.htaccess en out/.htaccess."
   [[ -f "$CONTACT_ENDPOINT" ]] || fail "No se encontró server/api/contact.php."
+  [[ -f "$CONTACT_SECURITY" ]] || fail "No se encontró server/api/contact-security.php."
 
-  if command -v php >/dev/null 2>&1; then
-    php -l "$CONTACT_ENDPOINT" >/dev/null || fail "server/api/contact.php contiene errores de sintaxis."
-  else
-    log "PHP CLI no está disponible; se omite únicamente la validación local de sintaxis."
-  fi
+  php -l "$CONTACT_ENDPOINT" >/dev/null || fail "server/api/contact.php contiene errores de sintaxis."
+  php -l "$CONTACT_SECURITY" >/dev/null || fail "server/api/contact-security.php contiene errores de sintaxis."
 
   remote_dir="$(detect_remote_dir)"
   validate_remote_dir "$remote_dir"
@@ -189,6 +194,7 @@ main() {
   build_dir_escaped="$(lftp_quote "$BUILD_DIR")"
   apache_config_escaped="$(lftp_quote "$APACHE_CONFIG")"
   contact_endpoint_escaped="$(lftp_quote "$CONTACT_ENDPOINT")"
+  contact_security_escaped="$(lftp_quote "$CONTACT_SECURITY")"
 
   log "Cuenta cPanel: ${FTP_ACCOUNT_PATH}"
   log "Destino FTP validado: ${remote_dir}"
@@ -201,6 +207,7 @@ main() {
     log "Build preparado: ${build_file_count} archivos, ${build_size}."
     log "Configuración Apache preparada: public/.htaccess → .htaccess."
     log "Endpoint PHP preparado: server/api/contact.php → api/contact.php."
+    log "Helper protegido preparado: server/api/contact-security.php → api/contact-security.php."
     log "No se ejecutaron comandos de transferencia ni borrado."
     return 0
   fi
@@ -220,6 +227,7 @@ mirror --reverse --delete --no-perms --parallel=4 --verbose=0 \\
   --exclude-glob \"api/**\" \\
   \"${build_dir_escaped}\" .
 mkdir -p -f api
+put \"${contact_security_escaped}\" -o \"api/contact-security.php\"
 put \"${contact_endpoint_escaped}\" -o \"api/contact.php\"
 put \"${apache_config_escaped}\" -o \".htaccess\"
 "

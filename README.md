@@ -30,6 +30,12 @@ El deploy compila la exportación estática de Next.js, verifica `out/` y public
 
 Requisitos locales: Node.js, npm, PHP CLI (ctype/JSON) y `lftp`. El deploy ejecuta las pruebas de seguridad con Brevo simulado.
 
+IndexNow se notifica automáticamente **después de finalizar todas las transferencias FTP**, incluido `.htaccess`. Se envía un único POST HTTPS con las cuatro URLs del sitemap: `/`, `/about/`, `/services/` y `/contact/`. No se notifica durante `DRY_RUN=1` ni cuando falla el build, la validación o la transferencia.
+
+La key de verificación pública `public/eb0d64a2c026422a948a7b49af9d1aa1.txt` se conserva en Git y se comprueba que esté intacta en `out/` antes de transferir; no es una contraseña FTP. Si falta o el sitemap cambia de alcance, se detiene el preflight para evitar publicar una exportación inconsistente.
+
+La notificación tiene un timeout de 10 segundos, sin redirecciones ni reintentos automáticos. Un error de red/HTTP produce una advertencia y **no cambia el código de salida exitoso del deploy web**. HTTP 200 confirma recepción y HTTP 202 indica validación de key pendiente; ninguno garantiza indexación ([documentación IndexNow](https://www.indexnow.org/documentation)). Para validar sin enviar: `node scripts/notify-indexnow.mjs --check`. Tras un deploy ya confirmado se puede reintentar solo la notificación con `node scripts/notify-indexnow.mjs --submit`.
+
 Crea `.env.deploy` en la raíz del proyecto y restringe sus permisos:
 
 ```bash

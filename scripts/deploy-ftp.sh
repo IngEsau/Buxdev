@@ -150,6 +150,7 @@ main() {
   local build_size
 
   require_command npm
+  require_command node
   require_command lftp
   require_command php
 
@@ -183,6 +184,9 @@ main() {
   [[ -f "$APACHE_CONFIG" ]] || fail "El build no publicó public/.htaccess en out/.htaccess."
   [[ -f "$CONTACT_ENDPOINT" ]] || fail "No se encontró server/api/contact.php."
   [[ -f "$CONTACT_SECURITY" ]] || fail "No se encontró server/api/contact-security.php."
+
+  # Validate before mirror --delete so the existing public verification key cannot disappear.
+  node scripts/notify-indexnow.mjs --check
 
   php -l "$CONTACT_ENDPOINT" >/dev/null || fail "server/api/contact.php contiene errores de sintaxis."
   php -l "$CONTACT_SECURITY" >/dev/null || fail "server/api/contact-security.php contiene errores de sintaxis."
@@ -233,6 +237,13 @@ put \"${apache_config_escaped}\" -o \".htaccess\"
 "
 
   log "Deploy terminado: out/, api/contact.php y .htaccess fueron sincronizados sin tocar la configuración privada."
+
+  # This must stay after the entire successful FTP session, never in an EXIT trap.
+  # Notification failure is non-fatal: the web deployment has already succeeded.
+  if ! node scripts/notify-indexnow.mjs --submit; then
+    log "ADVERTENCIA: IndexNow no fue confirmado. El deploy web sigue siendo exitoso; no es necesario repetirlo."
+  fi
+  return 0
 }
 
 main "$@"

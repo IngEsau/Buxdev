@@ -166,6 +166,7 @@ function NavbarContent({ pathname }: NavbarContentProps) {
             height={404}
             className={styles.logoOnLight}
             loading="eager"
+            fetchPriority="high"
           />
           <Image
             src="/brand/buxdev/logo-on-dark.svg"
@@ -174,6 +175,7 @@ function NavbarContent({ pathname }: NavbarContentProps) {
             height={404}
             className={styles.logoOnDark}
             loading="eager"
+            fetchPriority="high"
           />
         </Link>
 

@@ -4,11 +4,13 @@
   "private": true,
   "homepage": "https://buxdev.com/",
   "scripts": {
+    "prebuild": "node --test tests/performance/sources.test.mjs",
     "build": "next build",
     "postbuild": "node scripts/secure-export.mjs",
     "security:export": "node scripts/secure-export.mjs --check",
     "security:secrets": "node scripts/audit-secrets.mjs",
     "test:security": "node --test tests/security/*.test.mjs",
+    "test:performance": "node --test tests/performance/*.test.mjs",
     "deploy:ftp": "bash scripts/deploy-ftp.sh",
     "dev": "next dev",
     "lint": "eslint .",

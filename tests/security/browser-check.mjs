@@ -32,7 +32,7 @@ try {
   await writeFile(resolve(tmp, 'out/backup.sql'), 'benign-probe')
   await writeFile(resolve(tmp, 'out/_next/static/probe.map'), '{}')
   run('openssl', ['req', '-x509', '-newkey', 'rsa:2048', '-nodes', '-keyout', resolve(tmp, 'key.pem'), '-out', resolve(tmp, 'cert.pem'), '-days', '1', '-subj', '/CN=localhost'])
-  const modules = ['mpm_event', 'authz_core', 'authz_host', 'headers', 'mime', 'dir', 'rewrite', 'setenvif', 'ssl', 'socache_shmcb']
+  const modules = ['mpm_event', 'authz_core', 'authz_host', 'headers', 'mime', 'dir', 'rewrite', 'setenvif', 'ssl', 'socache_shmcb', 'filter', 'deflate']
   await writeFile(resolve(tmp, 'httpd.conf'), `
 ServerRoot /fixture
 PidFile /fixture/httpd.pid
@@ -63,6 +63,11 @@ RequestHeader set Host buxdev.com early
     await wait(100)
   }
   const header = run('curl', ['-ksSI', origin])
+  const compressedHeader = run('curl', ['-ksS', '-D', '-', '-o', '/dev/null', '-H', 'Accept-Encoding: gzip', origin])
+  assert.match(compressedHeader, /content-encoding: gzip/i, 'Existing Apache configuration compresses HTML when its modules are enabled')
+  const brandHeader = run('curl', ['-ksSI', origin + '/brand/buxdev/logo-on-dark.svg'])
+  assert.match(brandHeader, /cache-control: public, max-age=86400, must-revalidate/i)
+  assert.ok(!brandHeader.includes('immutable'), 'Stable SVG filenames must not be immutable')
   for (const expected of ["Content-Security-Policy:", "X-XSS-Protection: 0", "X-Frame-Options: DENY", "Strict-Transport-Security: max-age=31536000", "X-Content-Type-Options: nosniff", "Referrer-Policy: strict-origin-when-cross-origin"]) {
     assert.ok(header.toLowerCase().includes(expected.toLowerCase()), expected)
   }

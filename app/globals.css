@@ -1,5 +1,15 @@
-@import "tailwindcss";
+@import "tailwindcss" source(none);
 @import "tw-animate-css";
+
+/* Scan application sources, not the entire unused shadcn catalog or QA fixtures.
+   Keep reusable UI files in the repository; opt them in when a route imports them.
+   tests/performance/sources.test.mjs guards the reachable UI dependency graph. */
+@source "./**/*.{ts,tsx}";
+@source "../components/*.{ts,tsx}";
+@source "../hooks/*.{ts,tsx}";
+@source "../lib/*.{ts,tsx}";
+@source "../services/*.{ts,tsx}";
+@source "../components/ui/{button,dropdown-menu,input,label,select,textarea,toast,toaster}.tsx";
 
 @custom-variant dark (&:is(.dark *));
 

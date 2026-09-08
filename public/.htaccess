@@ -85,6 +85,11 @@ ErrorDocument 404 /404.html
   # These assets are safe to cache for one year.
   Header always set Cache-Control "public, max-age=31536000, immutable" env=BUXDEV_IMMUTABLE
 
+  # These brand filenames are stable, not content-hashed. Cache for one day,
+  # then revalidate with Last-Modified/ETag; never mark them immutable.
+  SetEnvIf Request_URI "^/brand/buxdev/(logo|mark)-on-(dark|light)\.svg$" BUXDEV_BRAND_ASSET=1
+  Header always set Cache-Control "public, max-age=86400, must-revalidate" env=BUXDEV_BRAND_ASSET
+
   # HTML documents must revalidate after deployments.
   <FilesMatch "\.(?:html?)$">
     Header always set Cache-Control "no-cache, max-age=0, must-revalidate"

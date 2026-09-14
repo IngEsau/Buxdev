@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react"
 import Image from "next/image"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { ArrowUpRight, Globe2, Menu, Moon, Sun, X } from "lucide-react"
+import { ArrowUpRight, Globe2, Moon, Sun } from "lucide-react"
 
 import {
   DropdownMenu,
@@ -45,6 +45,7 @@ function NavbarContent({ pathname }: NavbarContentProps) {
   const [languageMenuOpen, setLanguageMenuOpen] = useState<"desktop" | "mobile" | null>(null)
   const headerRef = useRef<HTMLElement>(null)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
+  const mobileMenuRef = useRef<HTMLElement>(null)
   const { t, language, setLanguage } = useLanguage()
   const { theme, toggleTheme } = useTheme()
   const normalizedPathname = normalizePathname(pathname)
@@ -102,10 +103,32 @@ function NavbarContent({ pathname }: NavbarContentProps) {
     if (!isOpen) return
 
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Escape" || event.defaultPrevented || languageMenuOpen) return
+      if (event.key === "Escape" && !event.defaultPrevented && !languageMenuOpen) {
+        setIsOpen(false)
+        menuButtonRef.current?.focus()
+        return
+      }
 
-      setIsOpen(false)
-      menuButtonRef.current?.focus()
+      if (event.key !== "Tab") return
+
+      const menuControls = Array.from(
+        mobileMenuRef.current?.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]):not([tabindex="-1"])',
+        ) ?? [],
+      )
+      const controls = [menuButtonRef.current, ...menuControls].filter(
+        (control): control is HTMLElement => control !== null,
+      )
+      const firstControl = controls[0]
+      const lastControl = controls.at(-1)
+
+      if (event.shiftKey && document.activeElement === firstControl) {
+        event.preventDefault()
+        lastControl?.focus()
+      } else if (!event.shiftKey && document.activeElement === lastControl) {
+        event.preventDefault()
+        firstControl?.focus()
+      }
     }
 
     window.addEventListener("keydown", handleKeyDown)
@@ -151,7 +174,10 @@ function NavbarContent({ pathname }: NavbarContentProps) {
   )
 
   return (
-    <header ref={headerRef} className={cn(styles.header, scrolled && styles.scrolled)}>
+    <header
+      ref={headerRef}
+      className={cn(styles.header, scrolled && styles.scrolled, isOpen && styles.menuOpen)}
+    >
       <div className={styles.headerInner}>
         <Link
           href="/"
@@ -227,12 +253,27 @@ function NavbarContent({ pathname }: NavbarContentProps) {
             aria-expanded={isOpen}
             aria-controls="mobile-navigation"
           >
-            {isOpen ? <X aria-hidden="true" /> : <Menu aria-hidden="true" />}
+            <span className={styles.menuGlyph} data-open={isOpen} aria-hidden="true">
+              <span />
+              <span />
+              <span />
+            </span>
           </button>
         </div>
       </div>
 
+      <div
+        className={styles.mobileOverlay}
+        data-open={isOpen}
+        aria-hidden="true"
+        onClick={() => {
+          setIsOpen(false)
+          menuButtonRef.current?.focus()
+        }}
+      />
+
       <nav
+        ref={mobileMenuRef}
         id="mobile-navigation"
         className={styles.mobileMenu}
         data-open={isOpen}
@@ -249,14 +290,34 @@ function NavbarContent({ pathname }: NavbarContentProps) {
               tabIndex={isOpen ? 0 : -1}
               aria-current={normalizedPathname === normalizePathname(item.href) ? "page" : undefined}
             >
-              <span>{t.nav[item.key]}</span>
-              <ArrowUpRight aria-hidden="true" />
+              {t.nav[item.key]}
             </Link>
           ))}
         </div>
 
         <div className={styles.mobileMenuFooter}>
-          {renderLanguageMenu("mobile", isOpen ? 0 : -1)}
+          <div className={styles.mobileLanguages} role="group" aria-label={t.header.language}>
+            <Globe2 aria-hidden="true" />
+            <button
+              type="button"
+              onClick={() => setLanguage("es")}
+              aria-pressed={language === "es"}
+              tabIndex={isOpen ? 0 : -1}
+              lang="es"
+            >
+              ES
+            </button>
+            <span aria-hidden="true">/</span>
+            <button
+              type="button"
+              onClick={() => setLanguage("en")}
+              aria-pressed={language === "en"}
+              tabIndex={isOpen ? 0 : -1}
+              lang="en"
+            >
+              EN
+            </button>
+          </div>
           <Link
             href="/contact/"
             className={styles.mobileCta}

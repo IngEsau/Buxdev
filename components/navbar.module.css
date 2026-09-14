@@ -158,6 +158,12 @@
   width: 2.5rem;
 }
 
+.menuButton {
+  border-color: transparent;
+  border-radius: 0;
+  background: transparent;
+}
+
 .utilityButton {
   gap: 0.4rem;
   padding-inline: 0.65rem;
@@ -166,8 +172,7 @@
   letter-spacing: 0.05em;
 }
 
-.iconButton svg,
-.menuButton svg {
+.iconButton svg {
   width: 1rem;
   height: 1rem;
   stroke-width: 1.6;
@@ -180,11 +185,62 @@
 }
 
 .iconButton:hover,
-.utilityButton:hover,
-.menuButton:hover {
+.utilityButton:hover {
   border-color: var(--border);
   background: var(--surface);
   color: var(--foreground);
+}
+
+.menuButton:hover {
+  border-color: transparent;
+  background: transparent;
+  color: var(--foreground);
+}
+
+.menuGlyph {
+  position: relative;
+  display: block;
+  width: 1rem;
+  height: 1rem;
+}
+
+.menuGlyph > span {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  transform-origin: center;
+  transition:
+    top 190ms ease,
+    opacity 190ms ease,
+    transform 190ms ease;
+}
+
+.menuGlyph > span:nth-child(1) {
+  top: 0.2rem;
+}
+
+.menuGlyph > span:nth-child(2) {
+  top: 0.5rem;
+}
+
+.menuGlyph > span:nth-child(3) {
+  top: 0.8rem;
+}
+
+.menuGlyph[data-open="true"] > span:nth-child(1) {
+  top: 0.5rem;
+  transform: rotate(45deg);
+}
+
+.menuGlyph[data-open="true"] > span:nth-child(2) {
+  opacity: 0;
+}
+
+.menuGlyph[data-open="true"] > span:nth-child(3) {
+  top: 0.5rem;
+  transform: rotate(-45deg);
 }
 
 .headerCta,
@@ -257,35 +313,71 @@
   color: var(--brand-hover);
 }
 
+.mobileOverlay,
 .mobileMenu {
-  position: absolute;
-  top: calc(var(--header-height) - 0.25rem);
-  right: var(--page-gutter);
-  left: var(--page-gutter);
   display: none;
-  max-height: calc(100dvh - var(--header-height) - 1rem);
-  padding: 0.5rem;
-  overflow-y: auto;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
-  background: color-mix(in srgb, var(--background-elevated) 94%, transparent);
-  box-shadow: 0 28px 80px rgb(0 0 0 / 38%);
-  backdrop-filter: blur(24px) saturate(130%);
+}
+
+.mobileOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  background: rgb(0 0 0 / 32%);
   opacity: 0;
   pointer-events: none;
-  transform: translateY(-0.5rem) scale(0.985);
-  transform-origin: top center;
+  transition: opacity 200ms ease;
+}
+
+.mobileOverlay[data-open="true"] {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: auto;
+  z-index: 4;
+  width: 80vw;
+  max-width: none;
+  padding:
+    var(--header-height) clamp(1rem, 4vw, 1.5rem)
+    max(1rem, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  border: 0;
+  border-top: 1px solid var(--border);
+  border-radius: 0;
+  background: var(--background-elevated);
+  box-shadow: -0.5rem 0 1.5rem rgb(0 0 0 / 12%);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-0.375rem);
   visibility: hidden;
   transition:
-    opacity 180ms ease,
-    transform 180ms ease,
-    visibility 180ms ease;
+    opacity 200ms ease,
+    transform 200ms ease,
+    visibility 200ms ease;
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .mobileOverlay {
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+  }
+
+  .mobileMenu {
+    background: color-mix(in srgb, var(--background-elevated) 92%, transparent);
+    -webkit-backdrop-filter: blur(20px) saturate(120%);
+    backdrop-filter: blur(20px) saturate(120%);
+  }
 }
 
 .mobileMenu[data-open="true"] {
   opacity: 1;
   pointer-events: auto;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
   visibility: visible;
 }
 
@@ -295,47 +387,119 @@
 }
 
 .mobileLink {
+  position: relative;
   display: flex;
-  min-height: 3.25rem;
+  min-height: 3.75rem;
   align-items: center;
-  justify-content: space-between;
-  padding-inline: 0.9rem;
-  border-radius: var(--radius-md);
+  padding-inline: 0.25rem;
+  border-bottom: 1px solid var(--border);
   color: var(--foreground-muted);
   font-size: 0.9375rem;
   font-weight: 550;
   text-decoration: none;
   transition:
-    background-color 160ms ease,
-    color 160ms ease;
+    color 160ms ease,
+    padding-left 160ms ease;
 }
 
-.mobileLink svg {
-  width: 1rem;
-  height: 1rem;
-  opacity: 0.45;
-  stroke-width: 1.5;
+.mobileLink::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 2px;
+  height: 0.875rem;
+  border-radius: 1px;
+  content: "";
+  background: var(--brand);
+  opacity: 0;
+  transform: translateY(-50%);
+  transition: opacity 160ms ease;
 }
 
 .mobileLink:hover,
+.mobileLink:focus-visible,
 .mobileLink[aria-current="page"] {
-  background: var(--surface-hover);
+  padding-left: 0.5rem;
   color: var(--foreground);
+}
+
+.mobileLink[aria-current="page"]::before {
+  opacity: 1;
 }
 
 .mobileMenuFooter {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
+  align-items: stretch;
+  flex-direction: column;
   gap: 0.75rem;
-  padding: 0.75rem 0.5rem 0.25rem;
-  margin-top: 0.35rem;
+  padding-top: 1.25rem;
+  margin-top: auto;
   border-top: 1px solid var(--border);
 }
 
+.mobileLanguages {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  gap: 0.45rem;
+  color: var(--foreground-subtle);
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.6875rem;
+  letter-spacing: 0.06em;
+}
+
+.mobileLanguages > svg {
+  width: 0.9rem;
+  height: 0.9rem;
+  color: var(--foreground-muted);
+  stroke-width: 1.6;
+}
+
+.mobileLanguages button {
+  position: relative;
+  min-width: 2.5rem;
+  min-height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--foreground-subtle);
+  font: inherit;
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+
+.mobileLanguages button::after {
+  position: absolute;
+  right: 0.45rem;
+  bottom: 0.3rem;
+  left: 0.45rem;
+  height: 1px;
+  content: "";
+  background: var(--brand);
+  opacity: 0;
+  transform: scaleX(0.5);
+  transition:
+    opacity 160ms ease,
+    transform 160ms ease;
+}
+
+.mobileLanguages button:hover,
+.mobileLanguages button:focus-visible,
+.mobileLanguages button[aria-pressed="true"] {
+  color: var(--foreground);
+}
+
+.mobileLanguages button[aria-pressed="true"]::after {
+  opacity: 1;
+  transform: scaleX(1);
+}
+
 .mobileCta {
-  flex: 1;
+  flex: none;
+  width: 100%;
+  min-height: 3rem;
   padding-inline: 1rem;
+  border-radius: var(--radius-sm);
 }
 
 @media (max-width: 68rem) {
@@ -350,8 +514,24 @@
 }
 
 @media (max-width: 56rem) {
+  .header {
+    z-index: 1000;
+  }
+
+  .header.menuOpen {
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
   .headerInner {
+    position: relative;
+    z-index: 3;
     grid-template-columns: 1fr auto;
+  }
+
+  .mobileActions {
+    position: relative;
+    z-index: 5;
   }
 
   .desktopNav,
@@ -360,8 +540,13 @@
   }
 
   .mobileActions,
+  .mobileOverlay,
   .mobileMenu {
     display: flex;
+  }
+
+  .mobileOverlay {
+    display: block;
   }
 
   .mobileMenu {
@@ -383,14 +568,16 @@
   .header {
     --page-gutter: 1rem;
   }
+}
 
-  .mobileMenuFooter {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .mobileMenuFooter > div,
-  .mobileMenuFooter .utilityButton {
-    width: 100%;
+@media (prefers-reduced-motion: reduce) {
+  .menuGlyph > span,
+  .mobileOverlay,
+  .mobileMenu,
+  .mobileLink,
+  .mobileLink::before,
+  .mobileLanguages button,
+  .mobileLanguages button::after {
+    transition: none;
   }
 }

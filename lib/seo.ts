@@ -1,8 +1,5 @@
 import type { Metadata } from "next"
 
-export const INSTAGRAM_URL = "https://www.instagram.com/buxdevco/"
-export const PRIMARY_PHONE = "+522211310600"
-export const CONTACT_EMAIL = "info@buxdev.com"
 export const SITE_NAME = "BUXDEV"
 export const SITE_ORIGIN = "https://buxdev.com"
 export const SITE_URL = new URL(SITE_ORIGIN)
@@ -10,6 +7,10 @@ export const HOME_TITLE = "Desarrollo de Software Multiplataforma"
 export const SITE_TITLE = `${HOME_TITLE} | ${SITE_NAME}`
 export const SITE_DESCRIPTION =
   "Diseñamos y desarrollamos páginas web, tiendas en línea y aplicaciones multiplataforma para impulsar negocios e ideas."
+export const SOCIAL_IMAGE_PATH = "/og/buxdev-home.png"
+export const INSTAGRAM_URL = "https://www.instagram.com/buxdevco/"
+export const PRIMARY_PHONE = "+522211310600"
+export const CONTACT_EMAIL = "info@buxdev.com"
 
 export const INDEXABLE_PATHS = ["/", "/about/", "/services/", "/contact/"] as const
 
@@ -45,6 +46,13 @@ export function absoluteUrl(path: string) {
   return new URL(path, SITE_URL).toString()
 }
 
+export const SOCIAL_IMAGE = {
+  url: absoluteUrl(SOCIAL_IMAGE_PATH),
+  width: 1200,
+  height: 630,
+  alt: "BUXDEV — Creamos software para hacer crecer ideas",
+}
+
 export function createPageMetadata({
   title,
   description,
@@ -70,11 +78,13 @@ export function createPageMetadata({
       siteName: SITE_NAME,
       title: socialTitle,
       description,
+      images: [SOCIAL_IMAGE],
     },
     twitter: {
-      card: "summary",
+      card: "summary_large_image",
       title: socialTitle,
       description,
+      images: [SOCIAL_IMAGE.url],
     },
   }
 }
@@ -90,8 +100,8 @@ export const homepageStructuredData = {
       "@id": organizationId,
       name: SITE_NAME,
       url: `${SITE_ORIGIN}/`,
-      logo: absoluteUrl("/brand/buxdev/logo-on-light.svg"),
       description: SITE_DESCRIPTION,
+      logo: absoluteUrl("/brand/buxdev/logo-on-light.svg"),
       email: CONTACT_EMAIL,
       telephone: PRIMARY_PHONE,
       sameAs: [INSTAGRAM_URL],

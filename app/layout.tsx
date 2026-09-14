@@ -5,6 +5,7 @@ import { SiteShell } from "@/components/site-shell"
 import {
   SITE_DESCRIPTION,
   SITE_NAME,
+  SOCIAL_IMAGE,
   SITE_TITLE,
   SITE_URL,
 } from "@/lib/seo"
@@ -58,16 +59,28 @@ export const metadata: Metadata = {
     type: "website",
     locale: "es_MX",
     siteName: SITE_NAME,
+    url: `${SITE_URL.origin}/`,
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
+    images: [SOCIAL_IMAGE],
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: SITE_TITLE,
     description: SITE_DESCRIPTION,
+    images: [SOCIAL_IMAGE.url],
   },
   icons: {
     icon: [
+      {
+        url: "/favicon.ico",
+        sizes: "any",
+      },
+      {
+        url: "/favicon-96x96.png",
+        type: "image/png",
+        sizes: "96x96",
+      },
       {
         url: "/brand/buxdev/mark-on-light.svg",
         media: "(prefers-color-scheme: light)",
@@ -75,6 +88,14 @@ export const metadata: Metadata = {
       {
         url: "/brand/buxdev/mark-on-dark.svg",
         media: "(prefers-color-scheme: dark)",
+      },
+    ],
+    shortcut: "/favicon.ico",
+    apple: [
+      {
+        url: "/apple-touch-icon.png",
+        type: "image/png",
+        sizes: "180x180",
       },
     ],
   },

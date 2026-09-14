@@ -125,8 +125,8 @@
 }
 
 .contact > a svg {
-  width: 0.95rem;
-  height: 0.95rem;
+  width: 1rem;
+  height: 1rem;
   flex: 0 0 auto;
   color: color-mix(in srgb, var(--brand) 68%, var(--foreground-muted));
   stroke-width: 1.45;
@@ -134,6 +134,19 @@
 
 .contact > a:hover {
   color: var(--foreground);
+}
+
+.contact > a.secondaryPhone {
+  color: var(--foreground-subtle);
+  font-size: 0.72rem;
+}
+
+.contact > a.secondaryPhone svg {
+  opacity: 0.55;
+}
+
+.contact > a.secondaryPhone:hover {
+  color: var(--foreground-muted);
 }
 
 .bottom {

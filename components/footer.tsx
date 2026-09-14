@@ -2,7 +2,7 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Mail, Phone } from "lucide-react"
+import { Mail, Phone } from "iconoir-react"
 
 import { useConsent } from "@/components/consent-provider"
 import { useLanguage } from "@/hooks/use-language"
@@ -21,7 +21,6 @@ export function Footer() {
   const { t } = useLanguage()
   const { openPreferences } = useConsent()
   const year = new Date().getFullYear()
-  const phoneHref = `tel:${t.footer.phone.replace(/[^\d+]/g, "")}`
 
   return (
     <footer className={styles.footer}>
@@ -64,9 +63,16 @@ export function Footer() {
               <Mail aria-hidden="true" />
               <span>{t.footer.email}</span>
             </a>
-            <a href={phoneHref}>
+            <a href="tel:+522211310600">
               <Phone aria-hidden="true" />
-              <span>{t.footer.phone}</span>
+              <span>{t.footer.primaryPhone}</span>
+            </a>
+            <a
+              href={`tel:${t.footer.secondaryPhone.replace(/[^\d+]/g, "")}`}
+              className={styles.secondaryPhone}
+            >
+              <Phone aria-hidden="true" />
+              <span>{t.footer.secondaryPhone}</span>
             </a>
           </div>
         </div>

@@ -21,13 +21,14 @@
 
 .scrolled {
   border-color: var(--border);
-  background: color-mix(in srgb, var(--background) 78%, transparent);
+  background: transparent;
   box-shadow: 0 12px 36px rgb(0 0 0 / 12%);
-  backdrop-filter: blur(18px) saturate(130%);
 }
 
 .scrolled::before {
-  opacity: 0;
+  background: color-mix(in srgb, var(--background) 78%, transparent);
+  -webkit-backdrop-filter: blur(18px) saturate(130%);
+  backdrop-filter: blur(18px) saturate(130%);
 }
 
 .headerInner {
@@ -525,7 +526,7 @@
 
   .headerInner {
     position: relative;
-    z-index: 3;
+    z-index: auto;
     grid-template-columns: 1fr auto;
   }
 

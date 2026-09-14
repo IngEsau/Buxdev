@@ -2,19 +2,11 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import {
-  ArrowUpRight,
-  Boxes,
-  Braces,
-  Code2,
-  Database,
-  GitBranch,
-  Layers3,
-  MonitorSmartphone,
-  ServerCog,
-} from "lucide-react"
+import { ArrowUpRight } from "iconoir-react"
+import { Boxes, Braces, Code2, Database, GitBranch, Layers3, MonitorSmartphone, ServerCog } from "lucide-react"
 
 import { useLanguage } from "@/hooks/use-language"
+import { MotionReveal } from "@/components/motion-reveal"
 
 import styles from "./hero-section.module.css"
 
@@ -27,14 +19,14 @@ export function HeroSection() {
       <div className={styles.ambientLight} aria-hidden="true" />
 
       <div className={styles.heroInner}>
-        <div className={styles.heroCopy}>
+        <MotionReveal className={styles.heroCopy} revealOnView={false} distance={10}>
           <p className={styles.eyebrow}>
             <span aria-hidden="true" />
             {t.hero.eyebrow}
           </p>
 
           <h1 id="home-hero-title" className={styles.headline}>
-            <span>{t.hero.headlineStart}</span>
+            <span>{t.hero.headlineStart}{" "}</span>
             <span className={styles.headlineAccent}>{t.hero.headlineEnd}</span>
           </h1>
 
@@ -50,9 +42,15 @@ export function HeroSection() {
               <Layers3 aria-hidden="true" />
             </Link>
           </div>
-        </div>
+        </MotionReveal>
 
-        <div className={styles.engineeringVisual} aria-hidden="true">
+        <MotionReveal
+          className={styles.engineeringVisual}
+          aria-hidden="true"
+          revealOnView={false}
+          delay={0.08}
+          distance={16}
+        >
           <div className={styles.visualAxisHorizontal} />
           <div className={styles.visualAxisVertical} />
 
@@ -187,7 +185,7 @@ export function HeroSection() {
               <Boxes /> {t.hero.interface.digitalProduct}
             </span>
           </div>
-        </div>
+        </MotionReveal>
       </div>
 
       <div className={styles.heroFade} aria-hidden="true" />

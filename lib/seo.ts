@@ -1,5 +1,8 @@
 import type { Metadata } from "next"
 
+export const INSTAGRAM_URL = "https://www.instagram.com/buxdevco/"
+export const PRIMARY_PHONE = "+522211310600"
+export const CONTACT_EMAIL = "info@buxdev.com"
 export const SITE_NAME = "BUXDEV"
 export const SITE_ORIGIN = "https://buxdev.com"
 export const SITE_URL = new URL(SITE_ORIGIN)
@@ -88,6 +91,10 @@ export const homepageStructuredData = {
       name: SITE_NAME,
       url: `${SITE_ORIGIN}/`,
       logo: absoluteUrl("/brand/buxdev/logo-on-light.svg"),
+      description: SITE_DESCRIPTION,
+      email: CONTACT_EMAIL,
+      telephone: PRIMARY_PHONE,
+      sameAs: [INSTAGRAM_URL],
     },
     {
       "@type": "WebSite",

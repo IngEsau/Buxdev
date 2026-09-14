@@ -74,6 +74,13 @@ export function Footer() {
               <Phone aria-hidden="true" />
               <span>{t.footer.secondaryPhone}</span>
             </a>
+            <a
+              href="https://www.instagram.com/buxdevco/"
+              target="_blank"
+              rel="me noopener noreferrer"
+            >
+              <span>Instagram</span>
+            </a>
           </div>
         </div>
 

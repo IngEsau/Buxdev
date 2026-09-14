@@ -2,8 +2,9 @@
 
 import Link from "next/link"
 
-import { Button } from "@/components/ui/button"
 import { useLanguage } from "@/hooks/use-language"
+
+import styles from "./not-found-page.module.css"
 
 export function NotFoundPage() {
   const { t } = useLanguage()
@@ -12,21 +13,32 @@ export function NotFoundPage() {
     <main
       id="main-content"
       tabIndex={-1}
-      className="min-h-screen flex items-center justify-center bg-background px-5"
+      className={styles.page}
       aria-labelledby="not-found-title"
+      aria-describedby="not-found-description"
     >
-      <div className="text-center">
-        <p className="text-6xl font-bold text-primary mb-4" aria-hidden="true">
+      <div className={styles.backgroundGrid} aria-hidden="true" />
+      <div className={styles.glow} aria-hidden="true" />
+
+      <section className={styles.content}>
+        <p className={styles.errorCode} aria-hidden="true">
           404
         </p>
-        <h1 id="not-found-title" className="text-2xl font-semibold mb-4">
-          {t.notFound.title}
-        </h1>
-        <p className="text-muted-foreground mb-8">{t.notFound.description}</p>
-        <Button asChild>
-          <Link href="/">{t.notFound.back}</Link>
-        </Button>
-      </div>
+
+        <div className={styles.copy}>
+          <h1 id="not-found-title">{t.notFound.title}</h1>
+          <p id="not-found-description">{t.notFound.description}</p>
+        </div>
+
+        <div className={styles.actions}>
+          <Link href="/" className={styles.primaryAction}>
+            {t.notFound.back}
+          </Link>
+          <Link href="/contact/" className={styles.secondaryAction}>
+            {t.notFound.contact}
+          </Link>
+        </div>
+      </section>
     </main>
   )
 }

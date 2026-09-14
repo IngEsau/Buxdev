@@ -270,8 +270,9 @@ export const translations = {
     },
     notFound: {
       title: "Página no encontrada",
-      description: "Lo sentimos, la página que buscas no existe.",
+      description: "La ruta que buscas no existe o ya no está disponible. Puedes volver al inicio para continuar.",
       back: "Volver al inicio",
+      contact: "Ir a contacto",
     },
     legal: {
       languageNotice: "El contenido jurídico oficial se presenta en español.",
@@ -547,8 +548,9 @@ export const translations = {
     },
     notFound: {
       title: "Page not found",
-      description: "Sorry, the page you are looking for does not exist.",
+      description: "The route you are looking for does not exist or is no longer available. You can return home to continue.",
       back: "Back to home",
+      contact: "Go to contact",
     },
     legal: {
       languageNotice: "The official legal content is provided in Spanish.",

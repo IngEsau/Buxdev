@@ -1,0 +1,171 @@
+.page {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: max(42rem, 100svh);
+  padding: calc(var(--header-height) + clamp(2.5rem, 6vw, 5rem)) var(--page-gutter)
+    clamp(5rem, 9vw, 8rem);
+  overflow: hidden;
+  place-items: center;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(180deg, var(--background-elevated), var(--background) 72%);
+}
+
+.backgroundGrid {
+  position: absolute;
+  inset: 0;
+  z-index: -3;
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: clamp(4.5rem, 7.5vw, 7.5rem) clamp(4.5rem, 7.5vw, 7.5rem);
+  opacity: 0.27;
+  -webkit-mask-image: radial-gradient(ellipse 82% 76% at 50% 42%, #000 28%, transparent 100%);
+  mask-image: radial-gradient(ellipse 82% 76% at 50% 42%, #000 28%, transparent 100%);
+  pointer-events: none;
+}
+
+.glow {
+  position: absolute;
+  top: 4%;
+  left: 50%;
+  z-index: -2;
+  width: min(62rem, 86vw);
+  height: min(29rem, 48vw);
+  background: radial-gradient(ellipse, color-mix(in srgb, var(--brand) 13%, transparent), transparent 68%);
+  filter: blur(2.5rem);
+  opacity: 0.72;
+  transform: translateX(-50%);
+  pointer-events: none;
+}
+
+.content {
+  display: flex;
+  width: min(100%, 64rem);
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+}
+
+.errorCode {
+  margin: 0;
+  color: color-mix(in srgb, var(--foreground-subtle) 68%, var(--brand) 32%);
+  font-size: clamp(8rem, 26vw, 23rem);
+  font-weight: 760;
+  letter-spacing: 0.015em;
+  line-height: 0.72;
+  text-shadow: 0 1.5rem 6rem color-mix(in srgb, var(--brand) 12%, transparent);
+}
+
+.copy {
+  max-width: 41rem;
+  margin-top: clamp(3.75rem, 6vw, 5.5rem);
+}
+
+.copy h1 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(2rem, 4vw, 3.35rem);
+  font-weight: 690;
+  letter-spacing: var(--heading-letter-spacing);
+  line-height: 1.08;
+  text-wrap: balance;
+}
+
+.copy p {
+  max-width: 37rem;
+  margin: 1.2rem auto 0;
+  color: var(--foreground-muted);
+  font-size: clamp(0.92rem, 1.4vw, 1.02rem);
+  letter-spacing: -0.018em;
+  line-height: 1.75;
+  text-wrap: balance;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: clamp(2rem, 4vw, 2.75rem);
+}
+
+.primaryAction,
+.secondaryAction {
+  display: inline-flex;
+  min-height: 3.1rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 1.4rem;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  font-size: 0.78rem;
+  font-weight: 640;
+  letter-spacing: -0.018em;
+  text-decoration: none;
+  transition:
+    border-color 180ms ease,
+    background-color 180ms ease,
+    box-shadow 180ms ease,
+    color 180ms ease,
+    transform 180ms ease;
+}
+
+.primaryAction {
+  border-color: color-mix(in srgb, var(--brand) 82%, #ffffff);
+  background: var(--brand);
+  color: #ffffff;
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 16%),
+    0 0.9rem 2.5rem color-mix(in srgb, var(--brand) 21%, transparent);
+}
+
+.secondaryAction {
+  border-color: var(--border-strong);
+  background: color-mix(in srgb, var(--surface) 58%, transparent);
+  color: var(--foreground);
+}
+
+.primaryAction:hover {
+  background: var(--brand-hover);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 18%),
+    0 1rem 2.75rem color-mix(in srgb, var(--brand) 27%, transparent);
+  transform: translateY(-1px);
+}
+
+.secondaryAction:hover {
+  border-color: color-mix(in srgb, var(--brand) 30%, var(--border-strong));
+  background: var(--surface-hover);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 40rem) {
+  .page {
+    min-height: 100svh;
+    padding: calc(var(--header-height) + 2rem) 1.25rem 4rem;
+  }
+
+  .errorCode {
+    font-size: clamp(8rem, 37vw, 10rem);
+  }
+
+  .copy {
+    margin-top: 3.25rem;
+  }
+
+  .copy h1 {
+    font-size: clamp(1.85rem, 8vw, 2.35rem);
+  }
+
+  .actions {
+    width: min(100%, 22rem);
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .primaryAction,
+  .secondaryAction {
+    width: 100%;
+  }
+}

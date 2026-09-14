@@ -263,6 +263,11 @@ export const translations = {
         contact: "Contáctanos: info@buxdev.com | +52 1 220 139 9038",
       },
     },
+    floating: {
+      actionsLabel: "Acciones de contacto y navegación",
+      whatsapp: "Hablar con BUXDEV por WhatsApp",
+      backToTop: "Volver arriba",
+    },
     notFound: {
       title: "Página no encontrada",
       description: "Lo sentimos, la página que buscas no existe.",
@@ -534,6 +539,11 @@ export const translations = {
         whatWeDo: "We develop websites, online stores, web and mobile applications, plus redesign and SEO services.",
         contact: "Contact us: info@buxdev.com | +52 1 220 139 9038",
       },
+    },
+    floating: {
+      actionsLabel: "Contact and navigation actions",
+      whatsapp: "Talk to BUXDEV on WhatsApp",
+      backToTop: "Back to top",
     },
     notFound: {
       title: "Page not found",

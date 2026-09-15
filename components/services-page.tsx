@@ -5,11 +5,11 @@ import Link from "next/link"
 import { ArrowUpRight } from "iconoir-react"
 import {
   Code2,
-  Globe2,
+  PanelsTopLeft,
   Search,
-  ShoppingCart,
-  Smartphone,
+  ShieldCheck,
   Sparkles,
+  Workflow,
 } from "lucide-react"
 
 import { MotionReveal } from "@/components/motion-reveal"
@@ -17,7 +17,23 @@ import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./services-page.module.css"
 
-const serviceIcons: LucideIcon[] = [Globe2, ShoppingCart, Code2, Smartphone, Sparkles, Search]
+const serviceIcons: LucideIcon[] = [Code2, PanelsTopLeft, ShieldCheck, Workflow]
+
+const serviceCtas = [
+  { href: "/work/valeria-herrera/" },
+  { href: "/work/valeria-herrera/" },
+  {
+    href: "https://github.com/IngEsau/wp-xmlrpc-attack-analysis",
+    external: true,
+  },
+  { href: "/contact/" },
+]
+
+const serviceCtaClassName =
+  "group mt-5 inline-flex items-center gap-2 py-1 text-xs font-semibold text-[var(--foreground-muted)] no-underline transition-colors duration-200 hover:text-[var(--foreground)] motion-reduce:transition-none"
+
+const serviceCtaIconClassName =
+  "h-4 w-4 transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 motion-reduce:transition-none"
 
 function WebsiteVisual() {
   return (
@@ -41,27 +57,6 @@ function WebsiteVisual() {
   )
 }
 
-function CommerceVisual() {
-  return (
-    <div className={styles.commerceVisual}>
-      <div className={styles.productGrid}>
-        {Array.from({ length: 4 }).map((_, index) => (
-          <span key={index}>
-            <i />
-            <b />
-          </span>
-        ))}
-      </div>
-      <div className={styles.checkoutPanel}>
-        <ShoppingCart />
-        <span />
-        <span />
-        <i />
-      </div>
-    </div>
-  )
-}
-
 function WebAppVisual() {
   return (
     <div className={styles.workflowVisual}>
@@ -74,28 +69,6 @@ function WebAppVisual() {
       </div>
       <i className={styles.workflowX} />
       <i className={styles.workflowY} />
-    </div>
-  )
-}
-
-function MobileVisual() {
-  return (
-    <div className={styles.mobileVisual}>
-      <div className={`${styles.phone} ${styles.phoneBack}`}>
-        <span />
-        <i />
-        <i />
-      </div>
-      <div className={`${styles.phone} ${styles.phoneFront}`}>
-        <span />
-        <Smartphone />
-        <i />
-      </div>
-      <div className={styles.mobileSignal}>
-        <span />
-        <span />
-        <span />
-      </div>
     </div>
   )
 }
@@ -123,7 +96,7 @@ function RedesignVisual() {
   )
 }
 
-function SeoVisual() {
+function SecurityAuditVisual() {
   return (
     <div className={styles.seoVisual}>
       <div className={styles.searchField}>
@@ -147,11 +120,9 @@ function SeoVisual() {
 
 const visuals = [
   WebsiteVisual,
-  CommerceVisual,
-  WebAppVisual,
-  MobileVisual,
   RedesignVisual,
-  SeoVisual,
+  SecurityAuditVisual,
+  WebAppVisual,
 ]
 
 export function ServicesPageContent() {
@@ -162,14 +133,15 @@ export function ServicesPageContent() {
       <div className={styles.grid} aria-hidden="true" />
       <MotionReveal className={styles.inner}>
         <header className={styles.header}>
-          <p>{t.services.title}</p>
-          <h2 id="services-list-title">{t.services.subtitle}</h2>
+          <p>{t.servicesPage.title}</p>
+          <h2 id="services-list-title">{t.servicesPage.subtitle}</h2>
         </header>
 
         <div className={styles.list}>
-          {t.services.items.map((service, index) => {
+          {t.servicesPage.items.map((service, index) => {
             const Icon = serviceIcons[index]
             const Visual = visuals[index]
+            const cta = serviceCtas[index]
 
             return (
               <article className={styles.service} key={service.title}>
@@ -181,6 +153,22 @@ export function ServicesPageContent() {
                   </div>
                   <h3>{service.title}</h3>
                   <p>{service.description}</p>
+                  {cta.external ? (
+                    <a
+                      href={cta.href}
+                      className={serviceCtaClassName}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      <span>{service.cta}</span>
+                      <ArrowUpRight className={serviceCtaIconClassName} aria-hidden="true" />
+                    </a>
+                  ) : (
+                    <Link href={cta.href} className={serviceCtaClassName}>
+                      <span>{service.cta}</span>
+                      <ArrowUpRight className={serviceCtaIconClassName} aria-hidden="true" />
+                    </Link>
+                  )}
                 </div>
 
                 <div className={styles.visualPanel} aria-hidden="true">

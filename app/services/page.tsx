@@ -5,7 +5,7 @@ import { createPageMetadata } from "@/lib/seo"
 export const metadata = createPageMetadata({
   title: "Servicios de Desarrollo de Software",
   description:
-    "Explora los servicios de BUXDEV: páginas web, tiendas en línea, web apps, aplicaciones móviles, rediseño y optimización SEO.",
+    "Servicios de BUXDEV en desarrollo fullstack, UX/UI, ciberseguridad, inteligencia artificial y automatización de procesos.",
   path: "/services/",
 })
 

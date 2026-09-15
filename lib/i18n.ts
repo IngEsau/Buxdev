@@ -43,7 +43,7 @@ export const translations = {
         titleStart: "Tecnología para",
         titleAccent: "hacer avanzar tu negocio.",
         description:
-          "Desarrollamos sitios, comercios y aplicaciones; también modernizamos plataformas y optimizamos su presencia en buscadores.",
+          "Combinamos desarrollo fullstack, UX/UI, ciberseguridad e IA aplicada para resolver necesidades reales de negocio.",
       },
       work: {
         eyebrow: "BUXDEV / Trabajos",
@@ -145,6 +145,36 @@ export const translations = {
         {
           title: "SEO",
           description: "Optimización para motores de búsqueda",
+        },
+      ],
+    },
+    servicesPage: {
+      title: "Servicios",
+      subtitle: "Cuatro pilares para construir, mejorar y proteger productos digitales.",
+      items: [
+        {
+          title: "Desarrollo Fullstack",
+          description:
+            "Desarrollo de sitios, aplicaciones web, APIs, integraciones y sistemas digitales orientados a necesidades reales de negocio.",
+          cta: "Ver caso relacionado",
+        },
+        {
+          title: "UX/UI Design",
+          description:
+            "Diseño y mejora de interfaces, arquitectura de información, prototipos, sistemas de diseño y reworks de productos existentes.",
+          cta: "Ver caso relacionado",
+        },
+        {
+          title: "Ciberseguridad",
+          description:
+            "Auditorías de seguridad web, análisis de exposición, revisión de configuraciones, hardening, assessment bajo autorización, respuesta a incidentes y análisis técnico.",
+          cta: "Ver caso técnico",
+        },
+        {
+          title: "IA & Automatización",
+          description:
+            "Automatización de procesos, integraciones con APIs y modelos de IA, workflows inteligentes, procesamiento de información e incorporación de IA a sistemas existentes para reducir tareas manuales.",
+          cta: "Hablemos de automatización",
         },
       ],
     },
@@ -481,7 +511,7 @@ export const translations = {
         titleStart: "Technology to",
         titleAccent: "move your business forward.",
         description:
-          "We build websites, commerce experiences, and applications; we also modernize platforms and improve their search presence.",
+          "We combine fullstack development, UX/UI, cybersecurity, and applied AI to solve real business needs.",
       },
       work: {
         eyebrow: "BUXDEV / Work",
@@ -583,6 +613,36 @@ export const translations = {
         {
           title: "SEO",
           description: "Search engine optimization",
+        },
+      ],
+    },
+    servicesPage: {
+      title: "Services",
+      subtitle: "Four pillars to build, improve, and protect digital products.",
+      items: [
+        {
+          title: "Fullstack Development",
+          description:
+            "Development of websites, web applications, APIs, integrations, and digital systems focused on real business needs.",
+          cta: "View related case",
+        },
+        {
+          title: "UX/UI Design",
+          description:
+            "Interface design and improvement, information architecture, prototypes, design systems, and reworks of existing products.",
+          cta: "View related case",
+        },
+        {
+          title: "Cybersecurity",
+          description:
+            "Web security audits, exposure analysis, configuration reviews, hardening, authorized assessments, and technical incident response and analysis.",
+          cta: "View technical case",
+        },
+        {
+          title: "AI & Automation",
+          description:
+            "Process automation, integrations with APIs and AI models, intelligent workflows, information processing, and incorporating AI into existing systems to reduce manual tasks.",
+          cta: "Let's talk automation",
         },
       ],
     },

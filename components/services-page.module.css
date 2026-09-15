@@ -37,7 +37,7 @@
 .header p {
   margin: 0.55rem 0 0;
   color: color-mix(in srgb, var(--brand) 65%, var(--foreground));
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.65rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -88,7 +88,7 @@
   padding-bottom: 1.15rem;
   border-bottom: 1px solid var(--border);
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.58rem;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -160,7 +160,7 @@
   padding-inline: 1rem;
   border-bottom: 1px solid var(--border);
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.55rem;
   letter-spacing: 0.1em;
 }

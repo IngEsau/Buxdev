@@ -42,7 +42,6 @@ export function PageHero({ page }: PageHeroProps) {
       <div className={styles.inner}>
         <MotionReveal className={styles.copy} revealOnView={false} distance={10}>
           <p className={styles.eyebrow}>
-            <span aria-hidden="true" />
             {copy.eyebrow}
           </p>
           <h1 id={`${page}-page-title`} className={styles.title}>

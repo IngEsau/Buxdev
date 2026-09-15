@@ -20,7 +20,6 @@ export function WorkPageContent() {
       <MotionReveal className={styles.inner}>
         <div className={styles.copy}>
           <p className={styles.eyebrow}>
-            <span aria-hidden="true" />
             {t.portfolio.stateLabel}
           </p>
           <h2 id="work-state-title">{t.portfolio.stateTitle}</h2>

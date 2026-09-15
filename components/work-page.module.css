@@ -52,21 +52,12 @@
 .eyebrow {
   display: inline-flex;
   align-items: center;
-  gap: 0.65rem;
   margin: 0 0 1.5rem;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.63rem;
   letter-spacing: 0.11em;
   text-transform: uppercase;
-}
-
-.eyebrow > span {
-  width: 0.38rem;
-  height: 0.38rem;
-  border-radius: 50%;
-  background: #5f91df;
-  box-shadow: 0 0 0 0.2rem rgb(35 86 167 / 14%);
 }
 
 .copy h2 {
@@ -209,7 +200,7 @@
 
 .frameHeader p {
   margin: 0;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.55rem;
   letter-spacing: 0.1em;
 }
@@ -330,7 +321,7 @@
   padding-inline: 1rem;
   border-top: 1px solid var(--border);
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.55rem;
   letter-spacing: 0.09em;
   text-transform: uppercase;

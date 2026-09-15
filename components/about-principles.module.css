@@ -66,7 +66,7 @@
   align-items: center;
   justify-content: space-between;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6rem;
   letter-spacing: 0.1em;
 }
@@ -122,7 +122,7 @@
 
 .values li > span {
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.58rem;
   letter-spacing: 0.08em;
 }

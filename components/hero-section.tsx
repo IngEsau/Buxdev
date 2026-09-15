@@ -21,7 +21,6 @@ export function HeroSection() {
       <div className={styles.heroInner}>
         <MotionReveal className={styles.heroCopy} revealOnView={false} distance={10}>
           <p className={styles.eyebrow}>
-            <span aria-hidden="true" />
             {t.hero.eyebrow}
           </p>
 
@@ -77,7 +76,6 @@ export function HeroSection() {
               </div>
             </div>
             <div className={styles.panelFooter}>
-              <span className={styles.statusDot} />
               {t.hero.interface.responsiveInterface}
             </div>
           </div>
@@ -117,7 +115,6 @@ export function HeroSection() {
               </div>
 
               <div className={styles.canvasLabel}>
-                <span className={styles.statusDot} />
                 {t.hero.interface.productCore}
               </div>
             </div>
@@ -167,7 +164,6 @@ export function HeroSection() {
               </div>
             </div>
             <div className={styles.panelFooter}>
-              <span className={styles.statusDot} />
               {t.hero.interface.connectedSystem}
             </div>
           </div>

@@ -53,23 +53,11 @@
 .eyebrow {
   margin: 0 0 1.25rem;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
   font-weight: 550;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-}
-
-.eyebrow::before {
-  display: inline-block;
-  width: 0.4rem;
-  height: 0.4rem;
-  margin-right: 0.65rem;
-  border-radius: 50%;
-  vertical-align: middle;
-  content: "";
-  background: var(--brand);
-  box-shadow: 0 0 0 0.22rem var(--brand-soft);
 }
 
 .title {
@@ -164,7 +152,7 @@
   align-items: center;
   justify-content: space-between;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.625rem;
   letter-spacing: 0.08em;
 }

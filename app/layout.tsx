@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata } from "next"
-import { Geist_Mono, Montserrat } from "next/font/google"
+import { Inter, Montserrat, Roboto } from "next/font/google"
 import { SiteShell } from "@/components/site-shell"
 import {
   SITE_DESCRIPTION,
@@ -39,9 +39,15 @@ const montserrat = Montserrat({
   display: "swap",
 })
 
-const geistMono = Geist_Mono({
+const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist-mono",
+  variable: "--font-inter",
+  display: "swap",
+})
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  variable: "--font-roboto",
   display: "swap",
 })
 
@@ -114,7 +120,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: initialPreferencesScript }}
         />
       </head>
-      <body className={`${montserrat.variable} ${geistMono.variable} font-sans antialiased`}>
+      <body className={`${montserrat.variable} ${inter.variable} ${roboto.variable} font-sans antialiased`}>
         <SiteShell>{children}</SiteShell>
       </body>
     </html>

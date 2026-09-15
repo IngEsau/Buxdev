@@ -69,31 +69,15 @@
 
 .eyebrow {
   display: inline-flex;
-  min-height: 2rem;
   align-items: center;
-  gap: 0.65rem;
-  padding: 0.45rem 0.85rem;
   margin: 0 0 clamp(1.5rem, 3vw, 2.25rem);
-  border: 1px solid var(--border);
-  border-radius: 999px;
-  background: color-mix(in srgb, var(--surface) 46%, transparent);
   color: var(--foreground-muted);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
   font-weight: 500;
   letter-spacing: 0.09em;
   line-height: 1;
   text-transform: uppercase;
-  box-shadow: inset 0 1px 0 rgb(255 255 255 / 4%);
-  backdrop-filter: blur(12px);
-}
-
-.eyebrow > span {
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 50%;
-  background: #5f91df;
-  box-shadow: 0 0 0 0.2rem rgb(35 86 167 / 16%);
 }
 
 .headline {
@@ -331,7 +315,7 @@
   align-items: center;
   border-bottom: 1px solid var(--border);
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.625rem;
   letter-spacing: 0.08em;
 }
@@ -531,18 +515,9 @@
   align-items: center;
   gap: 0.45rem;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.55rem;
   letter-spacing: 0.08em;
-}
-
-.statusDot {
-  display: inline-block;
-  width: 0.35rem;
-  height: 0.35rem;
-  border-radius: 50%;
-  background: #4e7dca;
-  box-shadow: 0 0 0 0.2rem rgb(35 86 167 / 12%);
 }
 
 .systemMetrics {
@@ -567,7 +542,7 @@
 
 .systemMetrics span,
 .systemMetrics strong {
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.5rem;
   font-style: normal;
   letter-spacing: 0.08em;
@@ -672,7 +647,7 @@
   padding-inline: 1rem;
   border-top: 1px solid var(--border);
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.55rem;
   letter-spacing: 0.08em;
 }
@@ -718,7 +693,7 @@
 
 .serviceState {
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.48rem;
   letter-spacing: 0.06em;
 }
@@ -739,7 +714,7 @@
   background: color-mix(in srgb, var(--background-elevated) 82%, transparent);
   color: var(--foreground-subtle);
   box-shadow: 0 16px 40px rgb(0 0 0 / 24%);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.55rem;
   letter-spacing: 0.07em;
   white-space: nowrap;

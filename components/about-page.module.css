@@ -57,7 +57,7 @@
 .kicker {
   margin: 0 0 clamp(2.5rem, 5vw, 4.5rem);
   color: color-mix(in srgb, var(--brand) 66%, var(--foreground));
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.66rem;
   letter-spacing: 0.12em;
   text-transform: uppercase;

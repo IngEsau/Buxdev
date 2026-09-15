@@ -3,7 +3,6 @@
   isolation: isolate;
   padding: clamp(6rem, 10vw, 9rem) var(--page-gutter);
   overflow: hidden;
-  border-top: 1px solid var(--border);
   background:
     radial-gradient(circle at 12% 50%, rgb(35 86 167 / 9%), transparent 30rem),
     linear-gradient(to bottom, color-mix(in srgb, var(--background-elevated) 24%, transparent), transparent 62%),
@@ -60,7 +59,7 @@
 .eyebrow {
   margin: 0 0 1.35rem;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
   font-weight: 550;
   letter-spacing: 0.12em;

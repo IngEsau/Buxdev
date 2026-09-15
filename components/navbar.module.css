@@ -45,8 +45,8 @@
 
   position: relative;
   display: inline-flex;
-  width: 7rem;
-  height: 4.75rem;
+  width: 6.5rem;
+  height: var(--header-height);
   align-items: center;
   justify-content: flex-start;
   justify-self: start;
@@ -63,7 +63,7 @@
   position: absolute;
   top: 50%;
   left: 0;
-  width: 7rem;
+  width: 6.5rem;
   height: auto;
   transform: translateY(calc(-50% + var(--logo-y-offset)));
 }
@@ -168,7 +168,7 @@
 .utilityButton {
   gap: 0.4rem;
   padding-inline: 0.65rem;
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
   letter-spacing: 0.05em;
 }
@@ -339,9 +339,9 @@
   top: 0;
   right: 0;
   bottom: 0;
-  left: 0;
+  left: auto;
   z-index: 4;
-  width: 100%;
+  width: 75%;
   max-width: none;
   padding:
     var(--header-height) clamp(1rem, 4vw, 1.5rem)
@@ -444,7 +444,7 @@
   align-items: center;
   gap: 0.45rem;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6875rem;
   letter-spacing: 0.06em;
 }
@@ -557,7 +557,7 @@
   .logoLink,
   .logoOnLight,
   .logoOnDark {
-    width: 6.6rem;
+    width: 5rem;
   }
 
   .logoLink {

@@ -280,7 +280,7 @@
 .categoryHeader p {
   margin: 0.22rem 0 0;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.58rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -303,7 +303,7 @@
   border-radius: 999px;
   background: var(--brand-soft);
   color: color-mix(in srgb, var(--brand-hover) 72%, var(--foreground));
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.56rem;
   font-weight: 620;
   letter-spacing: 0.05em;

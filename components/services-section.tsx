@@ -3,26 +3,24 @@
 import Link from "next/link"
 import { ArrowUpRight } from "iconoir-react"
 import type { LucideIcon } from "lucide-react"
-import { Code2, Globe2, Search, ShoppingCart, Smartphone, Sparkles } from "lucide-react"
+import { Code2, PanelsTopLeft, Search, ShieldCheck, Workflow } from "lucide-react"
 
 import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./services-section.module.css"
 
-type ServiceVisualKind = "web" | "commerce" | "app" | "mobile" | "redesign" | "search"
+type ServiceVisualKind = "web" | "app" | "redesign" | "search"
 
 const serviceDesigns: Array<{
   Icon: LucideIcon
   visual: ServiceVisualKind
   span: string
 }> = [
-  { Icon: Globe2, visual: "web", span: styles.spanSeven },
-  { Icon: ShoppingCart, visual: "commerce", span: styles.spanFive },
-  { Icon: Code2, visual: "app", span: styles.spanFour },
-  { Icon: Smartphone, visual: "mobile", span: styles.spanEight },
-  { Icon: Sparkles, visual: "redesign", span: styles.spanSeven },
-  { Icon: Search, visual: "search", span: styles.spanFive },
+  { Icon: Code2, visual: "web", span: styles.spanSeven },
+  { Icon: PanelsTopLeft, visual: "redesign", span: styles.spanFive },
+  { Icon: ShieldCheck, visual: "search", span: styles.spanFive },
+  { Icon: Workflow, visual: "app", span: styles.spanSeven },
 ]
 
 function ServiceVisual({ kind }: { kind: ServiceVisualKind }) {
@@ -58,21 +56,6 @@ function ServiceVisual({ kind }: { kind: ServiceVisualKind }) {
     )
   }
 
-  if (kind === "commerce") {
-    return (
-      <div className={styles.visual} aria-hidden="true">
-        <div className={styles.productWindow}>
-          <div className={styles.productPreview} />
-          <div className={styles.checkout}>
-            <span />
-            <span />
-            <span />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   if (kind === "app") {
     return (
       <div className={styles.visual} aria-hidden="true">
@@ -86,21 +69,6 @@ function ServiceVisual({ kind }: { kind: ServiceVisualKind }) {
           <div className={styles.appMain}>
             <div className={styles.appMetric} />
             <div className={styles.appGraph} />
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  if (kind === "mobile") {
-    return (
-      <div className={styles.visual} aria-hidden="true">
-        <div className={styles.phoneShell}>
-          <div className={styles.phoneScreen}>
-            <span />
-            <span />
-            <span />
-            <span />
           </div>
         </div>
       </div>
@@ -155,14 +123,14 @@ export function ServicesSection() {
           <div>
             <p className={styles.eyebrow}>{t.nav.servicios}</p>
             <h2 id="home-services-title" className={styles.title}>
-              {t.services.title}
+              {t.servicesPage.title}
             </h2>
           </div>
-          <p className={styles.subtitle}>{t.services.subtitle}</p>
+          <p className={styles.subtitle}>{t.servicesPage.subtitle}</p>
         </header>
 
         <div className={styles.bento}>
-          {t.services.items.map((service, index) => {
+          {t.servicesPage.items.map((service, index) => {
             const design = serviceDesigns[index]
             const Icon = design.Icon
 

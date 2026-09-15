@@ -74,7 +74,7 @@ export const translations = {
       headlineStart: "Creamos software para",
       headlineEnd: "hacer crecer ideas.",
       description:
-        "Diseñamos y desarrollamos páginas web, tiendas en línea y aplicaciones multiplataforma para impulsar tu negocio.",
+        "Combinamos desarrollo fullstack, UX/UI, ciberseguridad e IA aplicada para resolver necesidades reales de tu negocio.",
       primaryCta: "Cuéntanos tu proyecto",
       secondaryCta: "Ver nuestros trabajos",
       interface: {
@@ -542,7 +542,7 @@ export const translations = {
       headlineStart: "We create software to",
       headlineEnd: "help ideas grow.",
       description:
-        "We design and build websites, online stores, and cross-platform applications to move your business forward.",
+        "We combine fullstack development, UX/UI, cybersecurity, and applied AI to solve real business needs.",
       primaryCta: "Tell us about your project",
       secondaryCta: "See our work",
       interface: {

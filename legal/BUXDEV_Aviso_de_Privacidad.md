@@ -1,6 +1,6 @@
 # AVISO DE PRIVACIDAD INTEGRAL — BUXDEV
 
-**Última actualización:** 3 de septiembre de 2026
+**Última actualización:** 15 de septiembre de 2026
 
 ## 1. Identidad y domicilio del responsable
 

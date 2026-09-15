@@ -47,10 +47,10 @@ export const translations = {
       },
       work: {
         eyebrow: "BUXDEV / Trabajos",
-        titleStart: "Nuestros proyectos,",
-        titleAccent: "próximamente en este espacio.",
+        titleStart: "Casos reales de",
+        titleAccent: "software y producto.",
         description:
-          "Estamos preparando una selección de trabajos para presentarlos con el contexto y el detalle que merecen.",
+          "Una selección de proyectos construidos para negocios, profesionales y necesidades técnicas reales.",
       },
       contact: {
         eyebrow: "BUXDEV / Contacto",
@@ -200,10 +200,167 @@ export const translations = {
       title: "Nuestros Trabajos",
       subtitle: "Una selección en preparación",
       empty: "Próximamente mostraremos nuestros proyectos destacados",
-      stateLabel: "Portafolio en preparación",
-      stateTitle: "Estamos preparando una selección de trabajos.",
+      stateLabel: "Casos reales",
+      stateTitle: "Proyectos seleccionados.",
       stateDescription:
-        "Publicaremos cada proyecto cuando podamos presentarlo con información real y suficiente.",
+        "Una selección de soluciones digitales y trabajo técnico desarrollado por BUXDEV.",
+      categoriesLabel: "Categorías del proyecto",
+      actions: {
+        visitProject: "Visitar proyecto",
+        viewRepository: "Ver repositorio",
+        viewCaseStudy: "Ver caso",
+      },
+      projects: {
+        valeriaHerrera: {
+          title: "Valeria Herrera",
+          description:
+            "Catálogo digital de repostería diseñado para presentar productos y facilitar el contacto con clientes.",
+          categories: ["UX/UI", "Frontend", "SEO"],
+          desktopAlt: "Vista desktop del catálogo de repostería Valeria Herrera",
+          mobileAlt: "Vista responsive del catálogo de repostería Valeria Herrera",
+        },
+        bandasAsesoria: {
+          title: "Bandas Asesoría y Montaje",
+          description:
+            "Rework de una plataforma existente con nueva dirección visual, tienda de productos, formularios y mejoras orientadas al contacto comercial.",
+          categories: ["UX/UI", "Frontend", "E-commerce"],
+          desktopAlt: "Vista desktop de Bandas Asesoría y Montaje",
+          mobileAlt: "Vista responsive de Bandas Asesoría y Montaje",
+        },
+        wordpressIncidentResponse: {
+          title: "WordPress Incident Response",
+          description:
+            "Análisis y mitigación de un incidente real de SEO Spam sobre WordPress, incluyendo RCA, limpieza, hardening y recuperación.",
+          categories: ["Ciberseguridad", "Incident Response"],
+          desktopAlt: "Vista desktop del repositorio de respuesta a incidentes WordPress en GitHub",
+          mobileAlt: "Vista responsive del repositorio de respuesta a incidentes WordPress en GitHub",
+        },
+        portfolio: {
+          title: "Portfolio personal",
+          description:
+            "Proyecto interno utilizado como espacio de experimentación, presentación profesional y exploración frontend.",
+          categories: ["Proyecto interno", "Frontend"],
+          desktopAlt: "Vista desktop del portfolio personal",
+          mobileAlt: "Vista responsive del portfolio personal",
+        },
+      },
+    },
+    caseStudies: {
+      valeriaHerrera: {
+        backToWork: "Volver a trabajos",
+        label: "Caso de estudio / 01",
+        title: "Valeria Herrera",
+        description:
+          "Sitio desarrollado para presentar de forma profesional un catálogo de productos de repostería y facilitar el contacto con potenciales clientes.",
+        categories: ["UX/UI", "Frontend", "SEO"],
+        categoriesLabel: "Categorías del caso de estudio",
+        facts: [
+          { label: "Año", value: "2026" },
+          { label: "Tipo", value: "Proyecto para cliente" },
+        ],
+        visitSite: "Visitar sitio",
+        sections: [
+          {
+            id: "challenge",
+            index: "01",
+            title: "El reto",
+            paragraphs: [
+              "El proyecto necesitaba una presencia digital clara y visual para presentar una oferta de repostería artesanal de forma profesional.",
+              "El reto consistió en ordenar los productos, mantener una lectura sencilla y conducir a las personas hacia canales de contacto directos desde cualquier dispositivo.",
+            ],
+          },
+          {
+            id: "solution",
+            index: "02",
+            title: "La solución",
+            paragraphs: [
+              "Se construyó una experiencia editorial y cálida en la que las fotografías y la información esencial del catálogo tienen el protagonismo.",
+            ],
+            features: [
+              {
+                title: "Dirección visual",
+                description:
+                  "Una interfaz cálida y sobria que acompaña la identidad de la marca y prioriza las imágenes de producto.",
+              },
+              {
+                title: "Arquitectura de contenido",
+                description:
+                  "Una jerarquía clara que separa presentación, trabajo, productos destacados, catálogo y contacto.",
+              },
+              {
+                title: "Diseño responsive",
+                description:
+                  "Composición adaptable para conservar legibilidad, navegación y acceso a las acciones en desktop y mobile.",
+              },
+              {
+                title: "Catálogo",
+                description:
+                  "Productos organizados visualmente con descripción e información suficiente para iniciar una cotización.",
+              },
+              {
+                title: "Contacto",
+                description:
+                  "Accesos directos a WhatsApp, Instagram y correo electrónico a lo largo de la experiencia.",
+              },
+              {
+                title: "SEO técnico básico",
+                description:
+                  "Estructura pública indexable, metadatos esenciales, robots.txt y sitemap para facilitar el rastreo.",
+              },
+            ],
+          },
+          {
+            id: "implementation",
+            index: "03",
+            title: "Implementación",
+            paragraphs: [
+              "La solución se implementó como una aplicación frontend ligera, con componentes reutilizables y estilos responsivos.",
+            ],
+            technologies: ["React", "Vite", "Tailwind CSS"],
+          },
+          {
+            id: "result",
+            index: "04",
+            title: "Resultado",
+            paragraphs: [
+              "El proyecto está publicado como una experiencia funcional enfocada en presentar el catálogo y facilitar el contacto.",
+            ],
+            results: [
+              "Sitio público funcional",
+              "Catálogo responsive",
+              "Navegación clara",
+              "Presencia indexable",
+              "Integración con Search Console y sitemap",
+            ],
+          },
+        ],
+        galleryLabel: "Galería",
+        galleryTitle: "El producto en contexto.",
+        galleryDescription:
+          "Vistas reales del sitio publicado, capturadas en las secciones que articulan la experiencia.",
+        gallery: [
+          {
+            src: "/work/valeria-herrera/gallery-about.webp",
+            alt: "Sección Acerca del trabajo del sitio Valeria Herrera",
+            caption: "Presentación del trabajo y su propuesta artesanal",
+          },
+          {
+            src: "/work/valeria-herrera/gallery-catalog.webp",
+            alt: "Catálogo de productos del sitio Valeria Herrera",
+            caption: "Catálogo responsive con productos de repostería",
+          },
+          {
+            src: "/work/valeria-herrera/gallery-contact.webp",
+            alt: "Sección de contacto del sitio Valeria Herrera",
+            caption: "Canales de contacto y cierre de la experiencia",
+          },
+        ],
+        finalLabel: "Proyecto publicado",
+        finalTitle: "Explora el catálogo de Valeria Herrera.",
+        finalDescription:
+          "Consulta la experiencia completa y la presentación actual de sus productos de repostería.",
+        visitProject: "Visitar proyecto",
+      },
     },
     footer: {
       services: "Servicios",
@@ -328,10 +485,10 @@ export const translations = {
       },
       work: {
         eyebrow: "BUXDEV / Work",
-        titleStart: "Our projects,",
-        titleAccent: "coming soon to this space.",
+        titleStart: "Real-world software",
+        titleAccent: "and product cases.",
         description:
-          "We are preparing a selection of work to present it with the context and detail it deserves.",
+          "A selection of projects built for businesses, professionals, and real technical needs.",
       },
       contact: {
         eyebrow: "BUXDEV / Contact",
@@ -480,10 +637,167 @@ export const translations = {
       title: "Our Work",
       subtitle: "A selection in progress",
       empty: "Coming soon: our featured projects",
-      stateLabel: "Portfolio in progress",
-      stateTitle: "We are preparing a selection of work.",
+      stateLabel: "Real-world cases",
+      stateTitle: "Selected projects.",
       stateDescription:
-        "We will publish each project when we can present it with real and sufficient information.",
+        "A selection of digital solutions and technical work developed by BUXDEV.",
+      categoriesLabel: "Project categories",
+      actions: {
+        visitProject: "Visit project",
+        viewRepository: "View repository",
+        viewCaseStudy: "View case study",
+      },
+      projects: {
+        valeriaHerrera: {
+          title: "Valeria Herrera",
+          description:
+            "A digital pastry catalog designed to present products and make it easier for customers to get in touch.",
+          categories: ["UX/UI", "Frontend", "SEO"],
+          desktopAlt: "Desktop view of the Valeria Herrera pastry catalog",
+          mobileAlt: "Responsive view of the Valeria Herrera pastry catalog",
+        },
+        bandasAsesoria: {
+          title: "Bandas Asesoría y Montaje",
+          description:
+            "A rework of an existing platform with a new visual direction, product store, forms, and improvements focused on commercial contact.",
+          categories: ["UX/UI", "Frontend", "E-commerce"],
+          desktopAlt: "Desktop view of Bandas Asesoría y Montaje",
+          mobileAlt: "Responsive view of Bandas Asesoría y Montaje",
+        },
+        wordpressIncidentResponse: {
+          title: "WordPress Incident Response",
+          description:
+            "Analysis and mitigation of a real WordPress SEO Spam incident, including RCA, cleanup, hardening, and recovery.",
+          categories: ["Cybersecurity", "Incident Response"],
+          desktopAlt: "Desktop view of the WordPress incident response repository on GitHub",
+          mobileAlt: "Responsive view of the WordPress incident response repository on GitHub",
+        },
+        portfolio: {
+          title: "Personal portfolio",
+          description:
+            "An internal project used as a space for experimentation, professional presentation, and frontend exploration.",
+          categories: ["Internal project", "Frontend"],
+          desktopAlt: "Desktop view of the personal portfolio",
+          mobileAlt: "Responsive view of the personal portfolio",
+        },
+      },
+    },
+    caseStudies: {
+      valeriaHerrera: {
+        backToWork: "Back to work",
+        label: "Case study / 01",
+        title: "Valeria Herrera",
+        description:
+          "A site developed to professionally present a pastry product catalog and make it easier for potential customers to get in touch.",
+        categories: ["UX/UI", "Frontend", "SEO"],
+        categoriesLabel: "Case study categories",
+        facts: [
+          { label: "Year", value: "2026" },
+          { label: "Type", value: "Client project" },
+        ],
+        visitSite: "Visit site",
+        sections: [
+          {
+            id: "challenge",
+            index: "01",
+            title: "The challenge",
+            paragraphs: [
+              "The project needed a clear, visual digital presence to professionally present an artisanal pastry offering.",
+              "The challenge was to organize the products, keep the experience easy to read, and guide people toward direct contact channels from any device.",
+            ],
+          },
+          {
+            id: "solution",
+            index: "02",
+            title: "The solution",
+            paragraphs: [
+              "We built a warm editorial experience where the photography and essential catalog information take center stage.",
+            ],
+            features: [
+              {
+                title: "Visual direction",
+                description:
+                  "A warm, understated interface that supports the brand identity and prioritizes product imagery.",
+              },
+              {
+                title: "Content architecture",
+                description:
+                  "A clear hierarchy separating the introduction, work, featured products, catalog, and contact.",
+              },
+              {
+                title: "Responsive design",
+                description:
+                  "An adaptable composition that preserves legibility, navigation, and access to actions on desktop and mobile.",
+              },
+              {
+                title: "Catalog",
+                description:
+                  "Products organized visually with descriptions and enough information to begin a quote request.",
+              },
+              {
+                title: "Contact",
+                description:
+                  "Direct access to WhatsApp, Instagram, and email throughout the experience.",
+              },
+              {
+                title: "Basic technical SEO",
+                description:
+                  "A public indexable structure, essential metadata, robots.txt, and a sitemap to support crawling.",
+              },
+            ],
+          },
+          {
+            id: "implementation",
+            index: "03",
+            title: "Implementation",
+            paragraphs: [
+              "The solution was implemented as a lightweight frontend application with reusable components and responsive styles.",
+            ],
+            technologies: ["React", "Vite", "Tailwind CSS"],
+          },
+          {
+            id: "result",
+            index: "04",
+            title: "Result",
+            paragraphs: [
+              "The project is publicly available as a functional experience focused on presenting the catalog and making contact easier.",
+            ],
+            results: [
+              "Functional public site",
+              "Responsive catalog",
+              "Clear navigation",
+              "Indexable presence",
+              "Search Console and sitemap integration",
+            ],
+          },
+        ],
+        galleryLabel: "Gallery",
+        galleryTitle: "The product in context.",
+        galleryDescription:
+          "Real views of the published site, captured across the sections that shape the experience.",
+        gallery: [
+          {
+            src: "/work/valeria-herrera/gallery-about.webp",
+            alt: "About the work section on the Valeria Herrera site",
+            caption: "Presentation of the work and its artisanal proposition",
+          },
+          {
+            src: "/work/valeria-herrera/gallery-catalog.webp",
+            alt: "Product catalog on the Valeria Herrera site",
+            caption: "Responsive catalog of pastry products",
+          },
+          {
+            src: "/work/valeria-herrera/gallery-contact.webp",
+            alt: "Contact section on the Valeria Herrera site",
+            caption: "Contact channels and the closing section of the experience",
+          },
+        ],
+        finalLabel: "Published project",
+        finalTitle: "Explore the Valeria Herrera catalog.",
+        finalDescription:
+          "View the complete experience and the current presentation of its pastry products.",
+        visitProject: "Visit project",
+      },
     },
     footer: {
       services: "Services",

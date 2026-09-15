@@ -339,9 +339,9 @@
   top: 0;
   right: 0;
   bottom: 0;
-  left: auto;
+  left: 0;
   z-index: 4;
-  width: 80vw;
+  width: 100%;
   max-width: none;
   padding:
     var(--header-height) clamp(1rem, 4vw, 1.5rem)

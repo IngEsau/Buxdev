@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowUpRight } from "lucide-react"
+import { ArrowUpRight } from "iconoir-react"
 
+import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./about-section.module.css"
@@ -15,7 +16,7 @@ export function AboutSection() {
       <div className={styles.grid} aria-hidden="true" />
       <div className={styles.glow} aria-hidden="true" />
 
-      <div className={styles.container}>
+      <MotionReveal className={styles.container}>
         <div className={styles.intro}>
           <div className={styles.identity}>
             <p className={styles.eyebrow}>{t.about.title}</p>
@@ -37,7 +38,7 @@ export function AboutSection() {
             <ArrowUpRight aria-hidden="true" />
           </Link>
         </div>
-      </div>
+      </MotionReveal>
     </section>
   )
 }

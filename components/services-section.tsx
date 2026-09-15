@@ -1,9 +1,11 @@
 "use client"
 
 import Link from "next/link"
+import { ArrowUpRight } from "iconoir-react"
 import type { LucideIcon } from "lucide-react"
-import { ArrowUpRight, Code2, Globe2, Search, ShoppingCart, Smartphone, Sparkles } from "lucide-react"
+import { Code2, Globe2, Search, ShoppingCart, Smartphone, Sparkles } from "lucide-react"
 
+import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./services-section.module.css"
@@ -148,7 +150,7 @@ export function ServicesSection() {
 
   return (
     <section id="servicios" className={styles.section} aria-labelledby="home-services-title">
-      <div className={styles.container}>
+      <MotionReveal className={styles.container}>
         <header className={styles.header}>
           <div>
             <p className={styles.eyebrow}>{t.nav.servicios}</p>
@@ -190,7 +192,7 @@ export function ServicesSection() {
             <ArrowUpRight aria-hidden="true" />
           </Link>
         </div>
-      </div>
+      </MotionReveal>
     </section>
   )
 }

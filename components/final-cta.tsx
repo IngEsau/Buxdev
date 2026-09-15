@@ -2,8 +2,10 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { ArrowUpRight, Code2, Layers3, MonitorSmartphone } from "lucide-react"
+import { ArrowUpRight } from "iconoir-react"
+import { Code2, Layers3, MonitorSmartphone } from "lucide-react"
 
+import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./final-cta.module.css"
@@ -15,7 +17,7 @@ export function FinalCta() {
     <section className={styles.section} aria-labelledby="home-final-cta-title">
       <div className={styles.grid} aria-hidden="true" />
       <div className={styles.glow} aria-hidden="true" />
-      <div className={styles.container}>
+      <MotionReveal className={styles.container}>
         <div className={styles.layout}>
           <div className={styles.copy}>
             <p className={styles.eyebrow}>{t.contact.title}</p>
@@ -68,7 +70,7 @@ export function FinalCta() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionReveal>
     </section>
   )
 }

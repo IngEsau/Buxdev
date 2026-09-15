@@ -1,8 +1,10 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowUpRight, FolderKanban, ScanLine } from "lucide-react"
+import { ArrowUpRight } from "iconoir-react"
+import { FolderKanban, ScanLine } from "lucide-react"
 
+import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./work-page.module.css"
@@ -15,7 +17,7 @@ export function WorkPageContent() {
       <div className={styles.grid} aria-hidden="true" />
       <div className={styles.glow} aria-hidden="true" />
 
-      <div className={styles.inner}>
+      <MotionReveal className={styles.inner}>
         <div className={styles.copy}>
           <p className={styles.eyebrow}>
             <span aria-hidden="true" />
@@ -78,7 +80,7 @@ export function WorkPageContent() {
             </div>
           </div>
         </div>
-      </div>
+      </MotionReveal>
     </section>
   )
 }

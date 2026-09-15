@@ -2,8 +2,8 @@
 
 import type { LucideIcon } from "lucide-react"
 import Link from "next/link"
+import { ArrowUpRight } from "iconoir-react"
 import {
-  ArrowUpRight,
   Code2,
   Globe2,
   Search,
@@ -12,6 +12,7 @@ import {
   Sparkles,
 } from "lucide-react"
 
+import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./services-page.module.css"
@@ -159,7 +160,7 @@ export function ServicesPageContent() {
   return (
     <section className={styles.services} aria-labelledby="services-list-title">
       <div className={styles.grid} aria-hidden="true" />
-      <div className={styles.inner}>
+      <MotionReveal className={styles.inner}>
         <header className={styles.header}>
           <p>{t.services.title}</p>
           <h2 id="services-list-title">{t.services.subtitle}</h2>
@@ -210,7 +211,7 @@ export function ServicesPageContent() {
             <ArrowUpRight aria-hidden="true" />
           </Link>
         </div>
-      </div>
+      </MotionReveal>
     </section>
   )
 }

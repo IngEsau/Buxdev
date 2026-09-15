@@ -2,6 +2,7 @@
 
 import { Eye, Heart, Target } from "lucide-react"
 
+import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./about-principles.module.css"
@@ -10,7 +11,7 @@ export function AboutPrinciples() {
   const { t } = useLanguage()
 
   return (
-    <div className={styles.principles}>
+    <MotionReveal className={styles.principles} delay={0.06}>
       <article className={`${styles.principle} ${styles.mission}`}>
         <div className={styles.principleMeta}>
           <span>01</span>
@@ -52,6 +53,6 @@ export function AboutPrinciples() {
           ))}
         </ol>
       </article>
-    </div>
+    </MotionReveal>
   )
 }

@@ -62,7 +62,6 @@
 .copy {
   position: relative;
   z-index: 2;
-  animation: page-copy-enter 650ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
 }
 
 .eyebrow {
@@ -133,7 +132,6 @@
   width: 100%;
   max-width: 28rem;
   justify-self: end;
-  animation: page-visual-enter 820ms 90ms cubic-bezier(0.2, 0.72, 0.2, 1) both;
 }
 
 .visualShadow {

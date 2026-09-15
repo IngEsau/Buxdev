@@ -4,8 +4,9 @@ import type React from "react"
 
 import { useRef, useState } from "react"
 import Link from "next/link"
-import { ArrowUpRight, CircleAlert, CircleCheck, LoaderCircle, Mail, Phone, Send } from "lucide-react"
+import { ArrowUpRight, CheckCircle, Mail, Phone, RefreshDouble, Send, WarningCircle } from "iconoir-react"
 
+import { MotionReveal } from "@/components/motion-reveal"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -243,7 +244,7 @@ export function ContactSection() {
       <div className={styles.technicalGrid} aria-hidden="true" />
       <div className={styles.ambientLight} aria-hidden="true" />
 
-      <div className={styles.container}>
+      <MotionReveal className={styles.container}>
         <div className={styles.layout}>
           <div className={styles.intro}>
             <p className={styles.eyebrow}>
@@ -318,7 +319,7 @@ export function ContactSection() {
                   data-variant="error"
                   role="status"
                 >
-                  <CircleAlert aria-hidden="true" />
+                  <WarningCircle aria-hidden="true" />
                   <div>
                     <strong>{t.contact.unavailableTitle}</strong>
                     <p>{t.contact.unavailableDescription}</p>
@@ -333,7 +334,7 @@ export function ContactSection() {
                   data-variant="error"
                   role="alert"
                 >
-                  <CircleAlert aria-hidden="true" />
+                  <WarningCircle aria-hidden="true" />
                   <p>{t.contact.validationSummary}</p>
                 </div>
               )}
@@ -345,7 +346,7 @@ export function ContactSection() {
                   data-variant="success"
                   role="status"
                 >
-                  <CircleCheck aria-hidden="true" />
+                  <CheckCircle aria-hidden="true" />
                   <div>
                     <strong>{t.contact.successTitle}</strong>
                     <p>{t.contact.successDescription}</p>
@@ -360,7 +361,7 @@ export function ContactSection() {
                   data-variant="error"
                   role="alert"
                 >
-                  <CircleAlert aria-hidden="true" />
+                  <WarningCircle aria-hidden="true" />
                   <div>
                     <strong>{t.contact.errorTitle}</strong>
                     <p>{t.contact.errorDescription}</p>
@@ -570,7 +571,7 @@ export function ContactSection() {
                       : t.contact.submit}
                 </span>
                 {isSubmitting ? (
-                  <LoaderCircle className={styles.loadingIcon} aria-hidden="true" />
+                  <RefreshDouble className={styles.loadingIcon} aria-hidden="true" />
                 ) : (
                   <Send aria-hidden="true" />
                 )}
@@ -578,7 +579,7 @@ export function ContactSection() {
             </form>
           </div>
         </div>
-      </div>
+      </MotionReveal>
     </section>
   )
 }

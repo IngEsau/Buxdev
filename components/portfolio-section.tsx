@@ -3,6 +3,7 @@
 import Link from "next/link"
 import { ArrowUpRight, Layers3 } from "lucide-react"
 
+import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./portfolio-section.module.css"
@@ -12,7 +13,7 @@ export function PortfolioSection() {
 
   return (
     <section id="trabajos" className={styles.section} aria-labelledby="home-work-title">
-      <div className={styles.container}>
+      <MotionReveal className={styles.container}>
         <header className={styles.header}>
           <div>
             <p className={styles.eyebrow}>{t.nav.trabajos}</p>
@@ -68,7 +69,7 @@ export function PortfolioSection() {
             <ArrowUpRight aria-hidden="true" />
           </Link>
         </div>
-      </div>
+      </MotionReveal>
     </section>
   )
 }

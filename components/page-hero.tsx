@@ -3,6 +3,7 @@
 import type { LucideIcon } from "lucide-react"
 import { Braces, Layers3, Mail, PanelsTopLeft } from "lucide-react"
 
+import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./page-hero.module.css"
@@ -39,19 +40,25 @@ export function PageHero({ page }: PageHeroProps) {
       <div className={styles.glow} aria-hidden="true" />
 
       <div className={styles.inner}>
-        <div className={styles.copy}>
+        <MotionReveal className={styles.copy} revealOnView={false} distance={10}>
           <p className={styles.eyebrow}>
             <span aria-hidden="true" />
             {copy.eyebrow}
           </p>
           <h1 id={`${page}-page-title`} className={styles.title}>
-            <span>{copy.titleStart}</span>
+            <span>{copy.titleStart}{" "}</span>
             <span className={styles.titleAccent}>{copy.titleAccent}</span>
           </h1>
           <p className={styles.description}>{copy.description}</p>
-        </div>
+        </MotionReveal>
 
-        <div className={styles.visual} aria-hidden="true">
+        <MotionReveal
+          className={styles.visual}
+          aria-hidden="true"
+          revealOnView={false}
+          delay={0.08}
+          distance={14}
+        >
           <div className={styles.visualShadow} />
           <div className={styles.frame}>
             <div className={styles.frameBar}>
@@ -83,7 +90,7 @@ export function PageHero({ page }: PageHeroProps) {
               <span>{visualLabel.toUpperCase()}</span>
             </div>
           </div>
-        </div>
+        </MotionReveal>
       </div>
     </section>
   )

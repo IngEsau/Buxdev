@@ -127,7 +127,17 @@ RequestHeader set Host buxdev.com early
         } else {
           await send('Fetch.fulfillRequest', { requestId, responseCode: 204 })
         }
-      } catch (error) { interceptionError = error }
+      } catch (error) {
+        const isCancelledInterception =
+          typeof error === 'object' &&
+          error !== null &&
+          'code' in error &&
+          'message' in error &&
+          error.code === -32602 &&
+          error.message === 'Invalid InterceptionId.'
+
+        if (!isCancelledInterception) interceptionError = error
+      }
     }
   })
   const evaluate = async (expression) => {
@@ -144,19 +154,58 @@ RequestHeader set Host buxdev.com early
     await wait(700)
     assert.ok(await evaluate('document.readyState === "complete"'))
   }
+  const setPreferences = async (theme, language) => {
+    await evaluate(`localStorage.setItem('buxdev-theme', ${JSON.stringify(JSON.stringify({ state: { theme }, version: 0 }))}); localStorage.setItem('buxdev-language', ${JSON.stringify(JSON.stringify({ state: { language }, version: 0 }))})`)
+  }
+  const inspectLayout = () => evaluate(`({title:document.title,h1:document.querySelectorAll('h1').length,overflow:document.documentElement.scrollWidth>innerWidth,violations:window.qaViolations,fonts:document.fonts.status,brokenImages:[...document.images].filter(i=>i.complete&&!i.naturalWidth).length,language:document.documentElement.lang,theme:document.documentElement.classList.contains('dark')?'dark':'light'})`)
   const results = []
-  for (const width of [375, 1440]) {
-    await send('Emulation.setDeviceMetricsOverride', { width, height: 1000, deviceScaleFactor: 1, mobile: width === 375 })
-    for (const path of ['/', '/about/', '/services/', '/work/', '/contact/', '/cookies/', '/privacidad/', '/terminos/']) {
-      await navigate(path)
-      const result = await evaluate(`({title:document.title,h1:document.querySelectorAll('h1').length,overflow:document.documentElement.scrollWidth>innerWidth,violations:window.qaViolations,fonts:document.fonts.status,brokenImages:[...document.images].filter(i=>i.complete&&!i.naturalWidth).length})`)
-      assert.equal(result.h1, 1, path)
-      assert.equal(result.overflow, false, path)
-      assert.deepEqual(result.violations, [], path)
-      assert.equal(result.brokenImages, 0, path)
-      results.push({ width, path, ...result })
+  const paths = ['/', '/about/', '/services/', '/work/', '/contact/', '/cookies/', '/privacidad/', '/terminos/']
+  const variants = [
+    { theme: 'dark', language: 'es' },
+    { theme: 'light', language: 'en' },
+  ]
+  await navigate('/')
+  for (const width of [375, 390, 430, 768, 1024, 1440, 1920]) {
+    await send('Emulation.setDeviceMetricsOverride', { width, height: 1000, deviceScaleFactor: 1, mobile: width <= 430 })
+    for (const variant of variants) {
+      await setPreferences(variant.theme, variant.language)
+      for (const path of paths) {
+        await navigate(path)
+        const context = `${path} ${variant.theme}/${variant.language} @ ${width}px`
+        const result = await inspectLayout()
+        assert.equal(result.h1, 1, context)
+        assert.equal(result.overflow, false, context)
+        assert.deepEqual(result.violations, [], context)
+        assert.equal(result.brokenImages, 0, context)
+        assert.equal(result.language, variant.language, context)
+        assert.equal(result.theme, variant.theme, context)
+        results.push({ width, path, variant: `${variant.theme}/${variant.language}`, ...result })
+      }
     }
   }
+  await send('Emulation.setDeviceMetricsOverride', { width: 375, height: 1000, deviceScaleFactor: 1, mobile: true })
+  await send('Emulation.setEmulatedMedia', { features: [{ name: 'prefers-reduced-motion', value: 'reduce' }] })
+  await setPreferences('dark', 'es')
+  await navigate('/')
+  assert.equal(await evaluate(`document.querySelector('button[aria-controls="mobile-navigation"]').getAttribute('aria-expanded')`), 'false')
+  await evaluate(`document.querySelector('button[aria-controls="mobile-navigation"]').click()`)
+  await wait(100)
+  assert.equal(await evaluate(`document.querySelector('button[aria-controls="mobile-navigation"]').getAttribute('aria-expanded')`), 'true')
+  assert.equal(await evaluate(`document.documentElement.style.overflow`), 'hidden')
+  assert.equal(await evaluate(`(() => { const button=document.querySelector('button[aria-controls="mobile-navigation"]');button.focus();window.dispatchEvent(new KeyboardEvent('keydown',{key:'Tab',shiftKey:true,bubbles:true}));const controls=[...document.querySelectorAll('#mobile-navigation a[href],#mobile-navigation button:not([disabled])')];return document.activeElement===controls.at(-1) })()`), true)
+  assert.equal(await evaluate(`(() => { window.dispatchEvent(new KeyboardEvent('keydown',{key:'Tab',bubbles:true}));return document.activeElement===document.querySelector('button[aria-controls="mobile-navigation"]') })()`), true)
+  await evaluate(`window.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}))`)
+  await wait(100)
+  assert.equal(await evaluate(`document.querySelector('button[aria-controls="mobile-navigation"]').getAttribute('aria-expanded')`), 'false')
+  assert.equal(await evaluate(`document.activeElement===document.querySelector('button[aria-controls="mobile-navigation"]')`), true)
+  assert.notEqual(await evaluate(`document.documentElement.style.overflow`), 'hidden')
+  assert.equal(await evaluate(`document.querySelector('a[href^="https://wa.me/522211310600"]')?.href`), 'https://wa.me/522211310600?text=Hola%20BUXDEV%2C%20vi%20su%20sitio%20web%20y%20me%20gustar%C3%ADa%20platicar%20sobre%20un%20proyecto.')
+  await evaluate(`window.scrollTo(0,document.documentElement.scrollHeight)`)
+  await wait(250)
+  assert.equal(await evaluate(`!!document.querySelector('[data-back-to-top]')`), true)
+  await evaluate(`window.qaScrollBehavior=null;window.scrollTo=(options)=>{window.qaScrollBehavior=options.behavior};document.querySelector('[data-back-to-top]').click()`)
+  assert.equal(await evaluate(`window.qaScrollBehavior`), 'auto')
+  await send('Emulation.setEmulatedMedia', { features: [] })
   await navigate('/contact/')
   assert.equal(await evaluate('typeof window.dataLayer'), 'undefined')
   const fill = async () => {

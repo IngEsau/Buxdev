@@ -16,6 +16,7 @@ const allowed = [
   /^(?:robots\.txt|sitemap\.xml)$/,
   /^eb0d64a2c026422a948a7b49af9d1aa1\.txt$/, // Existing domain verification.
   /^(?:brand\/buxdev\/)?[\w-]+\.(?:svg|png|jpe?g|webp|ico)$/,
+  /^og\/[\w-]+\.(?:png|jpe?g|webp)$/,
 ]
 const secretPatterns = [
   /xkeysib-[a-zA-Z0-9_-]{30,}/,
@@ -66,7 +67,7 @@ try {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: https://www.googletagmanager.com https://*.google-analytics.com",
     "font-src 'self'",
-    "connect-src 'self' https://www.googletagmanager.com https://*.google-analytics.com https://*.analytics.google.com",
+    "connect-src 'self' https://www.googletagmanager.com https://www.google.com https://*.google-analytics.com https://*.analytics.google.com",
     "object-src 'none'", "base-uri 'self'", "frame-ancestors 'none'", "frame-src 'none'", "form-action 'self'",
     'upgrade-insecure-requests',
   ].join('; ') + ';'

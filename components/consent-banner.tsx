@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { ShieldCheck } from "lucide-react"
+import { ShieldCheck } from "iconoir-react"
 
 import { useConsent } from "@/components/consent-provider"
 import { useLanguage } from "@/hooks/use-language"

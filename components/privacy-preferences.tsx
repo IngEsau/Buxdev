@@ -3,7 +3,12 @@
 import { useState } from "react"
 import Link from "next/link"
 import * as Dialog from "@radix-ui/react-dialog"
-import { Check, LockKeyhole, SlidersHorizontal, X } from "lucide-react"
+import {
+  Check,
+  Lock as LockKeyhole,
+  SettingsProfiles as SlidersHorizontal,
+  Xmark as X,
+} from "iconoir-react"
 
 import { useConsent } from "@/components/consent-provider"
 import { useLanguage } from "@/hooks/use-language"

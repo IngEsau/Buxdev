@@ -111,7 +111,8 @@ export function ContactSection() {
   const isUnavailable = status === "unavailable"
   const hasValidationErrors = Object.keys(errors).length > 0
   const formDisabled = isSubmitting || isUnavailable
-  const phoneHref = `tel:${t.footer.phone.replace(/[^\d+]/g, "")}`
+  const primaryPhoneHref = `tel:${t.footer.primaryPhone.replace(/[^\d+]/g, "")}`
+  const secondaryPhoneHref = `tel:${t.footer.secondaryPhone.replace(/[^\d+]/g, "")}`
 
   const clearTransientStatus = () => {
     if (status === "success" || status === "error") {
@@ -269,13 +270,24 @@ export function ContactSection() {
                 <ArrowUpRight aria-hidden="true" />
               </a>
 
-              <a href={phoneHref} className={styles.contactLink}>
+              <a href={primaryPhoneHref} className={styles.contactLink}>
                 <span className={styles.contactIcon} aria-hidden="true">
                   <Phone />
                 </span>
                 <span>
                   <small>{t.contact.phone}</small>
-                  <strong>{t.footer.phone}</strong>
+                  <strong>{t.footer.primaryPhone}</strong>
+                </span>
+                <ArrowUpRight aria-hidden="true" />
+              </a>
+
+              <a href={secondaryPhoneHref} className={styles.contactLink}>
+                <span className={styles.contactIcon} aria-hidden="true">
+                  <Phone />
+                </span>
+                <span>
+                  <small>{t.contact.phone}</small>
+                  <strong>{t.footer.secondaryPhone}</strong>
                 </span>
                 <ArrowUpRight aria-hidden="true" />
               </a>
@@ -297,11 +309,6 @@ export function ContactSection() {
                 <p>{t.contact.title}</p>
                 <h3 id="contact-form-title">{t.contact.formTitle}</h3>
               </div>
-              <span
-                className={styles.formStatus}
-                data-state={isUnavailable ? "error" : hasValidationErrors ? "validation-error" : status}
-                aria-hidden="true"
-              />
             </div>
 
             <form

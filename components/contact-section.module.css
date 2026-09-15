@@ -63,7 +63,7 @@
   width: fit-content;
   margin: 0 0 clamp(1.5rem, 4vw, 3rem);
   color: var(--foreground-muted);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.68rem;
   font-weight: 600;
   line-height: 1;
@@ -144,7 +144,7 @@
 
 .contactLink small {
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.62rem;
   font-weight: 600;
   letter-spacing: 0.1em;
@@ -227,7 +227,7 @@
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: auto minmax(0, 1fr);
   gap: 1rem;
   align-items: center;
   min-height: 6.25rem;
@@ -243,14 +243,14 @@
   border: 1px solid var(--border-strong);
   border-radius: 999px;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.62rem;
 }
 
 .formPanelHeader p {
   margin: 0 0 0.35rem;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6rem;
   font-weight: 600;
   letter-spacing: 0.12em;
@@ -263,24 +263,6 @@
   font-size: clamp(1.05rem, 2vw, 1.3rem);
   font-weight: 600;
   letter-spacing: -0.025em;
-}
-
-.formStatus {
-  width: 0.45rem;
-  height: 0.45rem;
-  border-radius: 999px;
-  background: var(--brand-hover);
-  box-shadow: 0 0 0.8rem var(--brand-hover);
-}
-
-.formStatus[data-state="error"],
-.formStatus[data-state="validation-error"] {
-  background: var(--destructive);
-  box-shadow: 0 0 0.8rem color-mix(in srgb, var(--destructive) 72%, transparent);
-}
-
-.formStatus[data-state="success"] {
-  background: var(--brand-hover);
 }
 
 .form {
@@ -438,7 +420,7 @@
 
 .field label {
   color: var(--foreground-muted);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.66rem;
   font-weight: 600;
   letter-spacing: 0.07em;
@@ -594,7 +576,10 @@
   }
 
   .contactList {
+    width: min(100%, 30rem);
+    align-self: flex-end;
     margin-top: 2.75rem;
+    margin-left: auto;
   }
 
   .formPanelHeader {

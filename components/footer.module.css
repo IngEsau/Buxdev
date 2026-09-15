@@ -1,6 +1,6 @@
 .footer {
   position: relative;
-  padding: clamp(6.5rem, 10vw, 8rem) var(--page-gutter) clamp(3rem, 5vw, 4.5rem);
+  padding: clamp(7.25rem, 11vw, 9rem) var(--page-gutter) clamp(4rem, 6vw, 5.5rem);
   overflow: hidden;
   background:
     linear-gradient(to bottom, color-mix(in srgb, var(--background-elevated) 68%, transparent), var(--background) 54%),
@@ -26,8 +26,8 @@
 
 .top {
   display: grid;
-  grid-template-columns: minmax(15rem, 1.18fr) minmax(9rem, 0.72fr) minmax(17rem, 1fr);
-  gap: clamp(3.5rem, 8vw, 8rem);
+  grid-template-columns: minmax(13rem, 1.1fr) minmax(8rem, 0.65fr) minmax(15rem, 1fr) minmax(8rem, 0.65fr);
+  gap: clamp(2rem, 5vw, 5rem);
   align-items: start;
   padding-bottom: clamp(4rem, 7vw, 6rem);
 }
@@ -72,10 +72,11 @@
 }
 
 .navigation > p,
-.contact > p {
+.contact > p,
+.social > p {
   margin: 0 0 1.6rem;
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.6rem;
   letter-spacing: 0.11em;
   text-transform: uppercase;
@@ -108,11 +109,9 @@
 }
 
 .contact > a {
-  display: flex;
+  display: block;
   width: fit-content;
   max-width: 100%;
-  align-items: center;
-  gap: 0.8rem;
   color: var(--foreground-muted);
   font-size: 0.82rem;
   letter-spacing: -0.015em;
@@ -124,14 +123,6 @@
   margin-top: 1.15rem;
 }
 
-.contact > a svg {
-  width: 1rem;
-  height: 1rem;
-  flex: 0 0 auto;
-  color: color-mix(in srgb, var(--brand) 68%, var(--foreground-muted));
-  stroke-width: 1.45;
-}
-
 .contact > a:hover {
   color: var(--foreground);
 }
@@ -141,12 +132,25 @@
   font-size: 0.72rem;
 }
 
-.contact > a.secondaryPhone svg {
-  opacity: 0.55;
-}
-
 .contact > a.secondaryPhone:hover {
   color: var(--foreground-muted);
+}
+
+.social {
+  min-width: 0;
+}
+
+.social > a {
+  color: var(--foreground-muted);
+  font-size: 0.82rem;
+  font-weight: 520;
+  letter-spacing: -0.015em;
+  text-decoration: none;
+  transition: color 180ms ease;
+}
+
+.social > a:hover {
+  color: var(--foreground);
 }
 
 .bottom {
@@ -158,7 +162,7 @@
   padding-top: clamp(2rem, 3.5vw, 3rem);
   border-top: 1px solid var(--border-strong);
   color: var(--foreground-subtle);
-  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
   font-size: 0.58rem;
   letter-spacing: 0.07em;
   text-transform: uppercase;
@@ -199,8 +203,9 @@
     grid-template-columns: minmax(12rem, 1fr) minmax(9rem, 0.75fr);
   }
 
-  .contact {
-    grid-column: 1 / -1;
+  .contact,
+  .social {
+    grid-column: auto;
   }
 }
 

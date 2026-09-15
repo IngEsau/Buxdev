@@ -2,7 +2,6 @@
 
 import Image from "next/image"
 import Link from "next/link"
-import { Mail, Phone } from "iconoir-react"
 
 import { useConsent } from "@/components/consent-provider"
 import { useLanguage } from "@/hooks/use-language"
@@ -60,26 +59,27 @@ export function Footer() {
           <div className={styles.contact}>
             <p>{t.footer.contact}</p>
             <a href={`mailto:${t.footer.email}`}>
-              <Mail aria-hidden="true" />
               <span>{t.footer.email}</span>
             </a>
             <a href="tel:+522211310600">
-              <Phone aria-hidden="true" />
               <span>{t.footer.primaryPhone}</span>
             </a>
             <a
               href={`tel:${t.footer.secondaryPhone.replace(/[^\d+]/g, "")}`}
               className={styles.secondaryPhone}
             >
-              <Phone aria-hidden="true" />
               <span>{t.footer.secondaryPhone}</span>
             </a>
+          </div>
+
+          <div className={styles.social}>
+            <p>{t.footer.social}</p>
             <a
               href="https://www.instagram.com/buxdevco/"
               target="_blank"
               rel="me noopener noreferrer"
             >
-              <span>Instagram</span>
+              Instagram
             </a>
           </div>
         </div>

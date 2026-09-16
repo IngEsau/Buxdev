@@ -110,3 +110,7 @@
     font-size: 1.25rem;
   }
 }
+
+:global(html:not(.dark)) .about::after {
+  display: none;
+}

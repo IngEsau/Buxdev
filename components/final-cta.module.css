@@ -346,3 +346,11 @@
     right: 7%;
   }
 }
+
+:global(html:not(.dark)) .section {
+  background: var(--background-elevated);
+}
+
+:global(html:not(.dark)) .glow {
+  display: none;
+}

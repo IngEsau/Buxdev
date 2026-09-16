@@ -983,3 +983,12 @@
     display: none;
   }
 }
+
+:global(html:not(.dark)) .hero {
+  background: var(--background);
+}
+
+:global(html:not(.dark)) .ambientLight,
+:global(html:not(.dark)) .engineeringVisual::before {
+  display: none;
+}

@@ -661,3 +661,11 @@
     justify-content: center;
   }
 }
+
+:global(html:not(.dark)) .section {
+  background: var(--background-elevated);
+}
+
+:global(html:not(.dark)) .service::after {
+  display: none;
+}

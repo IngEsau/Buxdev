@@ -303,3 +303,7 @@
     transition: none;
   }
 }
+
+:global(html:not(.dark)) .glow {
+  display: none;
+}

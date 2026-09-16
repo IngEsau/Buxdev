@@ -438,3 +438,14 @@
     right: 1.5rem;
   }
 }
+
+:global(html:not(.dark)) .hero {
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--background-elevated) 45%, transparent), transparent 72%),
+    var(--background);
+}
+
+:global(html:not(.dark)) .glow,
+:global(html:not(.dark)) .visualShadow {
+  display: none;
+}

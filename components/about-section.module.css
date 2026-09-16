@@ -175,3 +175,13 @@
     justify-content: center;
   }
 }
+
+:global(html:not(.dark)) .section {
+  background:
+    linear-gradient(to bottom, color-mix(in srgb, var(--background-elevated) 24%, transparent), transparent 62%),
+    var(--background);
+}
+
+:global(html:not(.dark)) .glow {
+  display: none;
+}

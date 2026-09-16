@@ -196,3 +196,7 @@
     transition: none;
   }
 }
+
+:global(html:not(.dark)) .principles::before {
+  display: none;
+}

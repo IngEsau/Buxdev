@@ -617,3 +617,7 @@
     transition: none;
   }
 }
+
+:global(html:not(.dark)) .heroGlow {
+  display: none;
+}

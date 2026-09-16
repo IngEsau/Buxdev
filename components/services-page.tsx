@@ -1,5 +1,6 @@
 "use client"
 
+import { useState } from "react"
 import type { LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { ArrowUpRight } from "iconoir-react"
@@ -127,6 +128,7 @@ const visuals = [
 
 export function ServicesPageContent() {
   const { t } = useLanguage()
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
 
   return (
     <section className={styles.services} aria-labelledby="services-list-title">
@@ -191,6 +193,59 @@ export function ServicesPageContent() {
             )
           })}
         </div>
+
+        <section className={styles.faq} aria-labelledby="services-faq-title">
+          <header className={styles.faqHeader}>
+            <div>
+              <p className={styles.faqEyebrow}>{t.servicesPage.faq.eyebrow}</p>
+              <h2 id="services-faq-title">{t.servicesPage.faq.title}</h2>
+            </div>
+            <p className={styles.faqIntroduction}>{t.servicesPage.faq.description}</p>
+          </header>
+
+          <div className={styles.faqList}>
+            {t.servicesPage.faq.items.map((item, index) => {
+              const isOpen = openFaq === index
+              const triggerId = `services-faq-trigger-${index}`
+              const panelId = `services-faq-panel-${index}`
+
+              return (
+                <div className={styles.faqItem} key={item.question}>
+                  <button
+                    id={triggerId}
+                    type="button"
+                    className={styles.faqTrigger}
+                    aria-expanded={isOpen}
+                    aria-controls={panelId}
+                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                  >
+                    <span className={styles.faqIndex}>
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span className={styles.faqQuestion}>{item.question}</span>
+                    <span className={styles.faqMark} data-open={isOpen} aria-hidden="true">
+                      <i />
+                      <i />
+                    </span>
+                  </button>
+
+                  <div
+                    id={panelId}
+                    className={styles.faqAnswer}
+                    data-open={isOpen}
+                    role="region"
+                    aria-labelledby={triggerId}
+                    aria-hidden={!isOpen}
+                  >
+                    <div className={styles.faqAnswerInner}>
+                      <p>{item.answer}</p>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+        </section>
 
         <div className={styles.ctaRow}>
           <p>{t.contact.subtitle}</p>

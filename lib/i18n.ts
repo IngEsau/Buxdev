@@ -177,6 +177,53 @@ export const translations = {
           cta: "Hablemos de automatización",
         },
       ],
+      faq: {
+        eyebrow: "Preguntas frecuentes",
+        title: "Preguntas antes de comenzar.",
+        description: "Algunas respuestas sobre cómo trabajamos y qué puedes esperar.",
+        items: [
+          {
+            question: "¿Cuánto cuesta desarrollar un proyecto con BUXDEV?",
+            answer:
+              "Cada proyecto se cotiza según alcance, complejidad, integraciones y necesidades específicas. Antes de desarrollar definimos contigo qué se necesita para preparar una propuesta clara.",
+          },
+          {
+            question: "¿Trabajan sobre proyectos que ya están desarrollados?",
+            answer:
+              "Sí. Podemos analizar productos existentes, corregir problemas, implementar nuevas funcionalidades, realizar reworks de UX/UI o mejorar aspectos técnicos sin reconstruir necesariamente todo desde cero.",
+          },
+          {
+            question: "¿BUXDEV trabaja únicamente con empresas de México?",
+            answer:
+              "No. Podemos colaborar de forma remota con clientes y equipos fuera de México, siempre que el proyecto pueda gestionarse mediante nuestros canales digitales.",
+          },
+          {
+            question: "¿Quién conserva el código fuente del proyecto?",
+            answer:
+              "Depende del alcance y acuerdo del proyecto. En desarrollos realizados específicamente para un cliente, las condiciones sobre código, infraestructura y entregables se definen claramente antes de comenzar.",
+          },
+          {
+            question: "¿Cómo funciona una auditoría de ciberseguridad?",
+            answer:
+              "Primero se define y autoriza el alcance. Después revisamos exposición, configuraciones y posibles riesgos dentro de los sistemas acordados, documentando hallazgos y recomendaciones de mitigación. No realizamos pruebas fuera del alcance autorizado.",
+          },
+          {
+            question: "¿Qué procesos se pueden automatizar con IA?",
+            answer:
+              "Procesos repetitivos como clasificación de información, generación o extracción de datos, atención asistida, integraciones entre herramientas y determinados workflows internos pueden ser candidatos a automatización.",
+          },
+          {
+            question: "¿Pueden encargarse tanto del diseño como del desarrollo?",
+            answer:
+              "Sí. UX/UI y desarrollo pueden trabajarse como un proceso integral para mantener coherencia entre experiencia, interfaz e implementación técnica.",
+          },
+          {
+            question: "¿Qué sucede después de entregar el proyecto?",
+            answer:
+              "Dependiendo del proyecto podemos acordar soporte, mantenimiento, mejoras posteriores o nuevas etapas de desarrollo. Estas condiciones se definen según las necesidades del cliente.",
+          },
+        ],
+      },
     },
     contact: {
       title: "Contacto",
@@ -645,6 +692,53 @@ export const translations = {
           cta: "Let's talk automation",
         },
       ],
+      faq: {
+        eyebrow: "Frequently asked questions",
+        title: "Questions before getting started.",
+        description: "Some answers about how we work and what you can expect.",
+        items: [
+          {
+            question: "How much does it cost to develop a project with BUXDEV?",
+            answer:
+              "Each project is quoted according to its scope, complexity, integrations, and specific needs. Before development begins, we define what is needed with you to prepare a clear proposal.",
+          },
+          {
+            question: "Do you work on projects that are already developed?",
+            answer:
+              "Yes. We can analyze existing products, fix problems, implement new features, carry out UX/UI reworks, or improve technical aspects without necessarily rebuilding everything from scratch.",
+          },
+          {
+            question: "Does BUXDEV only work with companies in Mexico?",
+            answer:
+              "No. We can collaborate remotely with clients and teams outside Mexico, provided the project can be managed through our digital channels.",
+          },
+          {
+            question: "Who retains the project's source code?",
+            answer:
+              "It depends on the project's scope and agreement. For developments created specifically for a client, the terms covering code, infrastructure, and deliverables are clearly defined before work begins.",
+          },
+          {
+            question: "How does a cybersecurity audit work?",
+            answer:
+              "First, the scope is defined and authorized. We then review exposure, configurations, and potential risks within the agreed systems, documenting findings and mitigation recommendations. We do not perform tests outside the authorized scope.",
+          },
+          {
+            question: "What processes can be automated with AI?",
+            answer:
+              "Repetitive processes such as information classification, data generation or extraction, assisted support, integrations between tools, and certain internal workflows may be candidates for automation.",
+          },
+          {
+            question: "Can you handle both design and development?",
+            answer:
+              "Yes. UX/UI and development can be handled as an integrated process to maintain consistency across the experience, interface, and technical implementation.",
+          },
+          {
+            question: "What happens after the project is delivered?",
+            answer:
+              "Depending on the project, we can agree on support, maintenance, further improvements, or new development stages. These terms are defined according to the client's needs.",
+          },
+        ],
+      },
     },
     contact: {
       title: "Contact",

@@ -618,3 +618,8 @@
     animation: none;
   }
 }
+
+:global(html:not(.dark)) .ambientLight,
+:global(html:not(.dark)) .formPanel::before {
+  display: none;
+}

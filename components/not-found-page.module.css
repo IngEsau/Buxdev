@@ -169,3 +169,7 @@
     width: 100%;
   }
 }
+
+:global(html:not(.dark)) .glow {
+  display: none;
+}

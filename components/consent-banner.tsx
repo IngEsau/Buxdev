@@ -24,39 +24,41 @@ export function ConsentBanner() {
         aria-describedby="consent-banner-description"
         aria-live="polite"
       >
-        <div className={styles.bannerCopy}>
-          <span className={styles.bannerIcon} aria-hidden="true">
-            <ShieldCheck />
-          </span>
-          <div>
-            <h2 id="consent-banner-title">{t.consent.bannerTitle}</h2>
-            <p id="consent-banner-description">{t.consent.bannerDescription}</p>
-            <div className={styles.bannerLinks}>
-              <button type="button" data-consent-action="configure" onClick={openPreferences}>
-                {t.consent.configure}
-              </button>
-              <Link href="/cookies/">{t.consent.policyLink}</Link>
+        <div className={styles.bannerInner}>
+          <div className={styles.bannerCopy}>
+            <span className={styles.bannerIcon} aria-hidden="true">
+              <ShieldCheck />
+            </span>
+            <div>
+              <h2 id="consent-banner-title">{t.consent.bannerTitle}</h2>
+              <p id="consent-banner-description">{t.consent.bannerDescription}</p>
+              <div className={styles.bannerLinks}>
+                <button type="button" data-consent-action="configure" onClick={openPreferences}>
+                  {t.consent.configure}
+                </button>
+                <Link href="/cookies/">{t.consent.policyLink}</Link>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div className={styles.bannerActions}>
-          <button
-            type="button"
-            className={styles.secondaryAction}
-            data-consent-action="reject"
-            onClick={rejectAnalytics}
-          >
-            {t.consent.rejectAnalytics}
-          </button>
-          <button
-            type="button"
-            className={styles.primaryAction}
-            data-consent-action="accept"
-            onClick={acceptAnalytics}
-          >
-            {t.consent.acceptAnalytics}
-          </button>
+          <div className={styles.bannerActions}>
+            <button
+              type="button"
+              className={styles.secondaryAction}
+              data-consent-action="reject"
+              onClick={rejectAnalytics}
+            >
+              {t.consent.rejectAnalytics}
+            </button>
+            <button
+              type="button"
+              className={styles.primaryAction}
+              data-consent-action="accept"
+              onClick={acceptAnalytics}
+            >
+              {t.consent.acceptAnalytics}
+            </button>
+          </div>
         </div>
       </section>
     </div>

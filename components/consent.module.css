@@ -4,31 +4,29 @@
   bottom: 0;
   left: 0;
   z-index: 90;
-  padding:
-    0 var(--page-gutter)
-    max(1rem, env(safe-area-inset-bottom));
   pointer-events: none;
 }
 
 .banner {
+  width: 100%;
+  padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid var(--border-strong);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--brand) 8%, transparent), transparent 44%),
+    color-mix(in srgb, var(--background-elevated) 96%, transparent);
+  backdrop-filter: blur(22px) saturate(125%);
+  pointer-events: auto;
+  animation: consent-enter 220ms ease-out both;
+}
+
+.bannerInner {
   display: grid;
   width: min(100%, var(--container-max));
   grid-template-columns: minmax(0, 1fr) auto;
   gap: clamp(1.25rem, 3vw, 2.5rem);
   align-items: center;
   margin-inline: auto;
-  padding: clamp(1rem, 2.4vw, 1.4rem);
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-lg);
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--brand) 8%, transparent), transparent 44%),
-    color-mix(in srgb, var(--background-elevated) 94%, transparent);
-  box-shadow:
-    0 1.5rem 4rem rgb(0 0 0 / 24%),
-    inset 0 1px rgb(255 255 255 / 4%);
-  backdrop-filter: blur(22px) saturate(125%);
-  pointer-events: auto;
-  animation: consent-enter 220ms ease-out both;
+  padding: clamp(1rem, 2.4vw, 1.4rem) var(--page-gutter);
 }
 
 .bannerCopy {
@@ -418,7 +416,7 @@
 }
 
 @media (max-width: 62rem) {
-  .banner {
+  .bannerInner {
     grid-template-columns: 1fr;
   }
 
@@ -428,15 +426,9 @@
 }
 
 @media (max-width: 37.5rem) {
-  .bannerViewport {
-    padding-right: 0.75rem;
-    padding-left: 0.75rem;
-  }
-
-  .banner {
+  .bannerInner {
     gap: 1rem;
     padding: 1rem;
-    border-radius: var(--radius-md);
   }
 
   .bannerCopy {
@@ -509,4 +501,9 @@
   .switchTrack span {
     transition: none;
   }
+}
+
+:global(html:not(.dark)) .banner,
+:global(html:not(.dark)) .dialogContent {
+  background: var(--background-elevated);
 }

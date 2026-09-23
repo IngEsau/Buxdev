@@ -104,56 +104,65 @@ async function fetchBlogFeed(
 
   const controller = new AbortController()
   const timeout = setTimeout(() => controller.abort(), timeoutMs)
-  let response: Response
-
-  try {
-    response = await fetchImpl(url, {
+  const request = async () => {
+    const response = await fetchImpl(url, {
       method: "GET",
       headers: {
         Accept: "application/json",
       },
       redirect: "error",
+      cache: "no-store",
       signal: controller.signal,
     })
-  } catch {
-    if (controller.signal.aborted) {
-      throw new Error("Blog API request timed out.")
+    if (!response.ok) {
+      await response.body?.cancel().catch(() => undefined)
+      throw new Error(`Blog API returned HTTP ${response.status}.`)
     }
+
+    const mediaType = response.headers.get("content-type")?.split(";", 1)[0].trim().toLowerCase()
+    if (mediaType !== "application/json") {
+      await response.body?.cancel().catch(() => undefined)
+      throw new Error("Blog API response must use application/json.")
+    }
+
+    const body = await readBoundedResponse(response, maxResponseBytes)
+    let payload: unknown
+
+    try {
+      payload = JSON.parse(body)
+    } catch {
+      throw new Error("Blog API returned invalid JSON.")
+    }
+
+    const result = blogFeedSchema.safeParse(payload)
+    if (!result.success) {
+      throw new Error("Blog API returned an invalid contract.")
+    }
+
+    if (result.data.articles.some((article) => article.locale !== locale)) {
+      throw new Error("Blog API returned articles for an unexpected locale.")
+    }
+
+    return result.data
+  }
+
+  try {
+    // The deadline covers headers AND streaming the body (including a stalled body).
+    return await Promise.race([
+      request(),
+      new Promise<never>((_resolve, reject) => {
+        controller.signal.addEventListener("abort", () => {
+          reject(new Error("Blog API request timed out."))
+        }, { once: true })
+      }),
+    ])
+  } catch (error) {
+    if (controller.signal.aborted) throw new Error("Blog API request timed out.")
+    if (error instanceof Error && error.message.startsWith("Blog API ")) throw error
     throw new Error("Blog API request failed.")
   } finally {
     clearTimeout(timeout)
   }
-
-  if (!response.ok) {
-    await response.body?.cancel().catch(() => undefined)
-    throw new Error(`Blog API returned HTTP ${response.status}.`)
-  }
-
-  const mediaType = response.headers.get("content-type")?.split(";", 1)[0].trim().toLowerCase()
-  if (mediaType !== "application/json") {
-    await response.body?.cancel().catch(() => undefined)
-    throw new Error("Blog API response must use application/json.")
-  }
-
-  const body = await readBoundedResponse(response, maxResponseBytes)
-  let payload: unknown
-
-  try {
-    payload = JSON.parse(body)
-  } catch {
-    throw new Error("Blog API returned invalid JSON.")
-  }
-
-  const result = blogFeedSchema.safeParse(payload)
-  if (!result.success) {
-    throw new Error("Blog API returned an invalid contract.")
-  }
-
-  if (result.data.articles.some((article) => article.locale !== locale)) {
-    throw new Error("Blog API returned articles for an unexpected locale.")
-  }
-
-  return result.data
 }
 
 export function createBlogApiLoader(options: BlogApiLoaderOptions = {}) {

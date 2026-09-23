@@ -1,5 +1,14 @@
 export const translations = {
   es: {
+    blog: {
+      title: "Ingeniería en práctica.",
+      description: "Casos reales y aprendizajes sobre desarrollo de software y ciberseguridad.",
+      spanishContent: "Artículos disponibles en español.",
+      readArticle: "Leer artículo",
+      back: "Volver al blog",
+      published: "Publicado el",
+      updated: "Actualizado el",
+    },
     nav: {
       inicio: "Inicio",
       nosotros: "Nosotros",
@@ -515,6 +524,15 @@ export const translations = {
     },
   },
   en: {
+    blog: {
+      title: "Engineering in practice.",
+      description: "Real cases and lessons learned in software development and cybersecurity.",
+      spanishContent: "Articles are currently available in Spanish.",
+      readArticle: "Read article",
+      back: "Back to the blog",
+      published: "Published on",
+      updated: "Updated on",
+    },
     nav: {
       inicio: "Home",
       nosotros: "About Us",

@@ -13,7 +13,7 @@ const cloneFixture = () => structuredClone(fixture)
 // directory so Node tests the same extensionless imports used by Next.js.
 await mkdir('.next', { recursive: true })
 const compiledDirectory = await mkdtemp(resolve('.next', 'blog-contract-test-'))
-for (const name of ['blog-schema', 'blog-api']) {
+for (const name of ['blog-schema', 'blog-api', 'blog-seo', 'seo']) {
   const source = await readFile(resolve('lib', `${name}.ts`), 'utf8')
   const output = ts.transpileModule(source, {
     compilerOptions: {
@@ -21,7 +21,7 @@ for (const name of ['blog-schema', 'blog-api']) {
       target: ts.ScriptTarget.ES2022,
       verbatimModuleSyntax: true,
     },
-  }).outputText.replace('"./blog-schema"', '"./blog-schema.mjs"')
+  }).outputText.replace('"./blog-schema"', '"./blog-schema.mjs"').replace('"./seo"', '"./seo.mjs"')
   await writeFile(resolve(compiledDirectory, `${name}.mjs`), output)
 }
 const {
@@ -33,6 +33,7 @@ const {
   articleSchema,
   blogFeedSchema,
 } = await import(pathToFileURL(resolve(compiledDirectory, 'blog-schema.mjs')).href)
+const { articleMetadata, serializeBlogJsonLd } = await import(pathToFileURL(resolve(compiledDirectory, 'blog-seo.mjs')).href)
 
 after(async () => {
   await rm(compiledDirectory, { recursive: true, force: true })
@@ -246,4 +247,37 @@ test('Loader applies a bounded timeout without making a real network request', a
   })
 
   await assert.rejects(load('es'), /timed out/)
+})
+
+test('Timeout also bounds a stalled response body, and failed loads are never replaced by an empty feed', async () => {
+  let calls = 0
+  const load = createBlogApiLoader({
+    timeoutMs: 20,
+    fetchImpl: async (_url, options) => {
+      calls++
+      return new Response(new ReadableStream({
+        start(controller) {
+          options.signal.addEventListener('abort', () => controller.error(new Error('aborted')), { once: true })
+        },
+      }), { headers: { 'Content-Type': 'application/json' } })
+    },
+  })
+  await assert.rejects(load('es'), /timed out/)
+  await assert.rejects(load('es'), /timed out/)
+  assert.equal(calls, 1)
+})
+
+test('Article metadata uses canonical URLs and JSON-LD cannot break out of its script', () => {
+  const article = structuredClone(fixture.articles[0])
+  article.title = '</script><script>alert(1)</script>'
+  const metadata = articleMetadata(article)
+  assert.equal(metadata.alternates.canonical, `https://buxdev.com/blog/${article.slug}/`)
+  assert.equal(metadata.openGraph.type, 'article')
+  assert.equal(metadata.openGraph.publishedTime, article.publishedAt)
+  const serialized = serializeBlogJsonLd(article)
+  assert.ok(!serialized.includes('<'))
+  const data = JSON.parse(serialized)
+  assert.equal(data['@type'], 'BlogPosting')
+  assert.equal(data.headline, article.title)
+  assert.equal(data.dateModified, article.updatedAt)
 })

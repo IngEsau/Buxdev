@@ -5,7 +5,7 @@ import { fileURLToPath, pathToFileURL } from 'node:url'
 const PROJECT_ROOT = fileURLToPath(new URL('../', import.meta.url))
 const KEY = 'eb0d64a2c026422a948a7b49af9d1aa1'
 const ORIGIN = 'https://buxdev.com'
-// Fail closed if the deployed sitemap changes its current indexing scope.
+// Keep the approved notification scope; blog URLs are discovered through the sitemap.
 const INDEXABLE_URLS = ['/', '/about/', '/services/', '/contact/'].map(path => ORIGIN + path)
 
 export async function prepareNotification(root = PROJECT_ROOT) {
@@ -18,11 +18,18 @@ export async function prepareNotification(root = PROJECT_ROOT) {
   if (sourceKey.trim() !== KEY || exportedKey !== sourceKey) {
     throw new Error('La key pública falta, cambió o no coincide con la exportación.')
   }
-  const urlList = [...sitemap.matchAll(/<loc>([^<]*)<\/loc>/g)].map(match => match[1])
-  if (urlList.length !== 4 || new Set(urlList).size !== 4 ||
-      urlList.some(url => !INDEXABLE_URLS.includes(url))) {
-    throw new Error('El sitemap debe contener únicamente las cuatro URLs indexables aprobadas.')
+  const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]*)<\/loc>/g)].map(match => match[1])
+  const blogUrl = /^https:\/\/buxdev\.com\/blog\/(?:[a-z0-9]+(?:-[a-z0-9]+)*\/)?$/
+  if (new Set(sitemapUrls).size !== sitemapUrls.length ||
+      INDEXABLE_URLS.some(url => !sitemapUrls.includes(url)) ||
+      sitemapUrls.some(url => !INDEXABLE_URLS.includes(url) && !blogUrl.test(url))) {
+    throw new Error('El sitemap debe conservar las cuatro URLs aprobadas y solo añadir rutas válidas del blog.')
   }
+  for (const url of sitemapUrls.filter(url => blogUrl.test(url))) {
+    // No added URL is accepted unless its static HTML actually exists.
+    await readFile(resolve(root, 'out', new URL(url).pathname.slice(1), 'index.html'))
+  }
+  const urlList = INDEXABLE_URLS
   return { host: 'buxdev.com', key: KEY, keyLocation: `${ORIGIN}/${filename}`, urlList }
 }
 

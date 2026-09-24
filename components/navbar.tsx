@@ -24,6 +24,7 @@ const navigation = [
   { key: "nosotros", href: "/about/" },
   { key: "servicios", href: "/services/" },
   { key: "trabajos", href: "/work/" },
+  { key: "blog", href: "/blog/" },
   { key: "contacto", href: "/contact/" },
 ] as const
 

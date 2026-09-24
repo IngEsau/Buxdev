@@ -14,6 +14,7 @@ export const translations = {
       nosotros: "Nosotros",
       servicios: "Servicios",
       trabajos: "Trabajos",
+      blog: "Blog",
       contacto: "Contacto",
     },
     header: {
@@ -538,6 +539,7 @@ export const translations = {
       nosotros: "About Us",
       servicios: "Services",
       trabajos: "Work",
+      blog: "Blog",
       contacto: "Contact",
     },
     header: {

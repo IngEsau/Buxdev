@@ -19,7 +19,7 @@ export function HeroSection() {
       <div className={styles.ambientLight} aria-hidden="true" />
 
       <div className={styles.heroInner}>
-        <MotionReveal className={styles.heroCopy} revealOnView={false} distance={10}>
+        <MotionReveal className={styles.heroCopy} revealOnView={false} distance={10} disableOnMobile>
           <p className={styles.eyebrow}>
             {t.hero.eyebrow}
           </p>
@@ -45,6 +45,7 @@ export function HeroSection() {
 
         <MotionReveal
           className={styles.engineeringVisual}
+          disableOnMobile
           aria-hidden="true"
           revealOnView={false}
           delay={0.08}

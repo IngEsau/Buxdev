@@ -284,8 +284,8 @@ export const translations = {
     },
     portfolio: {
       title: "Nuestros Trabajos",
-      subtitle: "Una selección en preparación",
-      empty: "Próximamente mostraremos nuestros proyectos destacados",
+      subtitle: "Proyectos reales, soluciones digitales",
+      empty: "Explora nuestros proyectos y casos de estudio",
       stateLabel: "Casos reales",
       stateTitle: "Proyectos seleccionados.",
       stateDescription:
@@ -807,8 +807,8 @@ export const translations = {
     },
     portfolio: {
       title: "Our Work",
-      subtitle: "A selection in progress",
-      empty: "Coming soon: our featured projects",
+      subtitle: "Real projects, digital solutions",
+      empty: "Explore our projects and case studies",
       stateLabel: "Real-world cases",
       stateTitle: "Selected projects.",
       stateDescription:

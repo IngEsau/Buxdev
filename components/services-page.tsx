@@ -133,7 +133,7 @@ export function ServicesPageContent() {
   return (
     <section className={styles.services} aria-labelledby="services-list-title">
       <div className={styles.grid} aria-hidden="true" />
-      <MotionReveal className={styles.inner}>
+      <MotionReveal className={styles.inner} disableOnMobile>
         <header className={styles.header}>
           <p>{t.servicesPage.title}</p>
           <h2 id="services-list-title">{t.servicesPage.subtitle}</h2>

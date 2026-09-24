@@ -13,7 +13,7 @@ export function PortfolioSection() {
 
   return (
     <section id="trabajos" className={styles.section} aria-labelledby="home-work-title">
-      <MotionReveal className={styles.container}>
+      <MotionReveal className={styles.container} disableOnMobile>
         <header className={styles.header}>
           <div>
             <p className={styles.eyebrow}>{t.nav.trabajos}</p>

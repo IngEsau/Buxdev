@@ -16,7 +16,7 @@ export function AboutSection() {
       <div className={styles.grid} aria-hidden="true" />
       <div className={styles.glow} aria-hidden="true" />
 
-      <MotionReveal className={styles.container}>
+      <MotionReveal className={styles.container} disableOnMobile>
         <div className={styles.intro}>
           <div className={styles.identity}>
             <p className={styles.eyebrow}>{t.about.title}</p>

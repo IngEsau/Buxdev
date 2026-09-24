@@ -118,7 +118,7 @@ export function ServicesSection() {
 
   return (
     <section id="servicios" className={styles.section} aria-labelledby="home-services-title">
-      <MotionReveal className={styles.container}>
+      <MotionReveal className={styles.container} disableOnMobile>
         <header className={styles.header}>
           <div>
             <p className={styles.eyebrow}>{t.nav.servicios}</p>

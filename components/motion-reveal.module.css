@@ -1,0 +1,7 @@
+/* Keep mobile content visible even before hydration applies the media query. */
+@media (max-width: 48rem) {
+  .staticOnMobile {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

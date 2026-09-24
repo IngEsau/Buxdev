@@ -17,7 +17,7 @@ export function FinalCta() {
     <section className={styles.section} aria-labelledby="home-final-cta-title">
       <div className={styles.grid} aria-hidden="true" />
       <div className={styles.glow} aria-hidden="true" />
-      <MotionReveal className={styles.container}>
+      <MotionReveal className={styles.container} disableOnMobile>
         <div className={styles.layout}>
           <div className={styles.copy}>
             <p className={styles.eyebrow}>{t.contact.title}</p>

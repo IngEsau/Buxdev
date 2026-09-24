@@ -40,7 +40,7 @@ export function PageHero({ page }: PageHeroProps) {
       <div className={styles.glow} aria-hidden="true" />
 
       <div className={styles.inner}>
-        <MotionReveal className={styles.copy} revealOnView={false} distance={10}>
+        <MotionReveal className={styles.copy} revealOnView={false} distance={10} disableOnMobile={page === "services"}>
           <p className={styles.eyebrow}>
             {copy.eyebrow}
           </p>
@@ -53,6 +53,7 @@ export function PageHero({ page }: PageHeroProps) {
 
         <MotionReveal
           className={styles.visual}
+          disableOnMobile={page === "services"}
           aria-hidden="true"
           revealOnView={false}
           delay={0.08}

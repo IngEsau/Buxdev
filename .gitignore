@@ -4,6 +4,7 @@
 # Next.js output
 /.next
 /out
+/.blog-build-*
 
 # production
 /build

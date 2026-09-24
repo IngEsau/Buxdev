@@ -1,0 +1,106 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-09-18T15:00:00Z",
+  "articles": [
+    {
+      "id": "article-static-export",
+      "locale": "es",
+      "slug": "exportacion-estatica-con-nextjs",
+      "title": "Exportación estática con Next.js",
+      "excerpt": "Principios para generar sitios estáticos que conserven rendimiento, seguridad y capacidad de despliegue.",
+      "author": {
+        "name": "BUXDEV"
+      },
+      "content": [
+        {
+          "type": "heading",
+          "level": 2,
+          "id": "punto-de-partida",
+          "text": "Punto de partida"
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "text",
+              "value": "El contenido se valida antes de generar las páginas estáticas. Consulta la "
+            },
+            {
+              "type": "link",
+              "text": "sección de servicios",
+              "href": "/services/"
+            },
+            {
+              "type": "text",
+              "value": " para conocer el contexto del proyecto."
+            }
+          ]
+        },
+        {
+          "type": "list",
+          "ordered": false,
+          "items": [
+            [
+              {
+                "type": "text",
+                "value": "Validación estricta del contrato."
+              }
+            ],
+            [
+              {
+                "type": "text",
+                "value": "Generación reproducible durante el build."
+              }
+            ]
+          ]
+        },
+        {
+          "type": "code",
+          "language": "typescript",
+          "code": "export const dynamicParams = false"
+        }
+      ],
+      "publishedAt": "2026-09-10T14:00:00Z",
+      "updatedAt": "2026-09-18T15:00:00Z"
+    },
+    {
+      "id": "article-security-contract",
+      "locale": "es",
+      "slug": "contratos-de-contenido-seguros",
+      "title": "Contratos de contenido seguros",
+      "excerpt": "Cómo limitar formatos y enlaces para impedir que una fuente de contenido introduzca HTML arbitrario.",
+      "author": {
+        "name": "BUXDEV"
+      },
+      "content": [
+        {
+          "type": "heading",
+          "level": 3,
+          "id": "contenido-estructurado",
+          "text": "Contenido estructurado"
+        },
+        {
+          "type": "quote",
+          "content": [
+            {
+              "type": "text",
+              "value": "Los datos externos deben validarse antes de llegar a la interfaz."
+            }
+          ]
+        },
+        {
+          "type": "paragraph",
+          "content": [
+            {
+              "type": "link",
+              "text": "Sitio oficial de BUXDEV",
+              "href": "https://buxdev.com/"
+            }
+          ]
+        }
+      ],
+      "publishedAt": "2026-09-12T16:30:00-06:00",
+      "updatedAt": "2026-09-12T16:30:00-06:00"
+    }
+  ]
+}

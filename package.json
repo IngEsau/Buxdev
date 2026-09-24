@@ -5,7 +5,9 @@
   "homepage": "https://buxdev.com/",
   "scripts": {
     "prebuild": "node --test tests/performance/sources.test.mjs",
-    "build": "next build",
+    "build": "node scripts/build-blog.mjs",
+    "dev:blog": "node scripts/build-blog.mjs --dev",
+    "test:blog": "node --test tests/blog/*.test.mjs",
     "postbuild": "node scripts/secure-export.mjs",
     "security:export": "node scripts/secure-export.mjs --check",
     "security:secrets": "node scripts/audit-secrets.mjs",

@@ -65,6 +65,25 @@ test('IndexNow sends one bounded HTTPS JSON request without redirects; handles H
   }
 })
 
+test('Exported blog URLs may appear in the sitemap without extending notifications', async () => {
+  const root = await fixture()
+  try {
+    await writeFile(resolve(root, 'out/sitemap.xml'), xml([...urls, 'https://buxdev.com/blog/', 'https://buxdev.com/blog/caso-real/']))
+    await assert.rejects(prepareNotification(root), /ENOENT/)
+    for (const path of ['blog', 'blog/caso-real']) {
+      await mkdir(resolve(root, 'out', path), { recursive: true })
+      await writeFile(resolve(root, 'out', path, 'index.html'), '<h1>Blog</h1>')
+    }
+    assert.deepEqual((await prepareNotification(root)).urlList, urls)
+    for (const path of ['blog/../work/', 'blog/case/?draft=1', 'blog/case/nested/', 'blog//evil/']) {
+      await writeFile(resolve(root, 'out/sitemap.xml'), xml([...urls, `https://buxdev.com/${path}`]))
+      await assert.rejects(prepareNotification(root), /cuatro URLs/)
+    }
+  } finally {
+    await rm(root, { recursive: true, force: true })
+  }
+})
+
 test('Deploy notifies only after successful FTP; failed notification preserves exit 0 (offline stubs)', async () => {
   const root = await fixture()
   try {

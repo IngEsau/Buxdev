@@ -6,13 +6,14 @@ import { fileURLToPath } from 'node:url'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const out = resolve(root, 'out')
 const checkOnly = process.argv.includes('--check')
-const routes = '(?:about|services|work(?:/valeria-herrera)?|contact|privacidad|terminos|cookies|404|_not-found)'
+const routes = '(?:about|services|work(?:/valeria-herrera)?|blog(?:/[a-z0-9]+(?:-[a-z0-9]+)*)?|contact|privacidad|terminos|cookies|404|_not-found)'
 const allowed = [
   /^\.htaccess$/,
   /^_next\/static\/(?:chunks|media)\/[\w./-]+\.(?:js|css|woff2?|ttf|otf|png|jpe?g|svg|webp|ico)$/,
   /^_next\/static\/[\w-]+\/_(?:buildManifest|ssgManifest|clientMiddlewareManifest)\.js$/,
   new RegExp(`^(?:${routes}/)?(?:index|404)\\.html$`),
   new RegExp(`^(?:${routes}/)?(?:index|__next[\\w.-]*)\\.txt$`),
+  /^blog\/[a-z0-9]+(?:-[a-z0-9]+)*\/__next\.blog\.\$d\$slug(?:\.__PAGE__)?\.txt$/,
   /^(?:robots\.txt|sitemap\.xml)$/,
   /^eb0d64a2c026422a948a7b49af9d1aa1\.txt$/, // Existing domain verification.
   /^(?:brand\/buxdev\/)?[\w-]+\.(?:svg|png|jpe?g|webp|ico)$/,

@@ -3,6 +3,7 @@ import { AboutSection } from "@/components/about-section"
 import { FinalCta } from "@/components/final-cta"
 import { HeroSection } from "@/components/hero-section"
 import { PortfolioSection } from "@/components/portfolio-section"
+import { ProjectProcess } from "@/components/project-process"
 import { ServicesSection } from "@/components/services-section"
 import { createPageMetadata, HOME_TITLE, homepageStructuredData, SITE_DESCRIPTION } from "@/lib/seo"
 
@@ -18,6 +19,7 @@ export default function Page() {
       <StructuredData data={homepageStructuredData} />
       <main id="main-content" tabIndex={-1}>
         <HeroSection />
+        <ProjectProcess />
         <AboutSection />
         <ServicesSection />
         <PortfolioSection />

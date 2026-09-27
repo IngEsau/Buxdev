@@ -1,8 +1,9 @@
 .header {
+  --navbar-height: calc(var(--header-height) + 0.75rem);
   position: fixed;
   inset: 0 0 auto;
   z-index: 50;
-  height: var(--header-height);
+  height: var(--navbar-height);
   border-bottom: 1px solid transparent;
   transition:
     background-color 220ms ease,
@@ -46,7 +47,7 @@
   position: relative;
   display: inline-flex;
   width: 6.5rem;
-  height: var(--header-height);
+  height: 100%;
   align-items: center;
   justify-content: flex-start;
   justify-self: start;
@@ -344,7 +345,7 @@
   width: 75%;
   max-width: none;
   padding:
-    var(--header-height) clamp(1rem, 4vw, 1.5rem)
+    var(--navbar-height) clamp(1rem, 4vw, 1.5rem)
     max(1rem, env(safe-area-inset-bottom));
   overflow-y: auto;
   border: 0;

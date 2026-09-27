@@ -1,12 +1,20 @@
 "use client"
 
 import Link from "next/link"
-import { ArrowUpRight, Layers3 } from "lucide-react"
+import { ArrowUpRight } from "lucide-react"
 
+import { AccordionGallery } from "@/components/effects/accordion-gallery"
 import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
 import styles from "./portfolio-section.module.css"
+
+const projects = [
+  { id: "valeriaHerrera", folder: "valeria-herrera" },
+  { id: "bandasAsesoria", folder: "bandas-asesoria" },
+  { id: "wordpressIncidentResponse", folder: "wordpress-incident-response" },
+  { id: "portfolio", folder: "portfolio" },
+] as const
 
 export function PortfolioSection() {
   const { t } = useLanguage()
@@ -24,44 +32,15 @@ export function PortfolioSection() {
           <p className={styles.subtitle}>{t.portfolio.subtitle}</p>
         </header>
 
-        <div className={styles.showcase}>
-          <div className={styles.axisHorizontal} aria-hidden="true" />
-          <div className={styles.axisVertical} aria-hidden="true" />
-
-          <div className={styles.previewShell} aria-hidden="true">
-            <div className={styles.previewBar}>
-              <span />
-              <span />
-              <span />
-            </div>
-            <div className={styles.previewBody}>
-              <div className={styles.previewNavigation}>
-                <span />
-                <span />
-                <span />
-                <span />
-              </div>
-              <div className={styles.previewCanvas}>
-                <div className={styles.previewCopy}>
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <div className={styles.previewPanels}>
-                  <span />
-                  <span />
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className={styles.emptyMessage}>
-            <span className={styles.emptyIcon} aria-hidden="true">
-              <Layers3 />
-            </span>
-            <p>{t.portfolio.empty}</p>
-          </div>
-        </div>
+        <AccordionGallery
+          label={t.portfolio.title}
+          items={projects.map(project => ({
+            id: project.id,
+            image: `/work/${project.folder}/desktop.webp`,
+            mobileImage: `/work/${project.folder}/mobile.webp`,
+            label: t.portfolio.projects[project.id].title,
+          }))}
+        />
 
         <div className={styles.sectionFooter}>
           <Link href="/work/" className={styles.sectionLink}>

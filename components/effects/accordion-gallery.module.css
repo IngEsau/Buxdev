@@ -1,0 +1,92 @@
+.gallery {
+  position: relative;
+  display: flex;
+  gap: 10px;
+  height: 460px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  perspective: 1400px;
+}
+
+.panel {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  border-radius: var(--radius-lg);
+  background: #101319;
+  box-shadow: inset 0 0 0 1px rgb(255 255 255 / 12%);
+}
+
+.panel[data-active="true"] { flex-grow: 4.8947368421; }
+
+.trigger {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  overflow: hidden;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: #f5f7fa;
+  text-align: left;
+  cursor: pointer;
+}
+
+.trigger:focus-visible { outline: 3px solid var(--brand); outline-offset: 4px; }
+
+.media {
+  --gray: 1;
+  --dim: 0.3;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc((100vw - 2 * var(--page-gutter) - 30px) * 0.62);
+  height: 100%;
+  translate: -50% -50%;
+  filter: grayscale(var(--gray)) brightness(calc(1 - var(--dim)));
+  pointer-events: none;
+}
+
+.panel[data-active="true"] .media { --gray: 0; --dim: 0; }
+.image { object-fit: contain; object-position: center top; }
+
+.shade {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 55%, rgb(8 12 20 / 45%) 78%, rgb(8 12 20 / 95%));
+  pointer-events: none;
+}
+
+.label {
+  position: absolute;
+  right: 20px;
+  bottom: 22px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  opacity: 0;
+  font-size: clamp(0.9rem, 1.5vw, 1.2rem);
+  font-weight: 650;
+  line-height: 1.4;
+}
+
+.panel[data-active="true"] .label { opacity: 1; }
+.bar { flex: 0 0 3px; align-self: stretch; min-height: 24px; background: #477dd0; }
+
+@media (max-width: 40rem) {
+  .gallery { flex-direction: column; height: clamp(36rem, 85svh, 42rem); }
+  .media { width: 100%; height: calc((clamp(36rem, 85svh, 42rem) - 30px) * 0.62); }
+  .image { object-position: center; }
+  .label { left: 16px; right: 16px; bottom: 16px; gap: 10px; opacity: 1; font-size: 0.85rem; }
+  .panel:not([data-active="true"]) .shade { background: rgb(8 12 20 / 80%); }
+  .panel:not([data-active="true"]) .bar { background: #8b9aaf; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel, .media, .label { transition: none; }
+}

@@ -1,10 +1,10 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight } from "iconoir-react"
-import { Code2, Layers3, MonitorSmartphone } from "lucide-react"
+import { Layers3 } from "lucide-react"
 
+import { ShapeGrid } from "@/components/effects/shape-grid"
 import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
@@ -16,7 +16,7 @@ export function FinalCta() {
   return (
     <section className={styles.section} aria-labelledby="home-final-cta-title">
       <div className={styles.grid} aria-hidden="true" />
-      <div className={styles.glow} aria-hidden="true" />
+      <ShapeGrid />
       <MotionReveal className={styles.container} disableOnMobile>
         <div className={styles.layout}>
           <div className={styles.copy}>
@@ -35,38 +35,6 @@ export function FinalCta() {
                 <span>{t.nav.servicios}</span>
                 <Layers3 aria-hidden="true" />
               </Link>
-            </div>
-          </div>
-
-          <div className={styles.visual} aria-hidden="true">
-            <div className={styles.axisHorizontal} />
-            <div className={styles.axisVertical} />
-            <div className={`${styles.node} ${styles.nodeTop}`}>
-              <Code2 />
-            </div>
-            <div className={`${styles.node} ${styles.nodeRight}`}>
-              <MonitorSmartphone />
-            </div>
-            <div className={`${styles.node} ${styles.nodeBottom}`}>
-              <Layers3 />
-            </div>
-            <div className={styles.orbitOuter} />
-            <div className={styles.orbitInner} />
-            <div className={styles.core}>
-              <Image
-                src="/brand/buxdev/mark-on-light.svg"
-                alt=""
-                width={281}
-                height={303}
-                className={styles.markOnLight}
-              />
-              <Image
-                src="/brand/buxdev/mark-on-dark.svg"
-                alt=""
-                width={281}
-                height={303}
-                className={styles.markOnDark}
-              />
             </div>
           </div>
         </div>

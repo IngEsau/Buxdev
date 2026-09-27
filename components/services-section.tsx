@@ -5,6 +5,7 @@ import { ArrowUpRight } from "iconoir-react"
 import type { LucideIcon } from "lucide-react"
 import { Code2, PanelsTopLeft, Search, ShieldCheck, Workflow } from "lucide-react"
 
+import { MagicBento } from "@/components/effects/magic-bento"
 import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
@@ -129,13 +130,13 @@ export function ServicesSection() {
           <p className={styles.subtitle}>{t.servicesPage.subtitle}</p>
         </header>
 
-        <div className={styles.bento}>
+        <MagicBento className={styles.bento}>
           {t.servicesPage.items.map((service, index) => {
             const design = serviceDesigns[index]
             const Icon = design.Icon
 
             return (
-              <article key={service.title} className={`${styles.service} ${design.span}`}>
+              <article data-magic-card key={service.title} className={`${styles.service} ${design.span}`}>
                 <div className={styles.serviceTop}>
                   <span>{String(index + 1).padStart(2, "0")}</span>
                   <span className={styles.serviceIcon}>
@@ -152,7 +153,7 @@ export function ServicesSection() {
               </article>
             )
           })}
-        </div>
+        </MagicBento>
 
         <div className={styles.sectionFooter}>
           <Link href="/services/" className={styles.sectionLink}>

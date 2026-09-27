@@ -107,22 +107,12 @@
     0 28px 70px rgb(0 0 0 / 10%);
   transition:
     border-color 220ms ease,
-    background-color 220ms ease,
-    transform 220ms ease;
-}
-
-.service::after {
-  position: absolute;
-  inset: 0;
-  content: "";
-  background: radial-gradient(circle at 65% 20%, rgb(35 86 167 / 9%), transparent 52%);
-  pointer-events: none;
+    background-color 220ms ease;
 }
 
 .service:hover {
   border-color: color-mix(in srgb, var(--brand) 38%, var(--border-strong));
   background-color: var(--surface-hover);
-  transform: translateY(-2px);
 }
 
 .spanSeven {
@@ -183,10 +173,6 @@
   align-self: center;
   margin-block: 1rem;
   transition: transform 260ms ease;
-}
-
-.service:hover .visual {
-  transform: translateY(-0.2rem);
 }
 
 .serviceContent h3 {
@@ -664,8 +650,4 @@
 
 :global(html:not(.dark)) .section {
   background: var(--background-elevated);
-}
-
-:global(html:not(.dark)) .service::after {
-  display: none;
 }

@@ -1,0 +1,52 @@
+.grid {
+  --magic-blue: 35 86 167;
+  position: relative;
+  isolation: isolate;
+}
+
+.grid [data-magic-card]::after {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  padding: 1px;
+  border-radius: inherit;
+  content: "";
+  background: radial-gradient(400px circle at var(--glow-x, 50%) var(--glow-y, 50%),
+    rgb(var(--magic-blue) / 95%) 0%, rgb(var(--magic-blue) / 55%) 30%, transparent 65%);
+  opacity: var(--glow-intensity, 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+.spotlight {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 3;
+  width: 800px;
+  height: 800px;
+  translate: -50% -50%;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(var(--magic-blue) / 16%), rgb(var(--magic-blue) / 7%) 30%, transparent 65%);
+  opacity: 0;
+  mix-blend-mode: screen;
+  pointer-events: none;
+}
+
+.ripple {
+  position: absolute;
+  z-index: 3;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgb(var(--magic-blue) / 35%), rgb(var(--magic-blue) / 15%) 40%, transparent 70%);
+  pointer-events: none;
+}
+
+/* Keep the light theme clean: only the local border and motion remain. */
+:global(html:not(.dark)) .spotlight { display: none; }
+
+@media (max-width: 64rem), (hover: none), (pointer: coarse), (prefers-reduced-motion: reduce) {
+  .spotlight, .ripple, .grid [data-magic-card]::after { display: none; }
+}

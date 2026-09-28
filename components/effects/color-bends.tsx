@@ -28,6 +28,10 @@ const pageColorBends = {
   parallax: 0.1,
 } as const
 
+// Keep the page backgrounds visibly flowing on mobile, without extra brightness
+// or more frames. The main Hero and desktop retain their existing settings.
+const mobilePageSpeed = 0.48
+
 const motionQuery = "(prefers-reduced-motion: no-preference)"
 
 export function ColorBends({ className, variant = "hero" }: { className?: string; variant?: "hero" | "page" }) {
@@ -121,7 +125,7 @@ export function ColorBends({ className, variant = "hero" }: { className?: string
         const uniforms = {
           uCanvas: { value: new THREE.Vector2(1, 1) },
           uTime: { value: 0 },
-          uSpeed: { value: settings.speed },
+          uSpeed: { value: variant === "page" && compact.matches ? mobilePageSpeed : settings.speed },
           uRot: { value: new THREE.Vector2(Math.cos(rotation), Math.sin(rotation)) },
           uColorCount: { value: 1 },
           uColors: { value: colors },
@@ -206,6 +210,7 @@ export function ColorBends({ className, variant = "hero" }: { className?: string
           currentPointer.lerp(targetPointer, Math.min(1, delta * 8))
           uniforms.uPointer.value.copy(currentPointer)
           uniforms.uTime.value = elapsed
+          uniforms.uSpeed.value = variant === "page" && compact.matches ? mobilePageSpeed : settings.speed
           renderer.render(scene, camera)
           if (failed) throw new Error("Color Bends unavailable")
         }
@@ -239,7 +244,7 @@ export function ColorBends({ className, variant = "hero" }: { className?: string
       document.removeEventListener("visibilitychange", sync)
       disposeRenderer()
     }
-  }, [hasHydrated, settings, theme])
+  }, [hasHydrated, settings, theme, variant])
 
   return <div ref={containerRef} className={className} aria-hidden="true" />
 }

@@ -44,7 +44,9 @@ export function ShapeGrid() {
     const context = canvas?.getContext("2d")
     if (!canvas || !section || !context) return
 
-    const motion = matchMedia("(min-width: 48.0625rem) and (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference)")
+    const motion = matchMedia("(prefers-reduced-motion: no-preference)")
+    const compact = matchMedia("(max-width: 48rem)")
+    const interaction = matchMedia("(min-width: 48.0625rem) and (hover: hover) and (pointer: fine)")
     const cells = new Map<string, number>()
     const trail: Cell[] = []
     let hovered: Cell | null = null
@@ -59,14 +61,18 @@ export function ShapeGrid() {
       const bounds = section.getBoundingClientRect()
       width = bounds.width
       height = bounds.height
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5)
+      const dpr = Math.min(window.devicePixelRatio || 1, compact.matches ? 1 : 1.5)
       canvas.width = Math.round(width * dpr)
       canvas.height = Math.round(height * dpr)
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
     }
 
     const draw = (time: number) => {
-      const elapsed = lastTime ? Math.min(time - lastTime, 50) : 16.67
+      if (lastTime && time - lastTime < 1000 / (compact.matches ? 20 : 30)) {
+        frame = requestAnimationFrame(draw)
+        return
+      }
+      const elapsed = lastTime ? Math.min(time - lastTime, 100) : 16.67
       lastTime = time
       offset = (offset - speed * elapsed / 16.67 + size) % size
       context.clearRect(0, 0, width, height)
@@ -118,7 +124,7 @@ export function ShapeGrid() {
       }
     }
     const move = (event: PointerEvent) => {
-      if (event.pointerType !== "mouse" || !frame) return
+      if (!interaction.matches || event.pointerType !== "mouse" || !frame) return
       const bounds = section.getBoundingClientRect()
       const col = Math.floor((event.clientX - bounds.left - offset) / size)
       const row = Math.floor((event.clientY - bounds.top - offset) / size)
@@ -136,13 +142,24 @@ export function ShapeGrid() {
       }
       hovered = null
     }
+    const syncInteraction = () => {
+      section.removeEventListener("pointermove", move)
+      section.removeEventListener("pointerleave", leave)
+      hovered = null
+      trail.length = 0
+      cells.clear()
+      if (interaction.matches) {
+        section.addEventListener("pointermove", move, { passive: true })
+        section.addEventListener("pointerleave", leave)
+      }
+    }
 
     const observer = new IntersectionObserver(([entry]) => { visible = entry.isIntersecting; sync() })
     const resizeObserver = new ResizeObserver(() => { resize(); sync() })
     observer.observe(section)
     resizeObserver.observe(section)
-    section.addEventListener("pointermove", move)
-    section.addEventListener("pointerleave", leave)
+    interaction.addEventListener("change", syncInteraction)
+    syncInteraction()
     motion.addEventListener("change", sync)
     document.addEventListener("visibilitychange", sync)
 
@@ -152,6 +169,7 @@ export function ShapeGrid() {
       resizeObserver.disconnect()
       section.removeEventListener("pointermove", move)
       section.removeEventListener("pointerleave", leave)
+      interaction.removeEventListener("change", syncInteraction)
       motion.removeEventListener("change", sync)
       document.removeEventListener("visibilitychange", sync)
     }

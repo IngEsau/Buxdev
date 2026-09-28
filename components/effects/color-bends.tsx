@@ -20,12 +20,21 @@ export const heroColorBends = {
   bandWidth: 1,
 } as const
 
-const motionQuery = "(min-width: 48rem) and (prefers-reduced-motion: no-preference)"
+const pageColorBends = {
+  ...heroColorBends,
+  speed: 0.18,
+  intensity: 1.5,
+  mouseInfluence: 0.08,
+  parallax: 0.1,
+} as const
 
-export function ColorBends({ className }: { className?: string }) {
+const motionQuery = "(prefers-reduced-motion: no-preference)"
+
+export function ColorBends({ className, variant = "hero" }: { className?: string; variant?: "hero" | "page" }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const theme = useTheme((state) => state.theme)
   const hasHydrated = useTheme((state) => state.hasHydrated)
+  const settings = variant === "page" ? pageColorBends : heroColorBends
 
   useEffect(() => {
     const container = containerRef.current
@@ -33,6 +42,7 @@ export function ColorBends({ className }: { className?: string }) {
     if (!container || !surface || !hasHydrated || theme !== "dark") return
 
     const media = window.matchMedia(motionQuery)
+    const compact = window.matchMedia("(max-width: 47.999rem)")
     let disposed = false
     let inView = false
     let loading = false
@@ -63,7 +73,7 @@ export function ColorBends({ className }: { className?: string }) {
         return
       }
       if (!canRun() || !renderFrame) return
-      if (!lastFrame || now - lastFrame >= 1000 / 30) {
+      if (!lastFrame || now - lastFrame >= 1000 / (compact.matches ? 20 : 30)) {
         const delta = lastFrame ? Math.min((now - lastFrame) / 1000, 0.1) : 0
         lastFrame = now
         elapsed += delta
@@ -86,7 +96,7 @@ export function ColorBends({ className }: { className?: string }) {
       if (loading || renderFrame || !canRun()) return
       loading = true
       try {
-        // Deferred chunk: neither downloaded nor initialized by mobile/reduced-motion.
+        // Load only when visible; reduced-motion keeps the static background.
         const THREE = await import("three")
         if (!canRun()) return
         const renderer = new THREE.WebGLRenderer({
@@ -107,25 +117,25 @@ export function ColorBends({ className }: { className?: string }) {
         const colors = Array.from({ length: 8 }, () => new THREE.Vector3())
         // Match the reference's direct RGB uniforms, without color-space conversion.
         colors[0].set(44 / 255, 76 / 255, 155 / 255)
-        const rotation = heroColorBends.rotation * Math.PI / 180
+        const rotation = settings.rotation * Math.PI / 180
         const uniforms = {
           uCanvas: { value: new THREE.Vector2(1, 1) },
           uTime: { value: 0 },
-          uSpeed: { value: heroColorBends.speed },
+          uSpeed: { value: settings.speed },
           uRot: { value: new THREE.Vector2(Math.cos(rotation), Math.sin(rotation)) },
           uColorCount: { value: 1 },
           uColors: { value: colors },
           uTransparent: { value: 1 },
-          uScale: { value: heroColorBends.scale },
-          uFrequency: { value: heroColorBends.frequency },
-          uWarpStrength: { value: heroColorBends.warpStrength },
+          uScale: { value: settings.scale },
+          uFrequency: { value: settings.frequency },
+          uWarpStrength: { value: settings.warpStrength },
           uPointer: { value: new THREE.Vector2() },
-          uMouseInfluence: { value: heroColorBends.mouseInfluence },
-          uParallax: { value: heroColorBends.parallax },
-          uNoise: { value: heroColorBends.noise },
-          uIterations: { value: heroColorBends.iterations },
-          uIntensity: { value: heroColorBends.intensity },
-          uBandWidth: { value: heroColorBends.bandWidth },
+          uMouseInfluence: { value: 0 },
+          uParallax: { value: 0 },
+          uNoise: { value: settings.noise },
+          uIterations: { value: settings.iterations },
+          uIntensity: { value: settings.intensity },
+          uBandWidth: { value: settings.bandWidth },
         }
         const material = new THREE.ShaderMaterial({
           vertexShader: colorBendsVertex,
@@ -136,15 +146,16 @@ export function ColorBends({ className }: { className?: string }) {
         scene.add(new THREE.Mesh(geometry, material))
         const targetPointer = new THREE.Vector2()
         const currentPointer = new THREE.Vector2()
+        const interaction = window.matchMedia("(min-width: 48rem) and (hover: hover) and (pointer: fine)")
         const resize = () => {
           const width = Math.max(container.clientWidth, 1)
           const height = Math.max(container.clientHeight, 1)
-          renderer.setPixelRatio(Math.min(width <= 1024 ? 0.75 : 1, 1440 / width))
+          renderer.setPixelRatio(Math.min(width < 768 ? 0.65 : width <= 1024 ? 0.75 : 1, 1440 / width))
           renderer.setSize(width, height, false)
           uniforms.uCanvas.value.set(width, height)
         }
         const onPointerMove = (event: PointerEvent) => {
-          if (!canRun() || event.pointerType !== "mouse") return
+          if (!canRun() || !interaction.matches || event.pointerType !== "mouse") return
           const rect = surface.getBoundingClientRect()
           targetPointer.set(
             Math.max(-1, Math.min(1, (event.clientX - rect.left) / rect.width * 2 - 1)),
@@ -152,6 +163,19 @@ export function ColorBends({ className }: { className?: string }) {
           )
         }
         const onPointerLeave = () => targetPointer.set(0, 0)
+        const syncInteraction = () => {
+          surface.removeEventListener("pointermove", onPointerMove)
+          surface.removeEventListener("pointerleave", onPointerLeave)
+          targetPointer.set(0, 0)
+          currentPointer.set(0, 0)
+          uniforms.uPointer.value.set(0, 0)
+          uniforms.uMouseInfluence.value = interaction.matches ? settings.mouseInfluence : 0
+          uniforms.uParallax.value = interaction.matches ? settings.parallax : 0
+          if (interaction.matches) {
+            surface.addEventListener("pointermove", onPointerMove, { passive: true })
+            surface.addEventListener("pointerleave", onPointerLeave)
+          }
+        }
         const onContextLost = () => {
           failed = true
           disposeRenderer()
@@ -161,6 +185,7 @@ export function ColorBends({ className }: { className?: string }) {
           resizeObserver.disconnect()
           surface.removeEventListener("pointermove", onPointerMove)
           surface.removeEventListener("pointerleave", onPointerLeave)
+          interaction.removeEventListener("change", syncInteraction)
           canvas.removeEventListener("webglcontextlost", onContextLost)
           geometry.dispose()
           material.dispose()
@@ -171,8 +196,8 @@ export function ColorBends({ className }: { className?: string }) {
         // Fall back on a shader compilation failure rather than leave a blank canvas.
         renderer.debug.onShaderError = () => { failed = true }
         canvas.addEventListener("webglcontextlost", onContextLost)
-        surface.addEventListener("pointermove", onPointerMove, { passive: true })
-        surface.addEventListener("pointerleave", onPointerLeave)
+        interaction.addEventListener("change", syncInteraction)
+        syncInteraction()
         resizeObserver.observe(container)
         resize()
         container.appendChild(canvas)
@@ -214,7 +239,7 @@ export function ColorBends({ className }: { className?: string }) {
       document.removeEventListener("visibilitychange", sync)
       disposeRenderer()
     }
-  }, [hasHydrated, theme])
+  }, [hasHydrated, settings, theme])
 
   return <div ref={containerRef} className={className} aria-hidden="true" />
 }

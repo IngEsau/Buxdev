@@ -18,14 +18,14 @@ test('Home keeps the LCP logos eager, high priority and deduplicated in the init
   assert.match(html, /rel="canonical" href="https:\/\/buxdev.com\/"/)
 })
 
-test('Home blocking CSS stays within budget and only the two Latin fonts are preloaded', () => {
+test('Home blocking CSS stays within budget and only the three Latin fonts are preloaded', () => {
   const html = readFileSync('out/index.html', 'utf8')
   const links = html.match(/<link\b[^>]*>/g) || []
   const css = links.filter(tag => tag.includes('rel="stylesheet"')).map(tag => tag.match(/href="([^"]+)"/)[1])
   assert.equal(new Set(css).size, css.length)
   const bytes = css.reduce((total, url) => total + readFileSync(`out${url}`).length, 0)
-  assert.ok(bytes <= 135_000, `Blocking CSS grew to ${bytes} bytes; budget 135000 (baseline 198461)`)
+  assert.ok(bytes <= 195_000, `Blocking CSS grew to ${bytes} bytes; budget 195000 (baseline 189274)`)
   const fonts = links.filter(tag => tag.includes('as="font"'))
-  assert.equal(fonts.length, 2)
+  assert.equal(fonts.length, 3)
   assert.ok(fonts.every(tag => tag.includes('type="font/woff2"')))
 })

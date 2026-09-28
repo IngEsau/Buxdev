@@ -1,0 +1,61 @@
+.button {
+  position: relative;
+  isolation: isolate;
+  transition: transform 150ms ease, background-color 180ms ease, box-shadow 180ms ease;
+}
+
+.button::before {
+  position: absolute;
+  inset: -1px;
+  z-index: 1;
+  padding: 1px;
+  border-radius: inherit;
+  content: "";
+  background: conic-gradient(from var(--specular-angle, 138deg),
+    transparent 0deg, rgb(225 237 255 / 95%) 12deg, transparent 58deg,
+    transparent 180deg, rgb(163 195 247 / 90%) 192deg, transparent 238deg);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: var(--specular-brightness, 0);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .button:hover:not(:disabled) {
+    transform: translateY(-2px);
+  }
+}
+
+.button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+.button:focus-visible {
+  outline: 2px solid var(--brand-hover);
+  outline-offset: 4px;
+}
+
+.button:disabled {
+  transform: none;
+}
+
+.button:disabled::before {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .button {
+    transition: none;
+  }
+
+  .button:hover:not(:disabled),
+  .button:active:not(:disabled) {
+    transform: none;
+  }
+
+  .button::before {
+    display: none;
+  }
+}

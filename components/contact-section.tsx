@@ -7,13 +7,14 @@ import Link from "next/link"
 import { ArrowUpRight, CheckCircle, Mail, Phone, RefreshDouble, Send, WarningCircle } from "iconoir-react"
 
 import { MotionReveal } from "@/components/motion-reveal"
-import { Button } from "@/components/ui/button"
+import { SpecularButton } from "@/components/effects/specular-button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/hooks/use-language"
 import { trackGenerateLead } from "@/lib/analytics"
+import { CONTACT_COUNTRIES, MAX_OTHER_INTEREST_LENGTH, getEmailError, getOtherInterestError, getPhoneError, normalizeNationalPhone } from "@/lib/contact-validation"
 import {
   ContactRequestError,
   isContactLeadType,
@@ -23,20 +24,11 @@ import {
 
 import styles from "./contact-section.module.css"
 
-const countryCodes = [
-  { code: "+1", country: "US/CA" },
-  { code: "+52", country: "MX" },
-  { code: "+34", country: "ES" },
-  { code: "+54", country: "AR" },
-  { code: "+56", country: "CL" },
-  { code: "+57", country: "CO" },
-]
-
-const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 const maxDescriptionLength = 2000
 
 type ContactFormData = {
   type: ContactLeadType | ""
+  otherInterest: string
   countryCode: string
   phone: string
   email: string
@@ -46,9 +38,11 @@ type ContactFormData = {
   website: string
 }
 
-type ValidatedField = "type" | "phone" | "email" | "description" | "privacyAcknowledged"
+type ValidatedField = "type" | "otherInterest" | "phone" | "email" | "description" | "privacyAcknowledged"
 type ContactErrorKey =
   | "typeRequired"
+  | "otherInterestRequired"
+  | "otherInterestInvalid"
   | "phoneRequired"
   | "phoneInvalid"
   | "emailRequired"
@@ -61,6 +55,7 @@ type SubmissionStatus = "idle" | "submitting" | "success" | "error" | "unavailab
 
 const fieldIds: Record<ValidatedField, string> = {
   type: "type",
+  otherInterest: "other-interest",
   phone: "phone",
   email: "email",
   description: "description",
@@ -69,6 +64,7 @@ const fieldIds: Record<ValidatedField, string> = {
 
 const createInitialFormData = (): ContactFormData => ({
   type: "",
+  otherInterest: "",
   countryCode: "+52",
   phone: "",
   email: "",
@@ -78,31 +74,24 @@ const createInitialFormData = (): ContactFormData => ({
   website: "",
 })
 
-const normalizeNationalPhone = (phone: string, countryCode: string) => {
-  const value = phone.trim()
-  const digits = value.replace(/\D/g, "")
-
-  if (!/^\+?[\d\s().-]+$/.test(value)) return null
-  if (!value.startsWith("+")) return digits
-
-  const countryDigits = countryCode.replace(/\D/g, "")
-  return digits.startsWith(countryDigits) ? digits.slice(countryDigits.length) : null
-}
-
-const getPhoneError = (phone: string, countryCode: string): ContactErrorKey | undefined => {
-  if (!phone.trim()) return "phoneRequired"
-
-  const nationalDigits = normalizeNationalPhone(phone, countryCode)
-  if (!nationalDigits) return "phoneInvalid"
-
-  const internationalLength = `${countryCode}${nationalDigits}`.replace(/\D/g, "").length
-  return nationalDigits.length < 7 || internationalLength > 15 ? "phoneInvalid" : undefined
+function validateField(field: ValidatedField, data: ContactFormData): ContactErrorKey | undefined {
+  switch (field) {
+    case "type": return isContactLeadType(data.type) ? undefined : "typeRequired"
+    case "otherInterest": return data.type === "otro" ? getOtherInterestError(data.otherInterest) : undefined
+    case "phone": return getPhoneError(data.phone, data.countryCode)
+    case "email": return getEmailError(data.email)
+    case "description": return !data.description.trim() ? "descriptionRequired"
+      : data.description.trim().length > maxDescriptionLength ? "descriptionTooLong" : undefined
+    case "privacyAcknowledged": return data.privacyAcknowledged ? undefined : "privacyRequired"
+  }
 }
 
 export function ContactSection() {
   const { language, t } = useLanguage()
   const [status, setStatus] = useState<SubmissionStatus>("idle")
   const [errors, setErrors] = useState<FormErrors>({})
+  const [touched, setTouched] = useState<Partial<Record<ValidatedField, boolean>>>({})
+  const [hasAttemptedSubmit, setHasAttemptedSubmit] = useState(false)
   const [formData, setFormData] = useState<ContactFormData>(createInitialFormData)
   const submissionInFlight = useRef(false)
   const submissionSequence = useRef(0)
@@ -120,67 +109,50 @@ export function ContactSection() {
     }
   }
 
-  const clearFieldError = (field: ValidatedField) => {
+  const updateFieldError = (field: ValidatedField, data: ContactFormData) => {
+    const error = validateField(field, data)
     setErrors((current) => {
-      if (!current[field]) return current
-
       const next = { ...current }
-      delete next[field]
+      if (error) next[field] = error
+      else delete next[field]
+      if (field === "type" && data.type !== "otro") delete next.otherInterest
       return next
     })
   }
 
+  const handleBlur = (field: ValidatedField, event: React.FocusEvent<HTMLElement>) => {
+    setTouched((current) => ({ ...current, [field]: true }))
+    // Do not move an action under the pointer by inserting an error before its click.
+    // Submit validates every field; returning to the options removes this field.
+    const nextTarget = event.relatedTarget instanceof HTMLElement ? event.relatedTarget : null
+    if (nextTarget?.matches('button[type="submit"]') || nextTarget?.classList.contains(styles.backToOptions)) return
+    updateFieldError(field, formData)
+  }
+
   const updateField = <Field extends keyof ContactFormData>(field: Field, value: ContactFormData[Field]) => {
     setFormData((current) => ({ ...current, [field]: value }))
-
-    if (field === "countryCode" && typeof value === "string") {
-      setErrors((current) => {
-        if (!current.phone) return current
-
-        const phoneError = getPhoneError(formData.phone, value)
+    const nextData = { ...formData, [field]: value }
+    if (field === "countryCode" && (touched.phone || errors.phone)) updateFieldError("phone", nextData)
+    else if (field === "type") {
+      if (value === "") setErrors((current) => {
         const next = { ...current }
-
-        if (phoneError) next.phone = phoneError
-        else delete next.phone
-
+        delete next.type
+        delete next.otherInterest
         return next
       })
-    } else if (
-      field === "type" ||
-      field === "phone" ||
-      field === "email" ||
-      field === "description" ||
-      field === "privacyAcknowledged"
-    ) {
-      clearFieldError(field)
+      else updateFieldError("type", nextData)
+    }
+    else if (field in fieldIds && (touched[field as ValidatedField] || errors[field as ValidatedField])) {
+      updateFieldError(field as ValidatedField, nextData)
     }
     clearTransientStatus()
   }
 
   const validateForm = () => {
     const nextErrors: FormErrors = {}
-    const email = formData.email.trim()
-    const description = formData.description.trim()
-
-    if (!isContactLeadType(formData.type)) nextErrors.type = "typeRequired"
-
-    const phoneError = getPhoneError(formData.phone, formData.countryCode)
-    if (phoneError) nextErrors.phone = phoneError
-
-    if (!email) {
-      nextErrors.email = "emailRequired"
-    } else if (!emailPattern.test(email)) {
-      nextErrors.email = "emailInvalid"
-    }
-
-    if (!description) {
-      nextErrors.description = "descriptionRequired"
-    } else if (description.length > maxDescriptionLength) {
-      nextErrors.description = "descriptionTooLong"
-    }
-
-    if (!formData.privacyAcknowledged) {
-      nextErrors.privacyAcknowledged = "privacyRequired"
+    for (const field of Object.keys(fieldIds) as ValidatedField[]) {
+      const error = validateField(field, formData)
+      if (error) nextErrors[field] = error
     }
 
     return nextErrors
@@ -196,6 +168,8 @@ export function ContactSection() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (submissionInFlight.current || isSubmitting || isUnavailable) return
+
+    setHasAttemptedSubmit(true)
 
     const nextErrors = validateForm()
     if (Object.keys(nextErrors).length > 0) {
@@ -217,6 +191,7 @@ export function ContactSection() {
     try {
       await sendContactRequest({
         type: leadType,
+        ...(leadType === "otro" ? { otherInterest: formData.otherInterest.trim() } : {}),
         email: formData.email.trim(),
         cellphone: `${formData.countryCode}${nationalDigits}`,
         description: formData.description.trim(),
@@ -231,6 +206,8 @@ export function ContactSection() {
         trackGenerateLead(leadType)
       }
       setFormData(createInitialFormData())
+      setTouched({})
+      setHasAttemptedSubmit(false)
     } catch (error) {
       setStatus(error instanceof ContactRequestError && error.status === 503 ? "unavailable" : "error")
     } finally {
@@ -238,7 +215,7 @@ export function ContactSection() {
     }
   }
 
-  const feedbackVisible = hasValidationErrors || status === "success" || status === "error" || isUnavailable
+  const feedbackVisible = (hasAttemptedSubmit && hasValidationErrors) || status === "success" || status === "error" || isUnavailable
 
   return (
     <section id="contacto" className={styles.section} aria-labelledby="contact-title">
@@ -334,7 +311,7 @@ export function ContactSection() {
                 </div>
               )}
 
-              {!isUnavailable && hasValidationErrors && (
+              {!isUnavailable && hasAttemptedSubmit && hasValidationErrors && (
                 <div
                   id="contact-form-feedback"
                   className={styles.formFeedback}
@@ -390,35 +367,68 @@ export function ContactSection() {
               </div>
 
               <div className={styles.field}>
-                <Label htmlFor="type">{t.contact.formTitle}</Label>
-                <Select
-                  name="type"
-                  value={formData.type}
-                  onValueChange={(value) => {
-                    if (isContactLeadType(value)) updateField("type", value)
-                  }}
-                  disabled={formDisabled}
-                  required
-                >
-                  <SelectTrigger
-                    id="type"
-                    className={styles.selectTrigger}
-                    aria-required="true"
-                    aria-invalid={Boolean(errors.type)}
-                    aria-describedby={errors.type ? "type-error" : undefined}
-                  >
-                    <SelectValue placeholder={t.contact.formTitle} />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="cotizacion">{t.contact.options.quote}</SelectItem>
-                    <SelectItem value="informacion">{t.contact.options.info}</SelectItem>
-                    <SelectItem value="duda">{t.contact.options.question}</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.type && (
-                  <p id="type-error" className={styles.fieldError}>
-                    {t.contact.errors[errors.type]}
-                  </p>
+                {formData.type === "otro" ? (
+                  <>
+                    <Label htmlFor="other-interest">{t.contact.otherInterestLabel}</Label>
+                    <Input
+                      id="other-interest"
+                      name="otherInterest"
+                      value={formData.otherInterest}
+                      onChange={(event) => updateField("otherInterest", event.target.value)}
+                      onBlur={(event) => handleBlur("otherInterest", event)}
+                      placeholder={t.contact.otherInterestPlaceholder}
+                      maxLength={MAX_OTHER_INTEREST_LENGTH}
+                      required
+                      disabled={formDisabled}
+                      className={styles.input}
+                      aria-invalid={Boolean(errors.otherInterest)}
+                      aria-describedby={errors.otherInterest ? "other-interest-error" : undefined}
+                    />
+                    {errors.otherInterest && <p id="other-interest-error" className={styles.fieldError} aria-live="polite">{t.contact.errors[errors.otherInterest]}</p>}
+                    <button type="button" className={styles.backToOptions} disabled={formDisabled} onClick={() => {
+                      updateField("type", "")
+                      window.requestAnimationFrame(() => document.getElementById("type")?.focus())
+                    }}>{t.contact.backToOptions}</button>
+                  </>
+                ) : (
+                  <>
+                    <Label htmlFor="type">{t.contact.interestLabel}</Label>
+                    <Select
+                      name="type"
+                      value={formData.type}
+                      onValueChange={(value) => {
+                        if (!isContactLeadType(value)) return
+                        updateField("type", value)
+                        if (value === "otro") window.requestAnimationFrame(() => document.getElementById("other-interest")?.focus())
+                      }}
+                      disabled={formDisabled}
+                      required
+                    >
+                      <SelectTrigger
+                        id="type"
+                        className={styles.selectTrigger}
+                        aria-required="true"
+                        aria-invalid={Boolean(errors.type)}
+                        aria-describedby={errors.type ? "type-error" : undefined}
+                      >
+                        <SelectValue placeholder={t.contact.interestPlaceholder} />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="cotizacion">{t.contact.options.quote}</SelectItem>
+                        <SelectItem value="fullstack">{t.contact.options.fullstack}</SelectItem>
+                        <SelectItem value="ux-ui">{t.contact.options.design}</SelectItem>
+                        <SelectItem value="ciberseguridad">{t.contact.options.security}</SelectItem>
+                        <SelectItem value="automatizacion">{t.contact.options.automation}</SelectItem>
+                        <SelectItem value="rework">{t.contact.options.rework}</SelectItem>
+                        <SelectItem value="otro">{t.contact.options.other}</SelectItem>
+                      </SelectContent>
+                    </Select>
+                    {errors.type && (
+                      <p id="type-error" className={styles.fieldError}>
+                        {t.contact.errors[errors.type]}
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
 
@@ -441,7 +451,7 @@ export function ContactSection() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
-                      {countryCodes.map((item) => (
+                      {CONTACT_COUNTRIES.map((item) => (
                         <SelectItem key={item.code} value={item.code}>
                           {item.code} {item.country}
                         </SelectItem>
@@ -454,18 +464,21 @@ export function ContactSection() {
                     type="tel"
                     value={formData.phone}
                     onChange={(event) => updateField("phone", event.target.value)}
-                    placeholder="222 1254 567"
+                    onBlur={(event) => handleBlur("phone", event)}
+                    placeholder={formData.countryCode === "+52" ? "222 123 4567" : t.contact.phone}
+                    maxLength={32}
                     required
                     inputMode="tel"
                     autoComplete="tel-national"
                     className={styles.input}
                     disabled={formDisabled}
                     aria-invalid={Boolean(errors.phone)}
-                    aria-describedby={errors.phone ? "phone-error" : undefined}
+                    aria-describedby={errors.phone ? "phone-hint phone-error" : "phone-hint"}
                   />
                 </div>
+                <p id="phone-hint" className={styles.fieldHint}>{formData.countryCode === "+52" ? t.contact.phoneHintMexico : t.contact.phoneHintInternational}</p>
                 {errors.phone && (
-                  <p id="phone-error" className={styles.fieldError}>
+                  <p id="phone-error" className={styles.fieldError} aria-live="polite">
                     {t.contact.errors[errors.phone]}
                   </p>
                 )}
@@ -479,6 +492,7 @@ export function ContactSection() {
                   type="email"
                   value={formData.email}
                   onChange={(event) => updateField("email", event.target.value)}
+                  onBlur={(event) => handleBlur("email", event)}
                   placeholder={t.contact.emailPlaceholder}
                   required
                   maxLength={254}
@@ -489,7 +503,7 @@ export function ContactSection() {
                   aria-describedby={errors.email ? "email-error" : undefined}
                 />
                 {errors.email && (
-                  <p id="email-error" className={styles.fieldError}>
+                  <p id="email-error" className={styles.fieldError} aria-live="polite">
                     {t.contact.errors[errors.email]}
                   </p>
                 )}
@@ -502,6 +516,7 @@ export function ContactSection() {
                   name="description"
                   value={formData.description}
                   onChange={(event) => updateField("description", event.target.value)}
+                  onBlur={(event) => handleBlur("description", event)}
                   placeholder={t.contact.descriptionPlaceholder}
                   required
                   rows={5}
@@ -517,13 +532,20 @@ export function ContactSection() {
                 )}
               </div>
 
-              <div id="contact-privacy-summary" className={styles.privacyNotice} lang="es">
-                {language === "en" && <small lang="en">{t.legal.languageNotice}</small>}
-                <p>
-                  {t.contact.privacyNotice}{" "}
-                  <Link href="/privacidad/">{t.contact.privacyNoticeLink}</Link>.
-                </p>
-              </div>
+              <details id="contact-privacy-summary" className={styles.privacyNotice} lang="es">
+                <summary>
+                  <span className={styles.privacyPreview}>{t.contact.privacyNotice}</span>
+                  <span className={styles.privacyReadMore} lang={language}>{t.contact.privacyReadMore}</span>
+                  <span className={styles.privacyReadLess} lang={language}>{t.contact.privacyReadLess}</span>
+                </summary>
+                <div className={styles.privacyContent}>
+                  {language === "en" && <small lang="en">{t.legal.languageNotice}</small>}
+                  <p>
+                    {t.contact.privacyNotice}{" "}
+                    <Link href="/privacidad/">{t.contact.privacyNoticeLink}</Link>.
+                  </p>
+                </div>
+              </details>
 
               <div className={styles.consentGroup}>
                 <div className={styles.consentControl} data-invalid={Boolean(errors.privacyAcknowledged)}>
@@ -569,7 +591,7 @@ export function ContactSection() {
                 </div>
               </div>
 
-              <Button type="submit" className={styles.submitButton} disabled={formDisabled}>
+              <SpecularButton type="submit" className={styles.submitButton} disabled={formDisabled}>
                 <span>
                   {isUnavailable
                     ? t.contact.unavailableSubmit
@@ -582,7 +604,7 @@ export function ContactSection() {
                 ) : (
                   <Send aria-hidden="true" />
                 )}
-              </Button>
+              </SpecularButton>
             </form>
           </div>
         </div>

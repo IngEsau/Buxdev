@@ -80,6 +80,22 @@ test('PHP contact: HTTP, validation, private rate limit, encoding and generic er
       { email: [] }, { description: {} }, { privacyAcknowledged: 'true' }, { privacyAcknowledged: false },
       { whatsappConsent: 'false' }, { to: 'other@example.test' }, { apiKey: 'untrusted' }, { website: 'bot' },
     ]) await request({ body: { ...payload, ...override }, status: 400 })
+    for (const type of ['fullstack', 'ux-ui', 'ciberseguridad', 'automatizacion', 'rework']) {
+      await request({ body: { ...payload, type } })
+    }
+    for (const override of [
+      { cellphone: '+522221234' }, { cellphone: '+5222212345678' }, { cellphone: '+520000000000' },
+      { cellphone: '+522222222222' }, { cellphone: '+12021550123' },
+      { type: 'otro' }, { type: 'otro', otherInterest: '' }, { type: 'otro', otherInterest: null },
+      { type: 'otro', otherInterest: [] }, { type: 'otro', otherInterest: 'x'.repeat(161) },
+      { type: 'otro', otherInterest: 'Consulta\r\nBcc: other@example.test' },
+      { type: 'cotizacion', otherInterest: 'Datos inesperados' },
+    ]) await request({ body: { ...payload, ...override }, status: 400 })
+    await request({ body: { ...payload, type: 'otro', otherInterest: '<script>consulta</script> & integración' } })
+    const otherEmail = JSON.parse(await readFile(resolve(tmp, 'last-email.json'), 'utf8'))
+    assert.match(otherEmail.htmlContent, /&lt;script&gt;consulta&lt;\/script&gt;/)
+    assert.doesNotMatch(otherEmail.htmlContent, /<script>/)
+    assert.match(otherEmail.textContent, /Otro motivo: <script>consulta<\/script> & integración/)
     await request({ body: { ...payload, description: '<script>alert("QA")</script> & café 漢字\nSegunda línea' } })
     const email = JSON.parse(await readFile(resolve(tmp, 'last-email.json'), 'utf8'))
     assert.match(email.htmlContent, /&lt;script&gt;/)

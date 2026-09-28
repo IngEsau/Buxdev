@@ -52,6 +52,27 @@ function buxdev_honeypot_is_filled(mixed $payload): bool
         && trim($payload['website']) !== '';
 }
 
+function buxdev_phone_is_valid(string $value): bool
+{
+    if (!preg_match('/^\+[0-9 ().-]+$/', $value)) return false;
+    $digits = preg_replace('/\D/', '', $value);
+    if ($digits === null || strlen($digits) < 8 || strlen($digits) > 15 || $digits[0] === '0') return false;
+    // Keep these contact-number lengths in sync with lib/contact-validation.ts.
+    $plans = ['1' => [10, 10], '52' => [10, 10], '34' => [9, 9],
+        '54' => [10, 11], '56' => [9, 9], '57' => [10, 10]];
+    foreach ($plans as $prefix => [$min, $max]) {
+        $prefix = (string) $prefix;
+        if (!str_starts_with($digits, $prefix)) continue;
+        $national = substr($digits, strlen($prefix));
+        if (strlen($national) < $min || strlen($national) > $max
+            || str_starts_with($national, '0') || preg_match('/^(\d)\1+$/', $national)) return false;
+        if ($prefix === '1' && !preg_match('/^[2-9]\d{2}[2-9]\d{6}$/', $national)) return false;
+        if ($prefix === '54' && strlen($national) === 11 && !str_starts_with($national, '9')) return false;
+        return true;
+    }
+    return !preg_match('/^(\d)\1+$/', $digits);
+}
+
 /**
  * @param mixed $payload
  * @return array{type: string, service_label: string, email: string, cellphone: string, description: string, privacyAcknowledged: true, whatsappConsent: bool, website: string}|null
@@ -62,11 +83,12 @@ function buxdev_validate_payload(mixed $payload): ?array
         return null;
     }
 
-    if (array_diff(array_keys($payload), ['type', 'email', 'cellphone', 'description', 'privacyAcknowledged', 'whatsappConsent', 'website']) !== []) {
+    if (array_diff(array_keys($payload), ['type', 'otherInterest', 'email', 'cellphone', 'description', 'privacyAcknowledged', 'whatsappConsent', 'website']) !== []) {
         return null;
     }
 
     $type = $payload['type'] ?? null;
+    $otherInterest = array_key_exists('otherInterest', $payload) ? $payload['otherInterest'] : '';
     $email = $payload['email'] ?? null;
     $cellphone = $payload['cellphone'] ?? null;
     $description = $payload['description'] ?? null;
@@ -76,6 +98,7 @@ function buxdev_validate_payload(mixed $payload): ?array
 
     if (
         !is_string($type)
+        || !is_string($otherInterest)
         || !is_string($email)
         || !is_string($cellphone)
         || !is_string($description)
@@ -90,16 +113,23 @@ function buxdev_validate_payload(mixed $payload): ?array
         'cotizacion' => 'Cotización',
         'informacion' => 'Información',
         'duda' => 'Duda',
+        'fullstack' => 'Desarrollo Fullstack',
+        'ux-ui' => 'UX/UI Design',
+        'ciberseguridad' => 'Ciberseguridad',
+        'automatizacion' => 'IA & Automatización',
+        'rework' => 'Mejorar un proyecto existente',
+        'otro' => 'Otro motivo',
     ];
 
     // Reject control characters in single-line fields before normalization.
-    if (preg_match('/[\x00-\x1F\x7F]/', $type . $email . $cellphone . $website)
+    if (preg_match('/[\x00-\x1F\x7F]/', $type . $otherInterest . $email . $cellphone . $website)
         || strlen($type) > 100 || strlen($cellphone) > 32
         || preg_match('/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/', $description)) {
         return null;
     }
 
     $type = trim($type);
+    $otherInterest = trim($otherInterest);
     $email = trim($email);
     $cellphone = trim($cellphone);
     $description = trim($description);
@@ -109,16 +139,17 @@ function buxdev_validate_payload(mixed $payload): ?array
         return null;
     }
 
+    $otherLength = buxdev_utf8_length($otherInterest);
+    if ($otherLength === null || ($type === 'otro' && ($otherLength < 1 || $otherLength > 160))
+        || ($type !== 'otro' && $otherLength !== 0)) {
+        return null;
+    }
+
     if (strlen($email) > 254 || filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
         return null;
     }
 
-    if (!preg_match('/^\+?[0-9\s().-]+$/', $cellphone)) {
-        return null;
-    }
-
-    $phoneDigits = preg_replace('/\D/', '', $cellphone);
-    if ($phoneDigits === null || strlen($phoneDigits) < 8 || strlen($phoneDigits) > 15) {
+    if (!buxdev_phone_is_valid($cellphone)) {
         return null;
     }
 
@@ -137,7 +168,7 @@ function buxdev_validate_payload(mixed $payload): ?array
 
     return [
         'type' => $type,
-        'service_label' => $services[$type],
+        'service_label' => $services[$type] . ($type === 'otro' ? ': ' . $otherInterest : ''),
         'email' => $email,
         'cellphone' => $cellphone,
         'description' => $description,

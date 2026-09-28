@@ -1,4 +1,6 @@
-export const CONTACT_LEAD_TYPES = ["cotizacion", "informacion", "duda"] as const
+export const CONTACT_LEAD_TYPES = [
+  "cotizacion", "informacion", "duda", "fullstack", "ux-ui", "ciberseguridad", "automatizacion", "rework", "otro",
+] as const
 
 export type ContactLeadType = (typeof CONTACT_LEAD_TYPES)[number]
 
@@ -8,6 +10,7 @@ export function isContactLeadType(value: string): value is ContactLeadType {
 
 export type ContactRequestPayload = {
   type: ContactLeadType
+  otherInterest?: string
   email: string
   cellphone: string
   description: string

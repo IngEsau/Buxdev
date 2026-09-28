@@ -7,21 +7,6 @@
   background: var(--background);
 }
 
-.about::after {
-  position: absolute;
-  top: 34%;
-  left: 50%;
-  z-index: -1;
-  width: min(72vw, 58rem);
-  aspect-ratio: 1.35;
-  border-radius: 50%;
-  content: "";
-  background: rgb(35 86 167 / 12%);
-  filter: blur(7rem);
-  transform: translateX(-50%);
-  pointer-events: none;
-}
-
 .grid {
   position: absolute;
   inset: 0;
@@ -44,7 +29,65 @@
 }
 
 .introduction {
+  position: relative;
+  isolation: isolate;
   padding-bottom: clamp(5rem, 9vw, 8rem);
+}
+
+.introContent {
+  position: relative;
+  z-index: 1;
+}
+
+.ambient {
+  position: absolute;
+  top: calc(-1 * (var(--header-height) + clamp(4.5rem, 8vw, 7rem)));
+  bottom: -1.5rem;
+  left: 50%;
+  z-index: -1;
+  width: 100vw;
+  overflow: hidden;
+  transform: translateX(-50%);
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(ellipse at 72% 62%, #000 5%, #000 30%, transparent 74%);
+  mask-image: radial-gradient(ellipse at 72% 62%, #000 5%, #000 30%, transparent 74%);
+}
+
+.expandSurface {
+  position: absolute;
+  inset: 0;
+  clip-path: inset(11% 14%);
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 14%, #000 26%, #000 74%, transparent 86%),
+    linear-gradient(180deg, transparent 11%, #000 23%, #000 77%, transparent 89%);
+  mask-image:
+    linear-gradient(90deg, transparent 14%, #000 26%, #000 74%, transparent 86%),
+    linear-gradient(180deg, transparent 11%, #000 23%, #000 77%, transparent 89%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+  transform: scale(1.12);
+}
+
+.aurora {
+  position: absolute;
+  inset: 0;
+  opacity: 0.75;
+  background:
+    radial-gradient(ellipse at 72% 65%, rgb(44 76 155 / 48%), transparent 60%),
+    radial-gradient(ellipse at 88% 65%, rgb(97 141 197 / 20%), transparent 48%);
+  -webkit-mask-image: linear-gradient(to bottom, transparent 10%, #000 38%, #000 74%, transparent);
+  mask-image: linear-gradient(to bottom, transparent 10%, #000 38%, #000 74%, transparent);
+}
+
+.aurora[data-aurora-ready="true"] {
+  background: none;
+}
+
+.aurora canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  transform: scaleY(-1);
 }
 
 .introCopy {
@@ -85,6 +128,10 @@
 }
 
 @media (max-width: 48rem) {
+  .aurora {
+    opacity: 0.48;
+  }
+
   .introCopy {
     grid-template-columns: 1fr;
     gap: 2.25rem;
@@ -111,6 +158,13 @@
   }
 }
 
-:global(html:not(.dark)) .about::after {
+:global(html:not(.dark)) .ambient {
   display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .expandSurface {
+    clip-path: none;
+    transform: none;
+  }
 }

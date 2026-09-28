@@ -1,0 +1,33 @@
+.text {
+  position: relative;
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.canvas {
+  position: absolute;
+  top: -12px;
+  left: -12px;
+  width: calc(100% + 24px);
+  height: calc(100% + 24px);
+  opacity: 0;
+  pointer-events: none;
+}
+
+.text[data-tech-ready="true"] .content {
+  color: transparent;
+}
+
+.text[data-tech-ready="true"] .canvas {
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .text[data-tech-ready="true"] .content {
+    color: inherit;
+  }
+
+  .canvas {
+    display: none;
+  }
+}

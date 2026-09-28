@@ -14,7 +14,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Textarea } from "@/components/ui/textarea"
 import { useLanguage } from "@/hooks/use-language"
 import { trackGenerateLead } from "@/lib/analytics"
-import { CONTACT_COUNTRIES, MAX_OTHER_INTEREST_LENGTH, getEmailError, getOtherInterestError, getPhoneError, normalizeNationalPhone } from "@/lib/contact-validation"
+import { CONTACT_COUNTRIES, MAX_OTHER_INTEREST_LENGTH, getEmailError, getOtherInterestError, getPhoneError, normalizeNationalPhone, parsePhoneInput } from "@/lib/contact-validation"
 import {
   ContactRequestError,
   isContactLeadType,
@@ -45,6 +45,8 @@ type ContactErrorKey =
   | "otherInterestInvalid"
   | "phoneRequired"
   | "phoneInvalid"
+  | "phoneInputInvalid"
+  | "phoneCountryChanged"
   | "emailRequired"
   | "emailInvalid"
   | "descriptionRequired"
@@ -100,6 +102,7 @@ export function ContactSection() {
   const isUnavailable = status === "unavailable"
   const hasValidationErrors = Object.keys(errors).length > 0
   const formDisabled = isSubmitting || isUnavailable
+  const phoneMaxLength = CONTACT_COUNTRIES.find((country) => country.code === formData.countryCode)!.max
   const primaryPhoneHref = `tel:${t.footer.primaryPhone.replace(/[^\d+]/g, "")}`
   const secondaryPhoneHref = `tel:${t.footer.secondaryPhone.replace(/[^\d+]/g, "")}`
 
@@ -145,6 +148,42 @@ export function ContactSection() {
     else if (field in fieldIds && (touched[field as ValidatedField] || errors[field as ValidatedField])) {
       updateFieldError(field as ValidatedField, nextData)
     }
+    clearTransientStatus()
+  }
+
+  const updatePhone = (value: string) => {
+    const parsed = parsePhoneInput(value, formData.countryCode)
+    if (!parsed) {
+      setErrors((current) => ({ ...current, phone: "phoneInputInvalid" }))
+      clearTransientStatus()
+      return
+    }
+    const nextData = { ...formData, ...parsed }
+    setFormData(nextData)
+    if (touched.phone || errors.phone) updateFieldError("phone", nextData)
+    clearTransientStatus()
+  }
+
+  const handlePhonePaste = (event: React.ClipboardEvent<HTMLInputElement>) => {
+    event.preventDefault()
+    const pasted = event.clipboardData.getData("text")
+    const input = event.currentTarget
+    // A complete international number replaces the national field. Local
+    // pastes respect the selection, before the browser applies maxLength.
+    const value = pasted.trim().startsWith("+") ? pasted
+      : formData.phone.slice(0, input.selectionStart ?? 0) + pasted
+        + formData.phone.slice(input.selectionEnd ?? formData.phone.length)
+    updatePhone(value)
+  }
+
+  const updateCountryCode = (countryCode: string) => {
+    const plan = CONTACT_COUNTRIES.find((country) => country.code === countryCode)
+    if (!plan) return
+    const tooLong = formData.phone.length > plan.max
+    const nextData = { ...formData, countryCode, phone: tooLong ? "" : formData.phone }
+    setFormData(nextData)
+    if (tooLong) setErrors((current) => ({ ...current, phone: "phoneCountryChanged" }))
+    else if (touched.phone || errors.phone) updateFieldError("phone", nextData)
     clearTransientStatus()
   }
 
@@ -440,7 +479,7 @@ export function ContactSection() {
                   <Select
                     name="countryCode"
                     value={formData.countryCode}
-                    onValueChange={(value) => updateField("countryCode", value)}
+                    onValueChange={updateCountryCode}
                     disabled={formDisabled}
                   >
                     <SelectTrigger
@@ -463,12 +502,13 @@ export function ContactSection() {
                     name="phone"
                     type="tel"
                     value={formData.phone}
-                    onChange={(event) => updateField("phone", event.target.value)}
+                    onChange={(event) => updatePhone(event.target.value)}
+                    onPaste={handlePhonePaste}
                     onBlur={(event) => handleBlur("phone", event)}
                     placeholder={formData.countryCode === "+52" ? "222 123 4567" : t.contact.phone}
-                    maxLength={32}
+                    maxLength={phoneMaxLength}
                     required
-                    inputMode="tel"
+                    inputMode="numeric"
                     autoComplete="tel-national"
                     className={styles.input}
                     disabled={formDisabled}

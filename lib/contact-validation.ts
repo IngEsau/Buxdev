@@ -10,6 +10,23 @@ export const CONTACT_COUNTRIES = [
 
 export const MAX_OTHER_INTEREST_LENGTH = 160
 
+// Only an explicit international prefix identifies a calling plan. National
+// digits alone cannot distinguish countries (and +1 is shared by US/CA).
+export function parsePhoneInput(phone: string, countryCode: string): { phone: string; countryCode: string } | null {
+  if (/[\x00-\x1f\x7f]/.test(phone)) return null
+  const value = phone.trim()
+  if (value && !/^\+?[0-9 ().-]+$/.test(value)) return null
+  const digits = value.replace(/\D/g, "")
+  const plan = value.startsWith("+")
+    ? CONTACT_COUNTRIES.find((country) => digits.startsWith(country.code.slice(1)))
+    : CONTACT_COUNTRIES.find((country) => country.code === countryCode)
+  if (!plan) return null
+  const national = value.startsWith("+") ? digits.slice(plan.code.length - 1) : digits
+  // Reject, never truncate a pasted/autofilled number into another destination.
+  if (national.length > plan.max) return null
+  return { phone: national, countryCode: plan.code }
+}
+
 export function normalizeNationalPhone(phone: string, countryCode: string): string | null {
   if (/[\x00-\x1f\x7f]/.test(phone)) return null
   const value = phone.trim()

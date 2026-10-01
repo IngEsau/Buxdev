@@ -13,6 +13,13 @@ export const PRIMARY_PHONE = "+522211310600"
 export const CONTACT_EMAIL = "info@buxdev.com"
 
 export const INDEXABLE_PATHS = ["/", "/about/", "/services/", "/contact/"] as const
+export const WORK_INDEXABLE_PATHS = [
+  "/work/",
+  "/work/montblan-mobile/",
+  "/work/sociograma-utp/",
+  "/work/valeria-herrera/",
+  "/work/backstabber-toolkit/",
+] as const
 
 export const INDEX_ROBOTS: Metadata["robots"] = {
   index: true,

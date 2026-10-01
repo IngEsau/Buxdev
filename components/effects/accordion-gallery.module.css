@@ -81,7 +81,7 @@
 @media (max-width: 40rem) {
   .gallery { flex-direction: column; height: clamp(36rem, 85svh, 42rem); }
   .media { width: 100%; height: calc((clamp(36rem, 85svh, 42rem) - 30px) * 0.62); }
-  .image { object-position: center; }
+  .image { object-fit: cover; object-position: center top; }
   .label { left: 16px; right: 16px; bottom: 16px; gap: 10px; opacity: 1; font-size: 0.85rem; }
   .panel:not([data-active="true"]) .shade { background: rgb(8 12 20 / 80%); }
   .panel:not([data-active="true"]) .bar { background: #8b9aaf; }

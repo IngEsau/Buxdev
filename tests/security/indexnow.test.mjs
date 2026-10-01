@@ -84,6 +84,23 @@ test('Exported blog URLs may appear in the sitemap without extending notificatio
   }
 })
 
+test('Published work routes require real static pages and never expand IndexNow notifications', async () => {
+  const root = await fixture()
+  const paths = ['work', 'work/montblan-mobile', 'work/sociograma-utp',
+    'work/valeria-herrera', 'work/backstabber-toolkit']
+  try {
+    await writeFile(resolve(root, 'out/sitemap.xml'), xml([...urls, ...paths.map(path => `https://buxdev.com/${path}/`)]))
+    await assert.rejects(prepareNotification(root), /ENOENT/)
+    for (const path of paths) {
+      await mkdir(resolve(root, 'out', path), { recursive: true })
+      await writeFile(resolve(root, 'out', path, 'index.html'), '<h1>Work</h1>')
+    }
+    assert.deepEqual((await prepareNotification(root)).urlList, urls)
+  } finally {
+    await rm(root, { recursive: true, force: true })
+  }
+})
+
 test('Deploy notifies only after successful FTP; failed notification preserves exit 0 (offline stubs)', async () => {
   const root = await fixture()
   try {

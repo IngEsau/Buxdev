@@ -10,10 +10,9 @@ import { useLanguage } from "@/hooks/use-language"
 import styles from "./portfolio-section.module.css"
 
 const projects = [
-  { id: "valeriaHerrera", folder: "valeria-herrera" },
-  { id: "bandasAsesoria", folder: "bandas-asesoria" },
-  { id: "wordpressIncidentResponse", folder: "wordpress-incident-response" },
-  { id: "portfolio", folder: "portfolio" },
+  { id: "valeriaHerrera", image: "/work/valeria-herrera/desktop.webp", mobileImage: "/work/valeria-herrera/mobile.webp" },
+  { id: "sociogramaUtp", image: "/work/sociograma-utp/admin-panel.webp", mobileImage: "/work/sociograma-utp/public-login-mobile.webp" },
+  { id: "bandasAsesoria", image: "/work/bandas-asesoria/desktop.webp", mobileImage: "/work/bandas-asesoria/mobile.webp" },
 ] as const
 
 export function PortfolioSection() {
@@ -36,8 +35,8 @@ export function PortfolioSection() {
           label={t.portfolio.title}
           items={projects.map(project => ({
             id: project.id,
-            image: `/work/${project.folder}/desktop.webp`,
-            mobileImage: `/work/${project.folder}/mobile.webp`,
+            image: project.image,
+            mobileImage: project.mobileImage,
             label: t.portfolio.projects[project.id].title,
           }))}
         />

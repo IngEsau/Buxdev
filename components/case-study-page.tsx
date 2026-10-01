@@ -30,6 +30,8 @@ interface CaseStudyGalleryItem {
   src: string
   alt: string
   caption: string
+  portrait?: boolean
+  uncropped?: boolean
 }
 
 export interface CaseStudyContent {
@@ -40,33 +42,42 @@ export interface CaseStudyContent {
   categories: readonly string[]
   categoriesLabel: string
   facts: readonly CaseStudyFact[]
-  visitSite: string
+  attribution?: string
+  referencesLabel?: string
+  references?: readonly { label: string; url: string }[]
+  visitSite?: string
   sections: readonly CaseStudySection[]
-  galleryLabel: string
-  galleryTitle: string
-  galleryDescription: string
-  gallery: readonly CaseStudyGalleryItem[]
-  finalLabel: string
-  finalTitle: string
-  finalDescription: string
-  visitProject: string
+  galleryLabel?: string
+  galleryTitle?: string
+  galleryDescription?: string
+  gallery?: readonly CaseStudyGalleryItem[]
+  finalLabel?: string
+  finalTitle?: string
+  finalDescription?: string
+  visitProject?: string
 }
 
 interface CaseStudyPageProps {
   content: CaseStudyContent
-  projectUrl: string
-  desktopCover: {
+  compactMobile?: boolean
+  projectUrl?: string
+  desktopCover?: {
     src: string
     alt: string
+    width?: number
+    height?: number
   }
-  mobileCover: {
+  mobileCover?: {
     src: string
     alt: string
+    width?: number
+    height?: number
   }
 }
 
 export function CaseStudyPage({
   content,
+  compactMobile = false,
   projectUrl,
   desktopCover,
   mobileCover,
@@ -89,6 +100,7 @@ export function CaseStudyPage({
                 <p className={styles.eyebrow}>{content.label}</p>
                 <h1 id="case-study-title">{content.title}</h1>
                 <p className={styles.heroDescription}>{content.description}</p>
+                {content.attribution ? <p className={styles.attributionNote}>{content.attribution}</p> : null}
 
                 <ul className={styles.categories} aria-label={content.categoriesLabel}>
                   {content.categories.map((category) => (
@@ -107,41 +119,39 @@ export function CaseStudyPage({
                   ))}
                 </dl>
 
-                <a
-                  href={projectUrl}
-                  className={styles.primaryAction}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>{content.visitSite}</span>
-                  <ArrowUpRight aria-hidden="true" />
-                </a>
+                {projectUrl && content.visitSite ? (
+                  <a href={projectUrl} className={styles.primaryAction} target="_blank" rel="noopener noreferrer">
+                    <span>{content.visitSite}</span>
+                    <ArrowUpRight aria-hidden="true" />
+                  </a>
+                ) : null}
+                {content.references?.length ? (
+                  <nav className={styles.references} aria-label={content.referencesLabel}>
+                    {content.references.map((reference) => (
+                      <a key={reference.url} href={reference.url} target="_blank" rel="noopener noreferrer">
+                        {reference.label}<ArrowUpRight aria-hidden="true" />
+                      </a>
+                    ))}
+                  </nav>
+                ) : null}
               </div>
             </div>
           </MotionReveal>
 
-          <MotionReveal className={styles.showcase} delay={0.08} revealOnView={false}>
-            <div className={styles.desktopFrame}>
-              <Image
-                src={desktopCover.src}
-                alt={desktopCover.alt}
-                width={1600}
-                height={834}
-                priority
-                sizes="(max-width: 48rem) 92vw, 75rem"
-              />
-            </div>
-            <div className={styles.mobileFrame}>
-              <Image
-                src={mobileCover.src}
-                alt={mobileCover.alt}
-                width={408}
-                height={901}
-                priority
-                sizes="(max-width: 48rem) 25vw, 12rem"
-              />
-            </div>
-          </MotionReveal>
+          {desktopCover || mobileCover ? (
+            <MotionReveal className={`${styles.showcase} ${desktopCover && !mobileCover ? styles.showcaseDesktopOnly : ""} ${mobileCover && !desktopCover ? styles.showcaseMobileOnly : ""} ${compactMobile ? styles.showcaseCompactMobile : ""}`} delay={0.08} revealOnView={false}>
+              {desktopCover ? (
+                <div className={styles.desktopFrame}>
+                  <Image src={desktopCover.src} alt={desktopCover.alt} width={desktopCover.width ?? 1600} height={desktopCover.height ?? 834} priority sizes="(max-width: 48rem) 92vw, 75rem" />
+                </div>
+              ) : null}
+              {mobileCover ? (
+                <div className={styles.mobileFrame}>
+                  <Image src={mobileCover.src} alt={mobileCover.alt} width={mobileCover.width ?? 408} height={mobileCover.height ?? 901} priority sizes="(max-width: 48rem) 25vw, 12rem" />
+                </div>
+              ) : null}
+            </MotionReveal>
+          ) : null}
         </div>
       </section>
 
@@ -196,7 +206,7 @@ export function CaseStudyPage({
         </div>
       </div>
 
-      <section className={styles.gallery} aria-labelledby="case-study-gallery-title">
+      {content.gallery?.length && content.galleryTitle ? <section className={`${styles.gallery} ${compactMobile ? styles.galleryCompactMobile : ""}`} aria-labelledby="case-study-gallery-title">
         <div className={styles.galleryGrid} aria-hidden="true" />
         <div className={styles.inner}>
           <MotionReveal className={styles.galleryHeader}>
@@ -211,16 +221,16 @@ export function CaseStudyPage({
             {content.gallery.map((item, index) => (
               <MotionReveal
                 key={item.src}
-                className={index === 0 ? styles.galleryItemWide : styles.galleryItem}
+                className={index === 0 && !compactMobile ? styles.galleryItemWide : styles.galleryItem}
               >
                 <figure>
-                  <div className={styles.galleryImage}>
+                  <div className={`${styles.galleryImage} ${item.portrait ? styles.galleryImagePortrait : ""} ${item.uncropped ? styles.galleryImageUncropped : ""}`}>
                     <Image
                       src={item.src}
                       alt={item.alt}
-                      width={1440}
-                      height={900}
-                      sizes={index === 0 ? "(max-width: 48rem) 92vw, 75rem" : "(max-width: 48rem) 92vw, 37rem"}
+                      width={item.portrait ? 393 : 1440}
+                      height={item.portrait ? 869 : 900}
+                      sizes={compactMobile ? "(max-width: 48rem) 18rem, 20rem" : index === 0 ? "(max-width: 48rem) 92vw, 75rem" : "(max-width: 48rem) 92vw, 37rem"}
                     />
                   </div>
                   <figcaption>
@@ -232,9 +242,9 @@ export function CaseStudyPage({
             ))}
           </div>
         </div>
-      </section>
+      </section> : null}
 
-      <section className={styles.finalCta} aria-labelledby="case-study-final-title">
+      {projectUrl && content.finalTitle && content.visitProject ? <section className={styles.finalCta} aria-labelledby="case-study-final-title">
         <div className={styles.inner}>
           <MotionReveal className={styles.finalLayout}>
             <div>
@@ -253,7 +263,7 @@ export function CaseStudyPage({
             </a>
           </MotionReveal>
         </div>
-      </section>
+      </section> : null}
     </main>
   )
 }

@@ -91,6 +91,11 @@
   border-top: 1px solid var(--border-strong);
 }
 
+.projectCardTextOnly .projectBody {
+  min-height: 15rem;
+  padding-top: clamp(2rem, 6vw, 4rem);
+}
+
 .projectCover {
   position: relative;
   aspect-ratio: 8 / 5;
@@ -107,12 +112,67 @@
   transition: border-color 220ms ease;
 }
 
+.projectCoverMobileOnly {
+  aspect-ratio: 1 / 1;
+}
+
+.projectCoverLogo {
+  display: grid;
+  place-items: center;
+}
+
+.logoFrame {
+  display: grid;
+  place-items: center;
+  width: min(56%, 17rem);
+  aspect-ratio: 1;
+}
+
+.logoFrame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .desktopFrame,
 .mobileFrame {
   position: absolute;
   overflow: hidden;
   border: 1px solid rgb(255 255 255 / 14%);
   background: #0b0d12;
+}
+
+.mobileOnlyFrame {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  height: 90%;
+  aspect-ratio: 393 / 869;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 14%);
+  border-radius: 0.75rem;
+  background: #0b0d12;
+  box-shadow: 0 18px 40px rgb(0 0 0 / 34%);
+  transform: translateX(-50%);
+}
+
+.projectCoverDesktopOnly .desktopFrame {
+  top: 6%;
+  left: 5%;
+  width: 90%;
+  aspect-ratio: 16 / 10;
+}
+
+.projectCoverDesktopRatio .desktopFrame {
+  aspect-ratio: 16 / 10;
+}
+
+.projectCoverDesktopRatio .mobileFrame {
+  aspect-ratio: 430 / 830;
+}
+
+.projectCoverJill .mobileFrame {
+  aspect-ratio: 430 / 900;
 }
 
 .desktopFrame {
@@ -135,7 +195,8 @@
 }
 
 .desktopFrame img,
-.mobileFrame img {
+.mobileFrame img,
+.mobileOnlyFrame img {
   display: block;
   width: 100%;
   height: 100%;
@@ -149,12 +210,27 @@
 }
 
 .projectCard:hover .desktopFrame img,
-.projectCard:hover .mobileFrame img {
+.projectCard:hover .mobileFrame img,
+.projectCard:hover .mobileOnlyFrame img {
   transform: scale(1.012);
 }
 
 .projectBody {
   padding-top: 1.5rem;
+}
+
+.mobileAppsSection {
+  grid-column: 1 / -1;
+  padding-top: clamp(1.5rem, 4vw, 2.5rem);
+  border-top: 1px solid var(--border-strong);
+}
+
+.mobileAppsSection h3 {
+  margin: 0 0 2.5rem;
+  color: var(--foreground);
+  font-size: clamp(1.6rem, 2.7vw, 2.15rem);
+  font-weight: 650;
+  letter-spacing: var(--heading-letter-spacing);
 }
 
 .projectMeta {
@@ -206,6 +282,27 @@
   font-size: 0.94rem;
   letter-spacing: -0.02em;
   line-height: 1.7;
+}
+
+.projectBody > .projectStatus {
+  margin-top: 1.25rem;
+  color: color-mix(in srgb, var(--brand) 72%, var(--foreground));
+  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.projectBody > .projectAttribution {
+  margin-top: 1rem;
+  color: var(--foreground-subtle);
+  font-size: 0.78rem;
+}
+
+.projectActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0 1.35rem;
 }
 
 .projectLink {

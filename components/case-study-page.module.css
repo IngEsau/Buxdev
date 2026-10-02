@@ -113,6 +113,16 @@
   text-wrap: balance;
 }
 
+.attributionNote {
+  max-width: 47rem;
+  margin: 1.5rem 0 0;
+  padding-left: 1rem;
+  border-left: 1px solid var(--brand);
+  color: var(--foreground-muted);
+  font-size: 0.88rem;
+  line-height: 1.65;
+}
+
 .categories {
   display: flex;
   flex-wrap: wrap;
@@ -191,6 +201,35 @@
   margin-top: 1.5rem;
 }
 
+.references {
+  display: grid;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+}
+
+.references a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding-block: 0.55rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--foreground-muted);
+  font-size: 0.78rem;
+  text-decoration: none;
+}
+
+.references a:hover,
+.references a:focus-visible {
+  color: var(--foreground);
+}
+
+.references svg {
+  flex: 0 0 0.95rem;
+  width: 0.95rem;
+  height: 0.95rem;
+}
+
 .primaryAction svg,
 .finalAction svg {
   width: 1rem;
@@ -261,6 +300,40 @@
   height: 100%;
   object-fit: cover;
   object-position: top;
+}
+
+.showcaseDesktopOnly .desktopFrame {
+  top: 6%;
+  left: 7.5%;
+  width: 85%;
+  aspect-ratio: 16 / 10;
+}
+
+.showcaseMobileOnly .mobileFrame {
+  top: 5%;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  width: auto;
+  height: 90%;
+  aspect-ratio: 393 / 869;
+  transform: translateX(-50%);
+}
+
+.showcaseCompactMobile {
+  max-width: 36rem;
+  aspect-ratio: 4 / 3;
+  margin-inline: auto;
+}
+
+.showcaseCompactMobile .mobileFrame {
+  top: 6%;
+  right: auto;
+  bottom: auto;
+  left: 50%;
+  width: auto;
+  height: 88%;
+  transform: translateX(-50%);
 }
 
 .story {
@@ -445,6 +518,17 @@
   gap: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 3vw, 2rem);
 }
 
+.galleryCompactMobile .galleryList {
+  max-width: 64rem;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-inline: auto;
+}
+
+.galleryCompactMobile .galleryList figure {
+  max-width: 18rem;
+  margin-inline: auto;
+}
+
 .galleryItemWide {
   grid-column: 1 / -1;
 }
@@ -472,6 +556,29 @@
   height: 100%;
   object-fit: cover;
   object-position: top;
+}
+
+.showcase button:focus-visible,
+.galleryImage:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: -3px;
+}
+
+.galleryImagePortrait {
+  aspect-ratio: 4 / 5;
+}
+
+.galleryImagePortrait img {
+  object-fit: contain;
+  object-position: center;
+}
+
+.galleryImageUncropped {
+  aspect-ratio: 1874 / 955;
+}
+
+.galleryImageUncropped img {
+  object-fit: contain;
 }
 
 .galleryList figcaption {
@@ -532,6 +639,18 @@
 
   .showcase {
     aspect-ratio: 4 / 3;
+  }
+
+  .showcaseMobileOnly {
+    aspect-ratio: 1 / 1;
+  }
+
+  .showcaseCompactMobile {
+    aspect-ratio: 4 / 3;
+  }
+
+  .galleryCompactMobile .galleryList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .desktopFrame {
@@ -599,6 +718,18 @@
   .showcase,
   .galleryImage {
     border-radius: var(--radius-md);
+  }
+
+  .galleryCompactMobile .galleryList {
+    grid-template-columns: 1fr;
+  }
+
+  .galleryCompactMobile .galleryList figure {
+    max-width: 14rem;
+  }
+
+  .galleryCompactMobile .galleryImagePortrait {
+    aspect-ratio: 393 / 869;
   }
 
   .mobileFrame {

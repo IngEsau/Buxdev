@@ -1,48 +1,77 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowUpRight } from "iconoir-react"
+import { Fragment } from "react"
 
 import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
+import type { TranslationKey } from "@/lib/i18n"
 
 import styles from "./work-page.module.css"
 
-const workProjects = [
+type ProjectId = keyof TranslationKey["portfolio"]["projects"]
+type ProjectCover =
+  | { kind: "pair"; desktop: string; mobile: string; desktopSize?: readonly [number, number]; mobileSize?: readonly [number, number] }
+  | { kind: "mobile" | "desktop" | "logo"; src: string; size?: readonly [number, number] }
+
+type WorkProject = {
+  id: ProjectId
+  cover?: ProjectCover
+  caseHref?: string
+  repositoryUrl?: string
+  publicUrl?: string
+  referenceUrl?: string
+}
+
+const workProjects: readonly WorkProject[] = [
   {
     id: "valeriaHerrera",
-    desktop: "/work/valeria-herrera/desktop.webp",
-    mobile: "/work/valeria-herrera/mobile.webp",
-    href: "/work/valeria-herrera/",
-    action: "viewCaseStudy",
-    external: false,
+    cover: { kind: "pair", desktop: "/work/valeria-herrera/desktop.webp", mobile: "/work/valeria-herrera/mobile.webp" },
+    caseHref: "/work/valeria-herrera/",
+    publicUrl: "https://valeriaherrera.buxdev.com/",
+  },
+  {
+    id: "sociogramaUtp",
+    cover: { kind: "pair", desktop: "/work/sociograma-utp/public-login.webp", mobile: "/work/sociograma-utp/public-login-mobile.webp", desktopSize: [1440, 900], mobileSize: [430, 830] },
+    caseHref: "/work/sociograma-utp/",
   },
   {
     id: "bandasAsesoria",
-    desktop: "/work/bandas-asesoria/desktop.webp",
-    mobile: "/work/bandas-asesoria/mobile.webp",
-    href: null,
-    action: null,
-    external: false,
+    cover: { kind: "pair", desktop: "/work/bandas-asesoria/desktop.webp", mobile: "/work/bandas-asesoria/mobile.webp" },
+    caseHref: "/work/bandas-asesoria/",
+    publicUrl: "https://bandasyasesoria.com.mx/",
+  },
+  {
+    id: "jillSoftware",
+    cover: { kind: "pair", desktop: "/work/jill-software/current-desktop.webp", mobile: "/work/jill-software/current-mobile.webp", desktopSize: [1440, 900], mobileSize: [430, 900] },
+    caseHref: "/work/jill-software/",
+    referenceUrl: "https://jillsoftware.com.mx/",
+  },
+  {
+    id: "backstabber",
+    cover: { kind: "logo", src: "/work/backstabber-toolkit/logo.webp", size: [640, 640] },
+    caseHref: "/work/backstabber-toolkit/",
+    repositoryUrl: "https://github.com/IngEsau/Backstabber",
   },
   {
     id: "wordpressIncidentResponse",
-    desktop: "/work/wordpress-incident-response/desktop.webp",
-    mobile: "/work/wordpress-incident-response/mobile.webp",
-    href: "https://github.com/IngEsau/wp-xmlrpc-attack-analysis",
-    action: "viewRepository",
-    external: true,
+    cover: { kind: "pair", desktop: "/work/wordpress-incident-response/desktop.webp", mobile: "/work/wordpress-incident-response/mobile.webp" },
+    repositoryUrl: "https://github.com/IngEsau/wp-xmlrpc-attack-analysis",
   },
   {
     id: "portfolio",
-    desktop: "/work/portfolio/desktop.webp",
-    mobile: "/work/portfolio/mobile.webp",
-    href: "https://portfolio.buxdev.com/",
-    action: "visitProject",
-    external: true,
+    cover: { kind: "pair", desktop: "/work/portfolio/desktop.webp", mobile: "/work/portfolio/mobile.webp" },
+    publicUrl: "https://portfolio.buxdev.com/",
   },
-] as const
+  {
+    id: "montblanMobile",
+    cover: { kind: "mobile", src: "/work/montblan-mobile/login.webp" },
+    caseHref: "/work/montblan-mobile/",
+    repositoryUrl: "https://github.com/IngEsau/montblan-mobile",
+  },
+]
 
 export function WorkPageContent() {
   const { t } = useLanguage()
@@ -64,62 +93,86 @@ export function WorkPageContent() {
         <div className={styles.projectGrid}>
           {workProjects.map((project, index) => {
             const projectCopy = t.portfolio.projects[project.id]
+            const cover = project.cover
+            const status = "status" in projectCopy ? projectCopy.status : undefined
+            const attribution = "attribution" in projectCopy ? projectCopy.attribution : undefined
 
-            return (
-              <article key={project.id} className={styles.projectCard}>
-                <div className={styles.projectCover}>
-                  <div className={styles.desktopFrame}>
-                    <Image
-                      src={project.desktop}
-                      alt={projectCopy.desktopAlt}
-                      width={1600}
-                      height={834}
-                      sizes="(max-width: 48rem) 78vw, (max-width: 80rem) 39vw, 30rem"
-                    />
+            const card = (
+              <article className={`${styles.projectCard} ${!cover ? styles.projectCardTextOnly : ""}`}>
+                {cover ? (
+                  <div className={`${styles.projectCover} ${cover.kind === "desktop" ? styles.projectCoverDesktopOnly : ""} ${cover.kind === "mobile" ? styles.projectCoverMobileOnly : ""} ${cover.kind === "logo" ? styles.projectCoverLogo : ""} ${project.id === "sociogramaUtp" || project.id === "jillSoftware" ? styles.projectCoverDesktopRatio : ""} ${project.id === "jillSoftware" ? styles.projectCoverJill : ""}`}>
+                    {cover.kind === "pair" || cover.kind === "desktop" ? (
+                      <div className={styles.desktopFrame}>
+                        <Image src={cover.kind === "pair" ? cover.desktop : cover.src}
+                          alt={"desktopAlt" in projectCopy ? projectCopy.desktopAlt : projectCopy.title}
+                          width={cover.kind === "pair" ? (cover.desktopSize?.[0] ?? 1600) : (cover.size?.[0] ?? 1440)}
+                          height={cover.kind === "pair" ? (cover.desktopSize?.[1] ?? 834) : (cover.size?.[1] ?? 900)}
+                          sizes="(max-width: 48rem) 78vw, (max-width: 80rem) 39vw, 30rem" />
+                      </div>
+                    ) : null}
+                    {cover.kind === "pair" ? (
+                      <div className={styles.mobileFrame}>
+                        <Image src={cover.mobile} alt={"mobileAlt" in projectCopy ? projectCopy.mobileAlt : projectCopy.title}
+                          width={cover.mobileSize?.[0] ?? 408} height={cover.mobileSize?.[1] ?? 901} sizes="(max-width: 48rem) 20vw, 7rem" />
+                      </div>
+                    ) : cover.kind === "mobile" ? (
+                      <div className={styles.mobileOnlyFrame}>
+                        <Image src={cover.src} alt={"mobileAlt" in projectCopy ? projectCopy.mobileAlt : projectCopy.title}
+                          width={cover.size?.[0] ?? 393} height={cover.size?.[1] ?? 869} sizes="(max-width: 48rem) 35vw, 14rem" />
+                      </div>
+                    ) : cover.kind === "logo" ? (
+                      <div className={styles.logoFrame}>
+                        <Image src={cover.src} alt={"logoAlt" in projectCopy ? projectCopy.logoAlt : projectCopy.title} width={cover.size?.[0] ?? 640}
+                          height={cover.size?.[1] ?? 640} sizes="(max-width: 48rem) 50vw, 16rem" />
+                      </div>
+                    ) : null}
                   </div>
-                  <div className={styles.mobileFrame}>
-                    <Image
-                      src={project.mobile}
-                      alt={projectCopy.mobileAlt}
-                      width={408}
-                      height={901}
-                      sizes="(max-width: 48rem) 20vw, 7rem"
-                    />
-                  </div>
-                </div>
+                ) : null}
 
                 <div className={styles.projectBody}>
                   <div className={styles.projectMeta}>
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     <ul aria-label={t.portfolio.categoriesLabel}>
-                      {projectCopy.categories.map((category) => (
-                        <li key={category}>{category}</li>
-                      ))}
+                      {projectCopy.categories.map((category) => <li key={category}>{category}</li>)}
                     </ul>
                   </div>
 
+                  {status ? <p className={styles.projectStatus}>{status}</p> : null}
                   <h3>{projectCopy.title}</h3>
                   <p>{projectCopy.description}</p>
+                  {attribution ? <p className={styles.projectAttribution}>{attribution}</p> : null}
 
-                  {project.href && project.action && project.external ? (
-                    <a
-                      href={project.href}
-                      className={styles.projectLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      <span>{t.portfolio.actions[project.action]}</span>
-                      <ArrowUpRight aria-hidden="true" />
-                    </a>
-                  ) : project.href && project.action ? (
-                    <Link href={project.href} className={styles.projectLink}>
-                      <span>{t.portfolio.actions[project.action]}</span>
-                      <ArrowUpRight aria-hidden="true" />
-                    </Link>
-                  ) : null}
+                  <div className={styles.projectActions}>
+                    {project.caseHref ? (
+                      <Link href={project.caseHref} className={styles.projectLink}>
+                        <span>{t.portfolio.actions.viewCaseStudy}</span><ArrowUpRight aria-hidden="true" />
+                      </Link>
+                    ) : null}
+                    {project.repositoryUrl ? (
+                      <a href={project.repositoryUrl} className={styles.projectLink} target="_blank" rel="noopener noreferrer">
+                        <span>{t.portfolio.actions.viewRepository}</span><ArrowUpRight aria-hidden="true" />
+                      </a>
+                    ) : null}
+                    {project.publicUrl ? (
+                      <a href={project.publicUrl} className={styles.projectLink} target="_blank" rel="noopener noreferrer">
+                        <span>{project.id === "valeriaHerrera" ? t.portfolio.actions.viewLiveSite : t.portfolio.actions.visitProject}</span><ArrowUpRight aria-hidden="true" />
+                      </a>
+                    ) : null}
+                    {project.referenceUrl ? (
+                      <a href={project.referenceUrl} className={styles.projectLink} target="_blank" rel="noopener noreferrer">
+                        <span>{t.portfolio.actions.viewCurrentSite}</span><ArrowUpRight aria-hidden="true" />
+                      </a>
+                    ) : null}
+                  </div>
                 </div>
               </article>
             )
+            return project.id === "montblanMobile" ? (
+              <section key={project.id} className={styles.mobileAppsSection} aria-labelledby="mobile-apps-title">
+                <h3 id="mobile-apps-title">{t.portfolio.mobileAppsTitle}</h3>
+                <div className={styles.projectGrid}>{card}</div>
+              </section>
+            ) : <Fragment key={project.id}>{card}</Fragment>
           })}
         </div>
       </MotionReveal>

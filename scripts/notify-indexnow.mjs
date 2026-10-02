@@ -7,6 +7,7 @@ const KEY = 'eb0d64a2c026422a948a7b49af9d1aa1'
 const ORIGIN = 'https://buxdev.com'
 // Keep the approved notification scope; blog URLs are discovered through the sitemap.
 const INDEXABLE_URLS = ['/', '/about/', '/services/', '/contact/'].map(path => ORIGIN + path)
+const WORK_URLS = ['/work/', '/work/montblan-mobile/', '/work/sociograma-utp/', '/work/bandas-asesoria/', '/work/jill-software/', '/work/valeria-herrera/', '/work/backstabber-toolkit/'].map(path => ORIGIN + path)
 
 export async function prepareNotification(root = PROJECT_ROOT) {
   const filename = `${KEY}.txt`
@@ -20,12 +21,14 @@ export async function prepareNotification(root = PROJECT_ROOT) {
   }
   const sitemapUrls = [...sitemap.matchAll(/<loc>([^<]*)<\/loc>/g)].map(match => match[1])
   const blogUrl = /^https:\/\/buxdev\.com\/blog\/(?:[a-z0-9]+(?:-[a-z0-9]+)*\/)?$/
+  const hasWork = sitemapUrls.some(url => WORK_URLS.includes(url))
   if (new Set(sitemapUrls).size !== sitemapUrls.length ||
       INDEXABLE_URLS.some(url => !sitemapUrls.includes(url)) ||
-      sitemapUrls.some(url => !INDEXABLE_URLS.includes(url) && !blogUrl.test(url))) {
-    throw new Error('El sitemap debe conservar las cuatro URLs aprobadas y solo añadir rutas válidas del blog.')
+      (hasWork && WORK_URLS.some(url => !sitemapUrls.includes(url))) ||
+      sitemapUrls.some(url => !INDEXABLE_URLS.includes(url) && !WORK_URLS.includes(url) && !blogUrl.test(url))) {
+    throw new Error('El sitemap debe conservar las cuatro URLs aprobadas y solo añadir rutas válidas del blog y del portafolio.')
   }
-  for (const url of sitemapUrls.filter(url => blogUrl.test(url))) {
+  for (const url of sitemapUrls.filter(url => blogUrl.test(url) || WORK_URLS.includes(url))) {
     // No added URL is accepted unless its static HTML actually exists.
     await readFile(resolve(root, 'out', new URL(url).pathname.slice(1), 'index.html'))
   }

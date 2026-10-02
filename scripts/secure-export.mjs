@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url'
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..')
 const out = resolve(root, 'out')
 const checkOnly = process.argv.includes('--check')
-const routes = '(?:about|services|work(?:/valeria-herrera)?|blog(?:/[a-z0-9]+(?:-[a-z0-9]+)*)?|contact|privacidad|terminos|cookies|404|_not-found)'
+const routes = '(?:about|services|work(?:/(?:valeria-herrera|montblan-mobile|sociograma-utp|backstabber-toolkit|bandas-asesoria|jill-software))?|blog(?:/[a-z0-9]+(?:-[a-z0-9]+)*)?|contact|privacidad|terminos|cookies|404|_not-found)'
 const allowed = [
   /^\.htaccess$/,
   /^_next\/static\/(?:chunks|media)\/[\w./-]+\.(?:js|css|woff2?|ttf|otf|png|jpe?g|svg|webp|ico)$/,
@@ -19,6 +19,11 @@ const allowed = [
   /^(?:brand\/buxdev\/)?[\w-]+\.(?:svg|png|jpe?g|webp|ico)$/,
   /^og\/[\w-]+\.(?:png|jpe?g|webp)$/,
   /^work\/(?:valeria-herrera|bandas-asesoria|wordpress-incident-response|portfolio)\/(?:desktop|mobile|gallery-(?:about|catalog|contact))\.webp$/,
+  /^work\/montblan-mobile\/(?:login|order-form|orders|products|receivables|warehouse-postdated)\.webp$/,
+  /^work\/sociograma-utp\/(?:public-login(?:-mobile)?|admin-panel|credential-worker|groups|questionnaires|question-bank|import-overview|import-form)\.webp$/,
+  /^work\/backstabber-toolkit\/(?:logo|overview|assessment|approvals|audit)\.webp$/,
+  /^work\/bandas-asesoria\/(?:products|services|company|home-(?:presence|featured|about)|catalog-(?:early|more|final))\.webp$/,
+  /^work\/jill-software\/(?:current|proposal)-(?:desktop|mobile)\.webp$/,
 ]
 const secretPatterns = [
   /xkeysib-[a-zA-Z0-9_-]{30,}/,

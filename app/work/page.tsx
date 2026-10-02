@@ -5,9 +5,8 @@ import { createPageMetadata } from "@/lib/seo"
 export const metadata = createPageMetadata({
   title: "Trabajos de Desarrollo de Software",
   description:
-    "Consulta el espacio de trabajos de BUXDEV, donde próximamente presentaremos una selección de proyectos con información real y suficiente.",
+    "Explora proyectos reales, colaboraciones, herramientas en desarrollo y propuestas de diseño de BUXDEV con alcance y atribución claros.",
   path: "/work/",
-  index: false,
 })
 
 export default function Page() {

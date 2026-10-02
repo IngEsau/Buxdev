@@ -86,7 +86,7 @@ test('Exported blog URLs may appear in the sitemap without extending notificatio
 
 test('Published work routes require real static pages and never expand IndexNow notifications', async () => {
   const root = await fixture()
-  const paths = ['work', 'work/montblan-mobile', 'work/sociograma-utp',
+  const paths = ['work', 'work/montblan-mobile', 'work/sociograma-utp', 'work/bandas-asesoria', 'work/jill-software',
     'work/valeria-herrera', 'work/backstabber-toolkit']
   try {
     await writeFile(resolve(root, 'out/sitemap.xml'), xml([...urls, ...paths.map(path => `https://buxdev.com/${path}/`)]))

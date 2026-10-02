@@ -1,7 +1,7 @@
-import Image from "next/image"
 import Link from "next/link"
 import { ArrowUpRight, NavArrowLeft } from "iconoir-react"
 
+import { ImageZoom } from "@/components/image-zoom"
 import { MotionReveal } from "@/components/motion-reveal"
 
 import styles from "./case-study-page.module.css"
@@ -32,6 +32,8 @@ interface CaseStudyGalleryItem {
   caption: string
   portrait?: boolean
   uncropped?: boolean
+  width?: number
+  height?: number
 }
 
 export interface CaseStudyContent {
@@ -140,16 +142,10 @@ export function CaseStudyPage({
 
           {desktopCover || mobileCover ? (
             <MotionReveal className={`${styles.showcase} ${desktopCover && !mobileCover ? styles.showcaseDesktopOnly : ""} ${mobileCover && !desktopCover ? styles.showcaseMobileOnly : ""} ${compactMobile ? styles.showcaseCompactMobile : ""}`} delay={0.08} revealOnView={false}>
-              {desktopCover ? (
-                <div className={styles.desktopFrame}>
-                  <Image src={desktopCover.src} alt={desktopCover.alt} width={desktopCover.width ?? 1600} height={desktopCover.height ?? 834} priority sizes="(max-width: 48rem) 92vw, 75rem" />
-                </div>
-              ) : null}
-              {mobileCover ? (
-                <div className={styles.mobileFrame}>
-                  <Image src={mobileCover.src} alt={mobileCover.alt} width={mobileCover.width ?? 408} height={mobileCover.height ?? 901} priority sizes="(max-width: 48rem) 25vw, 12rem" />
-                </div>
-              ) : null}
+              {desktopCover ? <ImageZoom className={styles.desktopFrame} src={desktopCover.src} alt={desktopCover.alt}
+                width={desktopCover.width ?? 1600} height={desktopCover.height ?? 834} priority sizes="(max-width: 48rem) 92vw, 75rem" /> : null}
+              {mobileCover ? <ImageZoom className={styles.mobileFrame} src={mobileCover.src} alt={mobileCover.alt}
+                width={mobileCover.width ?? 408} height={mobileCover.height ?? 901} priority sizes="(max-width: 48rem) 25vw, 12rem" /> : null}
             </MotionReveal>
           ) : null}
         </div>
@@ -224,15 +220,9 @@ export function CaseStudyPage({
                 className={index === 0 && !compactMobile ? styles.galleryItemWide : styles.galleryItem}
               >
                 <figure>
-                  <div className={`${styles.galleryImage} ${item.portrait ? styles.galleryImagePortrait : ""} ${item.uncropped ? styles.galleryImageUncropped : ""}`}>
-                    <Image
-                      src={item.src}
-                      alt={item.alt}
-                      width={item.portrait ? 393 : 1440}
-                      height={item.portrait ? 869 : 900}
-                      sizes={compactMobile ? "(max-width: 48rem) 18rem, 20rem" : index === 0 ? "(max-width: 48rem) 92vw, 75rem" : "(max-width: 48rem) 92vw, 37rem"}
-                    />
-                  </div>
+                  <ImageZoom className={`${styles.galleryImage} ${item.portrait ? styles.galleryImagePortrait : ""} ${item.uncropped ? styles.galleryImageUncropped : ""}`}
+                    src={item.src} alt={item.alt} width={item.width ?? (item.portrait ? 393 : 1440)} height={item.height ?? (item.portrait ? 869 : 900)}
+                    sizes={compactMobile ? "(max-width: 48rem) 18rem, 20rem" : index === 0 ? "(max-width: 48rem) 92vw, 75rem" : "(max-width: 48rem) 92vw, 37rem"} />
                   <figcaption>
                     <span>{String(index + 1).padStart(2, "0")}</span>
                     {item.caption}

@@ -11,8 +11,9 @@ import styles from "./portfolio-section.module.css"
 
 const projects = [
   { id: "valeriaHerrera", image: "/work/valeria-herrera/desktop.webp", mobileImage: "/work/valeria-herrera/mobile.webp" },
-  { id: "sociogramaUtp", image: "/work/sociograma-utp/admin-panel.webp", mobileImage: "/work/sociograma-utp/public-login-mobile.webp" },
+  { id: "sociogramaUtp", image: "/work/sociograma-utp/public-login.webp", mobileImage: "/work/sociograma-utp/public-login-mobile.webp" },
   { id: "bandasAsesoria", image: "/work/bandas-asesoria/desktop.webp", mobileImage: "/work/bandas-asesoria/mobile.webp" },
+  { id: "jillSoftware", image: "/work/jill-software/current-desktop.webp", mobileImage: "/work/jill-software/current-mobile.webp" },
 ] as const
 
 export function PortfolioSection() {

@@ -17,6 +17,8 @@ export const WORK_INDEXABLE_PATHS = [
   "/work/",
   "/work/montblan-mobile/",
   "/work/sociograma-utp/",
+  "/work/bandas-asesoria/",
+  "/work/jill-software/",
   "/work/valeria-herrera/",
   "/work/backstabber-toolkit/",
 ] as const

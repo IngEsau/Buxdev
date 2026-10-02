@@ -7,7 +7,7 @@ const KEY = 'eb0d64a2c026422a948a7b49af9d1aa1'
 const ORIGIN = 'https://buxdev.com'
 // Keep the approved notification scope; blog URLs are discovered through the sitemap.
 const INDEXABLE_URLS = ['/', '/about/', '/services/', '/contact/'].map(path => ORIGIN + path)
-const WORK_URLS = ['/work/', '/work/montblan-mobile/', '/work/sociograma-utp/', '/work/valeria-herrera/', '/work/backstabber-toolkit/'].map(path => ORIGIN + path)
+const WORK_URLS = ['/work/', '/work/montblan-mobile/', '/work/sociograma-utp/', '/work/bandas-asesoria/', '/work/jill-software/', '/work/valeria-herrera/', '/work/backstabber-toolkit/'].map(path => ORIGIN + path)
 
 export async function prepareNotification(root = PROJECT_ROOT) {
   const filename = `${KEY}.txt`

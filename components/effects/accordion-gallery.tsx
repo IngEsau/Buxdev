@@ -30,7 +30,12 @@ import { useEffect, useRef, useState, type KeyboardEvent } from "react"
 
 import styles from "./accordion-gallery.module.css"
 
-type GalleryItem = { id: string; image: string; mobileImage: string; label: string }
+type GalleryItem = {
+  id: string
+  image: string
+  mobileImage: string
+  label: string
+}
 
 export function AccordionGallery({ items, label }: { items: GalleryItem[]; label: string }) {
   const root = useRef<HTMLOListElement>(null)
@@ -133,14 +138,14 @@ export function AccordionGallery({ items, label }: { items: GalleryItem[]; label
         : ["ArrowLeft", "ArrowUp"].includes(event.key) ? (index - 1 + items.length) % items.length : null
     if (next === null) return
     event.preventDefault()
-    root.current?.querySelectorAll("button")[next]?.focus()
+    root.current?.querySelectorAll<HTMLButtonElement>("[data-gallery-trigger]")[next]?.focus()
   }
 
   return (
     <ol ref={root} className={styles.gallery} aria-label={label}>
       {items.map((item, index) => (
         <li key={item.id} className={styles.panel} data-active={active === index}>
-          <button type="button" className={styles.trigger} aria-label={item.label} aria-pressed={active === index}
+          <button type="button" data-gallery-trigger className={styles.trigger} aria-label={item.label} aria-pressed={active === index}
             onFocus={() => select(index)} onClick={() => select(index)} onKeyDown={event => onKeyDown(event, index)}
             onPointerMove={event => {
               if (event.pointerType !== "mouse" || (event.clientX === pointer.current.x && event.clientY === pointer.current.y)) return

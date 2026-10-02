@@ -116,6 +116,24 @@
   aspect-ratio: 1 / 1;
 }
 
+.projectCoverLogo {
+  display: grid;
+  place-items: center;
+}
+
+.logoFrame {
+  display: grid;
+  place-items: center;
+  width: min(56%, 17rem);
+  aspect-ratio: 1;
+}
+
+.logoFrame img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
 .desktopFrame,
 .mobileFrame {
   position: absolute;
@@ -199,6 +217,20 @@
 
 .projectBody {
   padding-top: 1.5rem;
+}
+
+.mobileAppsSection {
+  grid-column: 1 / -1;
+  padding-top: clamp(1.5rem, 4vw, 2.5rem);
+  border-top: 1px solid var(--border-strong);
+}
+
+.mobileAppsSection h3 {
+  margin: 0 0 2.5rem;
+  color: var(--foreground);
+  font-size: clamp(1.6rem, 2.7vw, 2.15rem);
+  font-weight: 650;
+  letter-spacing: var(--heading-letter-spacing);
 }
 
 .projectMeta {

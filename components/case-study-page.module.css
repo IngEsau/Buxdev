@@ -558,6 +558,12 @@
   object-position: top;
 }
 
+.showcase button:focus-visible,
+.galleryImage:focus-visible {
+  outline: 3px solid var(--brand);
+  outline-offset: -3px;
+}
+
 .galleryImagePortrait {
   aspect-ratio: 4 / 5;
 }

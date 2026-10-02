@@ -1,8 +1,9 @@
 "use client"
 
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
 import { ArrowUpRight } from "iconoir-react"
+import { Fragment } from "react"
 
 import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
@@ -12,8 +13,8 @@ import styles from "./work-page.module.css"
 
 type ProjectId = keyof TranslationKey["portfolio"]["projects"]
 type ProjectCover =
-  | { kind: "pair"; desktop: string; mobile: string }
-  | { kind: "mobile" | "desktop"; src: string }
+  | { kind: "pair"; desktop: string; mobile: string; desktopSize?: readonly [number, number]; mobileSize?: readonly [number, number] }
+  | { kind: "mobile" | "desktop" | "logo"; src: string; size?: readonly [number, number] }
 
 type WorkProject = {
   id: ProjectId
@@ -29,29 +30,28 @@ const workProjects: readonly WorkProject[] = [
     id: "valeriaHerrera",
     cover: { kind: "pair", desktop: "/work/valeria-herrera/desktop.webp", mobile: "/work/valeria-herrera/mobile.webp" },
     caseHref: "/work/valeria-herrera/",
+    publicUrl: "https://valeriaherrera.buxdev.com/",
   },
   {
     id: "sociogramaUtp",
-    cover: { kind: "pair", desktop: "/work/sociograma-utp/admin-panel.webp", mobile: "/work/sociograma-utp/public-login-mobile.webp" },
+    cover: { kind: "pair", desktop: "/work/sociograma-utp/public-login.webp", mobile: "/work/sociograma-utp/public-login-mobile.webp", desktopSize: [1440, 900], mobileSize: [430, 830] },
     caseHref: "/work/sociograma-utp/",
   },
   {
     id: "bandasAsesoria",
     cover: { kind: "pair", desktop: "/work/bandas-asesoria/desktop.webp", mobile: "/work/bandas-asesoria/mobile.webp" },
-  },
-  {
-    id: "montblanMobile",
-    cover: { kind: "mobile", src: "/work/montblan-mobile/login.webp" },
-    caseHref: "/work/montblan-mobile/",
-    repositoryUrl: "https://github.com/IngEsau/montblan-mobile",
+    caseHref: "/work/bandas-asesoria/",
+    publicUrl: "https://bandasyasesoria.com.mx/",
   },
   {
     id: "jillSoftware",
-    cover: { kind: "pair", desktop: "/work/jill-software/current-desktop.webp", mobile: "/work/jill-software/current-mobile.webp" },
+    cover: { kind: "pair", desktop: "/work/jill-software/current-desktop.webp", mobile: "/work/jill-software/current-mobile.webp", desktopSize: [1440, 900], mobileSize: [430, 900] },
+    caseHref: "/work/jill-software/",
     referenceUrl: "https://jillsoftware.com.mx/",
   },
   {
     id: "backstabber",
+    cover: { kind: "logo", src: "/work/backstabber-toolkit/logo.webp", size: [640, 640] },
     caseHref: "/work/backstabber-toolkit/",
     repositoryUrl: "https://github.com/IngEsau/Backstabber",
   },
@@ -64,6 +64,12 @@ const workProjects: readonly WorkProject[] = [
     id: "portfolio",
     cover: { kind: "pair", desktop: "/work/portfolio/desktop.webp", mobile: "/work/portfolio/mobile.webp" },
     publicUrl: "https://portfolio.buxdev.com/",
+  },
+  {
+    id: "montblanMobile",
+    cover: { kind: "mobile", src: "/work/montblan-mobile/login.webp" },
+    caseHref: "/work/montblan-mobile/",
+    repositoryUrl: "https://github.com/IngEsau/montblan-mobile",
   },
 ]
 
@@ -91,28 +97,33 @@ export function WorkPageContent() {
             const status = "status" in projectCopy ? projectCopy.status : undefined
             const attribution = "attribution" in projectCopy ? projectCopy.attribution : undefined
 
-            return (
-              <article key={project.id} className={`${styles.projectCard} ${!cover ? styles.projectCardTextOnly : ""}`}>
+            const card = (
+              <article className={`${styles.projectCard} ${!cover ? styles.projectCardTextOnly : ""}`}>
                 {cover ? (
-                  <div className={`${styles.projectCover} ${cover.kind === "desktop" ? styles.projectCoverDesktopOnly : ""} ${cover.kind === "mobile" ? styles.projectCoverMobileOnly : ""} ${project.id === "sociogramaUtp" || project.id === "jillSoftware" ? styles.projectCoverDesktopRatio : ""} ${project.id === "jillSoftware" ? styles.projectCoverJill : ""}`}>
+                  <div className={`${styles.projectCover} ${cover.kind === "desktop" ? styles.projectCoverDesktopOnly : ""} ${cover.kind === "mobile" ? styles.projectCoverMobileOnly : ""} ${cover.kind === "logo" ? styles.projectCoverLogo : ""} ${project.id === "sociogramaUtp" || project.id === "jillSoftware" ? styles.projectCoverDesktopRatio : ""} ${project.id === "jillSoftware" ? styles.projectCoverJill : ""}`}>
                     {cover.kind === "pair" || cover.kind === "desktop" ? (
                       <div className={styles.desktopFrame}>
-                        <Image
-                          src={cover.kind === "pair" ? cover.desktop : cover.src}
+                        <Image src={cover.kind === "pair" ? cover.desktop : cover.src}
                           alt={"desktopAlt" in projectCopy ? projectCopy.desktopAlt : projectCopy.title}
-                          width={cover.kind === "pair" ? 1600 : 1440}
-                          height={cover.kind === "pair" ? 834 : 900}
-                          sizes="(max-width: 48rem) 78vw, (max-width: 80rem) 39vw, 30rem"
-                        />
+                          width={cover.kind === "pair" ? (cover.desktopSize?.[0] ?? 1600) : (cover.size?.[0] ?? 1440)}
+                          height={cover.kind === "pair" ? (cover.desktopSize?.[1] ?? 834) : (cover.size?.[1] ?? 900)}
+                          sizes="(max-width: 48rem) 78vw, (max-width: 80rem) 39vw, 30rem" />
                       </div>
                     ) : null}
                     {cover.kind === "pair" ? (
                       <div className={styles.mobileFrame}>
-                        <Image src={cover.mobile} alt={"mobileAlt" in projectCopy ? projectCopy.mobileAlt : projectCopy.title} width={408} height={901} sizes="(max-width: 48rem) 20vw, 7rem" />
+                        <Image src={cover.mobile} alt={"mobileAlt" in projectCopy ? projectCopy.mobileAlt : projectCopy.title}
+                          width={cover.mobileSize?.[0] ?? 408} height={cover.mobileSize?.[1] ?? 901} sizes="(max-width: 48rem) 20vw, 7rem" />
                       </div>
                     ) : cover.kind === "mobile" ? (
                       <div className={styles.mobileOnlyFrame}>
-                        <Image src={cover.src} alt={"mobileAlt" in projectCopy ? projectCopy.mobileAlt : projectCopy.title} width={393} height={869} sizes="(max-width: 48rem) 35vw, 14rem" />
+                        <Image src={cover.src} alt={"mobileAlt" in projectCopy ? projectCopy.mobileAlt : projectCopy.title}
+                          width={cover.size?.[0] ?? 393} height={cover.size?.[1] ?? 869} sizes="(max-width: 48rem) 35vw, 14rem" />
+                      </div>
+                    ) : cover.kind === "logo" ? (
+                      <div className={styles.logoFrame}>
+                        <Image src={cover.src} alt={"logoAlt" in projectCopy ? projectCopy.logoAlt : projectCopy.title} width={cover.size?.[0] ?? 640}
+                          height={cover.size?.[1] ?? 640} sizes="(max-width: 48rem) 50vw, 16rem" />
                       </div>
                     ) : null}
                   </div>
@@ -144,7 +155,7 @@ export function WorkPageContent() {
                     ) : null}
                     {project.publicUrl ? (
                       <a href={project.publicUrl} className={styles.projectLink} target="_blank" rel="noopener noreferrer">
-                        <span>{t.portfolio.actions.visitProject}</span><ArrowUpRight aria-hidden="true" />
+                        <span>{project.id === "valeriaHerrera" ? t.portfolio.actions.viewLiveSite : t.portfolio.actions.visitProject}</span><ArrowUpRight aria-hidden="true" />
                       </a>
                     ) : null}
                     {project.referenceUrl ? (
@@ -156,6 +167,12 @@ export function WorkPageContent() {
                 </div>
               </article>
             )
+            return project.id === "montblanMobile" ? (
+              <section key={project.id} className={styles.mobileAppsSection} aria-labelledby="mobile-apps-title">
+                <h3 id="mobile-apps-title">{t.portfolio.mobileAppsTitle}</h3>
+                <div className={styles.projectGrid}>{card}</div>
+              </section>
+            ) : <Fragment key={project.id}>{card}</Fragment>
           })}
         </div>
       </MotionReveal>

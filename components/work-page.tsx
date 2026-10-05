@@ -81,7 +81,7 @@ export function WorkPageContent() {
       <div className={styles.grid} aria-hidden="true" />
       <div className={styles.glow} aria-hidden="true" />
 
-      <MotionReveal className={styles.inner}>
+      <MotionReveal className={styles.inner} disableOnMobile>
         <div className={styles.copy}>
           <div>
             <p className={styles.eyebrow}>{t.portfolio.stateLabel}</p>

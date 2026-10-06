@@ -5,7 +5,6 @@ import Image from "next/image"
 import { ArrowUpRight } from "iconoir-react"
 import { Fragment } from "react"
 
-import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 import type { TranslationKey } from "@/lib/i18n"
 
@@ -89,7 +88,7 @@ export function WorkPageContent() {
       <div className={styles.grid} aria-hidden="true" />
       <div className={styles.glow} aria-hidden="true" />
 
-      <MotionReveal className={styles.inner} disableOnMobile>
+      <div className={styles.inner}>
         <div className={styles.copy}>
           <div>
             <p className={styles.eyebrow}>{t.portfolio.stateLabel}</p>
@@ -189,7 +188,7 @@ export function WorkPageContent() {
             ) : <Fragment key={project.id}>{card}</Fragment>
           })}
         </div>
-      </MotionReveal>
+      </div>
     </section>
   )
 }

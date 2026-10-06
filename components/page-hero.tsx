@@ -15,6 +15,16 @@ interface PageHeroProps {
 export function PageHero({ page }: PageHeroProps) {
   const { t } = useLanguage()
   const copy = t.pages[page]
+  const content = (
+    <>
+      <p className={styles.eyebrow}>{copy.eyebrow}</p>
+      <h1 id={`${page}-page-title`} className={styles.title}>
+        <span>{copy.titleStart}{" "}</span>
+        <span className={styles.titleAccent}>{copy.titleAccent}</span>
+      </h1>
+      <p className={styles.description}>{copy.description}</p>
+    </>
+  )
 
   return (
     <section className={styles.hero} aria-labelledby={`${page}-page-title`}>
@@ -22,16 +32,13 @@ export function PageHero({ page }: PageHeroProps) {
       <ColorBends className={styles.colorBends} variant="page" />
 
       <div className={styles.inner}>
-        <MotionReveal className={styles.copy} revealOnView={false} distance={10} disableOnMobile={page === "services"}>
-          <p className={styles.eyebrow}>
-            {copy.eyebrow}
-          </p>
-          <h1 id={`${page}-page-title`} className={styles.title}>
-            <span>{copy.titleStart}{" "}</span>
-            <span className={styles.titleAccent}>{copy.titleAccent}</span>
-          </h1>
-          <p className={styles.description}>{copy.description}</p>
-        </MotionReveal>
+        {page === "services" || page === "work" ? (
+          <div className={styles.copy}>{content}</div>
+        ) : (
+          <MotionReveal className={styles.copy} revealOnView={false} distance={10}>
+            {content}
+          </MotionReveal>
+        )}
       </div>
     </section>
   )

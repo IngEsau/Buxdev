@@ -14,6 +14,7 @@ import styles from "./work-page.module.css"
 type ProjectId = keyof TranslationKey["portfolio"]["projects"]
 type ProjectCover =
   | { kind: "pair"; desktop: string; mobile: string; desktopSize?: readonly [number, number]; mobileSize?: readonly [number, number] }
+  | { kind: "screenshotLogo"; screenshot: string; logo: string; screenshotSize: readonly [number, number]; logoSize: readonly [number, number] }
   | { kind: "mobile" | "desktop" | "logo"; src: string; size?: readonly [number, number] }
 
 type WorkProject = {
@@ -44,16 +45,17 @@ const workProjects: readonly WorkProject[] = [
     publicUrl: "https://bandasyasesoria.com.mx/",
   },
   {
+    id: "poetsFlowers",
+    cover: { kind: "pair", desktop: "/work/poets-flowers/desktop.webp", mobile: "/work/poets-flowers/mobile.webp", desktopSize: [1600, 1000], mobileSize: [780, 1688] },
+    caseHref: "/work/poets-flowers/",
+    publicUrl: "https://poetsflowers.buxdev.com/",
+    repositoryUrl: "https://github.com/IngEsau/poets-flowers",
+  },
+  {
     id: "jillSoftware",
     cover: { kind: "pair", desktop: "/work/jill-software/current-desktop.webp", mobile: "/work/jill-software/current-mobile.webp", desktopSize: [1440, 900], mobileSize: [430, 900] },
     caseHref: "/work/jill-software/",
     referenceUrl: "https://jillsoftware.com.mx/",
-  },
-  {
-    id: "backstabber",
-    cover: { kind: "logo", src: "/work/backstabber-toolkit/logo.webp", size: [640, 640] },
-    caseHref: "/work/backstabber-toolkit/",
-    repositoryUrl: "https://github.com/IngEsau/Backstabber",
   },
   {
     id: "wordpressIncidentResponse",
@@ -64,6 +66,12 @@ const workProjects: readonly WorkProject[] = [
     id: "portfolio",
     cover: { kind: "pair", desktop: "/work/portfolio/desktop.webp", mobile: "/work/portfolio/mobile.webp" },
     publicUrl: "https://portfolio.buxdev.com/",
+  },
+  {
+    id: "backstabber",
+    cover: { kind: "screenshotLogo", screenshot: "/work/backstabber-toolkit/overview.webp", logo: "/work/backstabber-toolkit/logo.webp", screenshotSize: [1852, 950], logoSize: [640, 640] },
+    caseHref: "/work/backstabber-toolkit/",
+    repositoryUrl: "https://github.com/IngEsau/Backstabber",
   },
   {
     id: "montblanMobile",
@@ -96,17 +104,18 @@ export function WorkPageContent() {
             const cover = project.cover
             const status = "status" in projectCopy ? projectCopy.status : undefined
             const attribution = "attribution" in projectCopy ? projectCopy.attribution : undefined
+            const titleHref = project.caseHref ?? project.publicUrl ?? project.repositoryUrl ?? project.referenceUrl
 
             const card = (
               <article className={`${styles.projectCard} ${!cover ? styles.projectCardTextOnly : ""}`}>
                 {cover ? (
-                  <div className={`${styles.projectCover} ${cover.kind === "desktop" ? styles.projectCoverDesktopOnly : ""} ${cover.kind === "mobile" ? styles.projectCoverMobileOnly : ""} ${cover.kind === "logo" ? styles.projectCoverLogo : ""} ${project.id === "sociogramaUtp" || project.id === "jillSoftware" ? styles.projectCoverDesktopRatio : ""} ${project.id === "jillSoftware" ? styles.projectCoverJill : ""}`}>
-                    {cover.kind === "pair" || cover.kind === "desktop" ? (
+                  <div className={`${styles.projectCover} ${cover.kind === "desktop" ? styles.projectCoverDesktopOnly : ""} ${cover.kind === "mobile" ? styles.projectCoverMobileOnly : ""} ${cover.kind === "logo" ? styles.projectCoverLogo : ""} ${project.id === "sociogramaUtp" || project.id === "jillSoftware" || project.id === "poetsFlowers" ? styles.projectCoverDesktopRatio : ""} ${project.id === "jillSoftware" ? styles.projectCoverJill : ""} ${project.id === "poetsFlowers" ? styles.projectCoverPoets : ""}`}>
+                    {cover.kind === "pair" || cover.kind === "desktop" || cover.kind === "screenshotLogo" ? (
                       <div className={styles.desktopFrame}>
-                        <Image src={cover.kind === "pair" ? cover.desktop : cover.src}
+                        <Image src={cover.kind === "pair" ? cover.desktop : cover.kind === "screenshotLogo" ? cover.screenshot : cover.src}
                           alt={"desktopAlt" in projectCopy ? projectCopy.desktopAlt : projectCopy.title}
-                          width={cover.kind === "pair" ? (cover.desktopSize?.[0] ?? 1600) : (cover.size?.[0] ?? 1440)}
-                          height={cover.kind === "pair" ? (cover.desktopSize?.[1] ?? 834) : (cover.size?.[1] ?? 900)}
+                          width={cover.kind === "pair" ? (cover.desktopSize?.[0] ?? 1600) : cover.kind === "screenshotLogo" ? cover.screenshotSize[0] : (cover.size?.[0] ?? 1440)}
+                          height={cover.kind === "pair" ? (cover.desktopSize?.[1] ?? 834) : cover.kind === "screenshotLogo" ? cover.screenshotSize[1] : (cover.size?.[1] ?? 900)}
                           sizes="(max-width: 48rem) 78vw, (max-width: 80rem) 39vw, 30rem" />
                       </div>
                     ) : null}
@@ -120,10 +129,11 @@ export function WorkPageContent() {
                         <Image src={cover.src} alt={"mobileAlt" in projectCopy ? projectCopy.mobileAlt : projectCopy.title}
                           width={cover.size?.[0] ?? 393} height={cover.size?.[1] ?? 869} sizes="(max-width: 48rem) 35vw, 14rem" />
                       </div>
-                    ) : cover.kind === "logo" ? (
-                      <div className={styles.logoFrame}>
-                        <Image src={cover.src} alt={"logoAlt" in projectCopy ? projectCopy.logoAlt : projectCopy.title} width={cover.size?.[0] ?? 640}
-                          height={cover.size?.[1] ?? 640} sizes="(max-width: 48rem) 50vw, 16rem" />
+                    ) : cover.kind === "logo" || cover.kind === "screenshotLogo" ? (
+                      <div className={cover.kind === "screenshotLogo" ? styles.logoOverlay : styles.logoFrame}>
+                        <Image src={cover.kind === "screenshotLogo" ? cover.logo : cover.src} alt={"logoAlt" in projectCopy ? projectCopy.logoAlt : projectCopy.title}
+                          width={cover.kind === "screenshotLogo" ? cover.logoSize[0] : (cover.size?.[0] ?? 640)}
+                          height={cover.kind === "screenshotLogo" ? cover.logoSize[1] : (cover.size?.[1] ?? 640)} sizes="(max-width: 48rem) 25vw, 8rem" />
                       </div>
                     ) : null}
                   </div>
@@ -138,7 +148,11 @@ export function WorkPageContent() {
                   </div>
 
                   {status ? <p className={styles.projectStatus}>{status}</p> : null}
-                  <h3>{projectCopy.title}</h3>
+                  <h3>{titleHref ? project.caseHref ? (
+                    <Link href={titleHref} className={styles.projectTitleLink}>{projectCopy.title}</Link>
+                  ) : (
+                    <a href={titleHref} className={styles.projectTitleLink} target="_blank" rel="noopener noreferrer">{projectCopy.title}</a>
+                  ) : projectCopy.title}</h3>
                   <p>{projectCopy.description}</p>
                   {attribution ? <p className={styles.projectAttribution}>{attribution}</p> : null}
 

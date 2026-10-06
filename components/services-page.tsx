@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import type { LucideIcon } from "lucide-react"
 import Link from "next/link"
 import { ArrowUpRight } from "iconoir-react"
@@ -19,6 +19,7 @@ import { useLanguage } from "@/hooks/use-language"
 import styles from "./services-page.module.css"
 
 const serviceIcons: LucideIcon[] = [Code2, PanelsTopLeft, ShieldCheck, Workflow]
+const FAQ_HOVER_DELAY_MS = 2300
 
 const serviceCtas = [
   { href: "/work/valeria-herrera/" },
@@ -129,6 +130,16 @@ const visuals = [
 export function ServicesPageContent() {
   const { t } = useLanguage()
   const [openFaq, setOpenFaq] = useState<number | null>(null)
+  const hoverTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const cancelFaqHover = () => {
+    if (hoverTimer.current !== null) clearTimeout(hoverTimer.current)
+    hoverTimer.current = null
+  }
+
+  useEffect(() => () => {
+    if (hoverTimer.current !== null) clearTimeout(hoverTimer.current)
+  }, [])
 
   return (
     <section className={styles.services} aria-labelledby="services-list-title">
@@ -217,7 +228,19 @@ export function ServicesPageContent() {
                     className={styles.faqTrigger}
                     aria-expanded={isOpen}
                     aria-controls={panelId}
-                    onClick={() => setOpenFaq(isOpen ? null : index)}
+                    onPointerEnter={event => {
+                      if (event.pointerType !== "mouse" || !window.matchMedia("(hover: hover) and (pointer: fine)").matches) return
+                      cancelFaqHover()
+                      if (!isOpen) hoverTimer.current = setTimeout(() => {
+                        setOpenFaq(index)
+                        hoverTimer.current = null
+                      }, FAQ_HOVER_DELAY_MS)
+                    }}
+                    onPointerLeave={cancelFaqHover}
+                    onClick={() => {
+                      cancelFaqHover()
+                      setOpenFaq(isOpen ? null : index)
+                    }}
                   >
                     <span className={styles.faqIndex}>
                       {String(index + 1).padStart(2, "0")}

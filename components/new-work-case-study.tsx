@@ -3,7 +3,7 @@
 import { CaseStudyPage } from "@/components/case-study-page"
 import { useLanguage } from "@/hooks/use-language"
 
-type Project = "montblanMobile" | "sociogramaUtp" | "backstabber" | "bandasAsesoria" | "jillSoftware"
+type Project = "montblanMobile" | "sociogramaUtp" | "backstabber" | "bandasAsesoria" | "poetsFlowers" | "jillSoftware"
 
 export function NewWorkCaseStudy({ project }: { project: Project }) {
   const { t } = useLanguage()
@@ -45,6 +45,12 @@ export function NewWorkCaseStudy({ project }: { project: Project }) {
     return <CaseStudyPage content={content} projectUrl="https://bandasyasesoria.com.mx/"
       desktopCover={{ src: "/work/bandas-asesoria/desktop.webp", alt: t.portfolio.projects.bandasAsesoria.desktopAlt, width: 1600, height: 834 }}
       mobileCover={{ src: "/work/bandas-asesoria/mobile.webp", alt: t.portfolio.projects.bandasAsesoria.mobileAlt, width: 408, height: 901 }} />
+  }
+
+  if (project === "poetsFlowers") {
+    return <CaseStudyPage content={content} projectUrl="https://poetsflowers.buxdev.com/"
+      desktopCover={{ src: "/work/poets-flowers/desktop.webp", alt: t.portfolio.projects.poetsFlowers.desktopAlt, width: 1600, height: 1000 }}
+      mobileCover={{ src: "/work/poets-flowers/mobile.webp", alt: t.portfolio.projects.poetsFlowers.mobileAlt, width: 780, height: 1688 }} />
   }
 
   if (project === "jillSoftware") {

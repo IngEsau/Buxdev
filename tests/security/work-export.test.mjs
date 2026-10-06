@@ -8,14 +8,15 @@ test('Home features only the approved projects with real desktop and mobile imag
   const html = await read('index.html')
   const gallery = html.match(/<section id="trabajos"[\s\S]*?<\/section>/)?.[0]
   assert.ok(gallery, 'Home work gallery missing')
-  const names = ['Valeria Herrera', 'Sistema de sociometría', 'Bandas Asesoría y Montaje', 'Jill Software']
+  const names = ['Valeria Herrera', 'Sistema de sociometría', 'Bandas Asesoría y Montaje', 'Poet’s Flowers', 'Jill Software']
   let previous = -1
   for (const name of names) {
     const position = gallery.indexOf(name)
     assert.ok(position > previous, `${name} must follow the previous featured project`)
     previous = position
   }
-  for (const project of ['valeria-herrera', 'sociograma-utp', 'bandas-asesoria', 'jill-software']) {
+  for (const project of ['valeria-herrera', 'sociograma-utp', 'bandas-asesoria', 'poets-flowers', 'jill-software']) {
+    assert.match(gallery, new RegExp(`<a[^>]+href="/work/${project}/"`), `${project} must link to its case`)
     assert.ok(gallery.includes(`/work/${project}/`), `${project} must use real assets`)
   }
   assert.doesNotMatch(gallery, /Montblan Mobile System|Lux Garage|WordPress Incident Response|Backstabber Toolkit/)
@@ -28,10 +29,11 @@ test('The exported Work catalog keeps the approved order, case links and truthfu
     'Valeria Herrera',
     'Sistema de sociometría',
     'Bandas Asesoría y Montaje',
+    'Poet’s Flowers',
     'Jill Software',
-    'Backstabber Toolkit',
     'WordPress Incident Response',
     'Portfolio personal',
+    'Backstabber Toolkit',
     'Apps móviles',
     'Montblan Mobile System',
   ]
@@ -41,23 +43,32 @@ test('The exported Work catalog keeps the approved order, case links and truthfu
     assert.ok(position > previous, `${name} must follow the previous project`)
     previous = position
   }
-  assert.doesNotMatch(html, /Poets Flowers/)
   assert.doesNotMatch(html, /Lux Garage/)
-  for (const route of ['montblan-mobile', 'sociograma-utp', 'bandas-asesoria', 'jill-software', 'valeria-herrera', 'backstabber-toolkit']) {
+  for (const route of ['montblan-mobile', 'sociograma-utp', 'bandas-asesoria', 'poets-flowers', 'jill-software', 'valeria-herrera', 'backstabber-toolkit']) {
     assert.ok(html.includes(`/work/${route}/`))
   }
+  const titleLinks = [...html.matchAll(/<h3><a[^>]+href="([^"]+)"[^>]*>[^<]+<\/a><\/h3>/g)].map(match => match[1])
+  assert.deepEqual(titleLinks, [
+    '/work/valeria-herrera/', '/work/sociograma-utp/', '/work/bandas-asesoria/',
+    '/work/poets-flowers/', '/work/jill-software/',
+    'https://github.com/IngEsau/wp-xmlrpc-attack-analysis', 'https://portfolio.buxdev.com/',
+    '/work/backstabber-toolkit/', '/work/montblan-mobile/',
+  ])
   assert.match(html, /Proyecto propiedad de la Universidad Tecnológica de Puebla/)
   assert.match(html, /En desarrollo · Sin demo pública/)
   assert.match(html, /Sitio actual · Propuesta visual/)
   assert.match(html, /https:\/\/jillsoftware\.com\.mx\//)
   assert.match(html, /https:\/\/valeriaherrera\.buxdev\.com\//)
   assert.match(html, /\/work\/backstabber-toolkit\/logo\.webp/)
+  assert.match(html, /\/work\/backstabber-toolkit\/overview\.webp/)
+  assert.match(html, /https:\/\/poetsflowers\.buxdev\.com\//)
+  assert.match(html, /\/work\/poets-flowers\/desktop\.webp/)
   assert.doesNotMatch(html, /Ampliar imagen/, 'Work cards must not open the image viewer')
 })
 
 test('New cases are static, indexable, attributed and backed by real public assets', async () => {
   const sitemap = await read('sitemap.xml')
-  for (const route of ['work', 'work/montblan-mobile', 'work/sociograma-utp', 'work/bandas-asesoria', 'work/jill-software',
+  for (const route of ['work', 'work/montblan-mobile', 'work/sociograma-utp', 'work/bandas-asesoria', 'work/poets-flowers', 'work/jill-software',
     'work/valeria-herrera', 'work/backstabber-toolkit']) {
     const url = `https://buxdev.com/${route}/`
     assert.ok(sitemap.includes(`<loc>${url}</loc>`))
@@ -82,6 +93,12 @@ test('New cases are static, indexable, attributed and backed by real public asse
   for (const name of ['home-featured', 'home-about', 'home-presence', 'catalog-early', 'catalog-more', 'catalog-final']) {
     assert.ok(bandas.includes(`/work/bandas-asesoria/${name}.webp`))
   }
+  const poets = await read('work/poets-flowers/index.html')
+  assert.match(poets, /Poet’s Flowers/)
+  assert.match(poets, /Colección por ocasión/)
+  assert.match(poets, /https:\/\/poetsflowers\.buxdev\.com\//)
+  assert.match(poets, /https:\/\/github\.com\/IngEsau\/poets-flowers/)
+  assert.match(poets, /Ampliar imagen/, 'Case images must retain the zoom viewer')
   for (const path of ['work/montblan-mobile/login.webp', 'work/montblan-mobile/order-form.webp',
     'work/montblan-mobile/orders.webp', 'work/montblan-mobile/products.webp',
     'work/montblan-mobile/receivables.webp', 'work/montblan-mobile/warehouse-postdated.webp',
@@ -99,7 +116,10 @@ test('New cases are static, indexable, attributed and backed by real public asse
     'work/bandas-asesoria/company.webp', 'work/bandas-asesoria/home-presence.webp',
     'work/bandas-asesoria/home-featured.webp', 'work/bandas-asesoria/home-about.webp',
     'work/bandas-asesoria/catalog-early.webp', 'work/bandas-asesoria/catalog-more.webp',
-    'work/bandas-asesoria/catalog-final.webp']) {
+    'work/bandas-asesoria/catalog-final.webp',
+    'work/poets-flowers/desktop.webp', 'work/poets-flowers/mobile.webp',
+    'work/poets-flowers/meaning.webp', 'work/poets-flowers/collection.webp',
+    'work/poets-flowers/collection-mobile.webp', 'work/poets-flowers/contact.webp']) {
     assert.ok((await stat(`out/${path}`)).size > 1000, `${path} missing or empty`)
   }
   assert.match(await read('work/valeria-herrera/index.html'), /Valeria Herrera/)

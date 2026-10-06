@@ -26,6 +26,7 @@
  */
 
 import Image from "next/image"
+import Link from "next/link"
 import { useEffect, useRef, useState, type KeyboardEvent } from "react"
 
 import styles from "./accordion-gallery.module.css"
@@ -35,6 +36,7 @@ type GalleryItem = {
   image: string
   mobileImage: string
   label: string
+  href: string
 }
 
 export function AccordionGallery({ items, label }: { items: GalleryItem[]; label: string }) {
@@ -132,21 +134,21 @@ export function AccordionGallery({ items, label }: { items: GalleryItem[]; label
     setActive(index)
     paint.current?.()
   }
-  const onKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
+  const onKeyDown = (event: KeyboardEvent<HTMLAnchorElement>, index: number) => {
     const next = event.key === "Home" ? 0 : event.key === "End" ? items.length - 1
       : ["ArrowRight", "ArrowDown"].includes(event.key) ? (index + 1) % items.length
         : ["ArrowLeft", "ArrowUp"].includes(event.key) ? (index - 1 + items.length) % items.length : null
     if (next === null) return
     event.preventDefault()
-    root.current?.querySelectorAll<HTMLButtonElement>("[data-gallery-trigger]")[next]?.focus()
+    root.current?.querySelectorAll<HTMLAnchorElement>("[data-gallery-trigger]")[next]?.focus()
   }
 
   return (
     <ol ref={root} className={styles.gallery} aria-label={label}>
       {items.map((item, index) => (
-        <li key={item.id} className={styles.panel} data-active={active === index}>
-          <button type="button" data-gallery-trigger className={styles.trigger} aria-label={item.label} aria-pressed={active === index}
-            onFocus={() => select(index)} onClick={() => select(index)} onKeyDown={event => onKeyDown(event, index)}
+        <li key={item.id} className={styles.panel} data-active={active === index} data-project={item.id}>
+          <Link href={item.href} data-gallery-trigger className={styles.trigger} aria-label={item.label}
+            onFocus={() => select(index)} onKeyDown={event => onKeyDown(event, index)}
             onPointerMove={event => {
               if (event.pointerType !== "mouse" || (event.clientX === pointer.current.x && event.clientY === pointer.current.y)) return
               pointer.current = { x: event.clientX, y: event.clientY }
@@ -160,7 +162,7 @@ export function AccordionGallery({ items, label }: { items: GalleryItem[]; label
             </span>
             <span className={styles.shade} aria-hidden="true" />
             <span className={styles.label} data-gallery-label><span className={styles.bar} aria-hidden="true" />{item.label}</span>
-          </button>
+          </Link>
         </li>
       ))}
     </ol>

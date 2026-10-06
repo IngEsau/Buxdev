@@ -18,6 +18,7 @@ export const WORK_INDEXABLE_PATHS = [
   "/work/montblan-mobile/",
   "/work/sociograma-utp/",
   "/work/bandas-asesoria/",
+  "/work/poets-flowers/",
   "/work/jill-software/",
   "/work/valeria-herrera/",
   "/work/backstabber-toolkit/",

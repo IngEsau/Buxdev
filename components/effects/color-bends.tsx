@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react"
 import { useTheme } from "@/hooks/use-theme"
-import { colorBendsFragment, colorBendsVertex } from "./color-bends-shaders"
+import { createColorBendsRenderer } from "./color-bends-renderer"
 
 // Reference baseline, with a slower clock and enough energy for the dark Hero.
 export const heroColorBends = {
@@ -50,6 +50,9 @@ export function ColorBends({ className, variant = "hero" }: { className?: string
     let disposed = false
     let inView = false
     let loading = false
+    let initializationFrame = 0
+    let initializationTimer = 0
+    let idleCallback = 0
     let failed = false
     let animationFrame = 0
     let lastFrame = 0
@@ -58,7 +61,15 @@ export function ColorBends({ className, variant = "hero" }: { className?: string
     let releaseRenderer: (() => void) | undefined
 
     const canRun = () => !disposed && media.matches && inView && !document.hidden && !failed
+    const cancelInitialization = () => {
+      cancelAnimationFrame(initializationFrame)
+      clearTimeout(initializationTimer)
+      if (idleCallback) window.cancelIdleCallback(idleCallback)
+      initializationFrame = initializationTimer = idleCallback = 0
+      loading = false
+    }
     const stop = () => {
+      cancelInitialization()
       cancelAnimationFrame(animationFrame)
       animationFrame = 0
       lastFrame = 0
@@ -96,85 +107,33 @@ export function ColorBends({ className, variant = "hero" }: { className?: string
       if (!animationFrame && canRun() && renderFrame) animationFrame = requestAnimationFrame(loop)
     }
 
-    const initialize = async () => {
-      if (loading || renderFrame || !canRun()) return
-      loading = true
+    const initialize = () => {
+      initializationTimer = idleCallback = 0
+      if (renderFrame || !canRun()) { loading = false; return }
       try {
-        // Load only when visible; reduced-motion keeps the static background.
-        const THREE = await import("three")
-        if (!canRun()) return
-        const renderer = new THREE.WebGLRenderer({
-          alpha: true, antialias: false, depth: false, stencil: false,
-          powerPreference: "low-power",
-        })
-        const canvas = renderer.domElement
-        releaseRenderer = () => {
-          renderer.dispose()
-          if (!renderer.getContext().isContextLost()) renderer.forceContextLoss()
-          canvas.remove()
-        }
-        renderer.outputColorSpace = THREE.SRGBColorSpace
-        renderer.setClearColor(0x000000, 0)
-        const scene = new THREE.Scene()
-        const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1)
-        const geometry = new THREE.PlaneGeometry(2, 2)
-        const colors = Array.from({ length: 8 }, () => new THREE.Vector3())
-        // Match the reference's direct RGB uniforms, without color-space conversion.
-        colors[0].set(44 / 255, 76 / 255, 155 / 255)
-        const rotation = settings.rotation * Math.PI / 180
-        const uniforms = {
-          uCanvas: { value: new THREE.Vector2(1, 1) },
-          uTime: { value: 0 },
-          uSpeed: { value: variant === "page" && compact.matches ? mobilePageSpeed : settings.speed },
-          uRot: { value: new THREE.Vector2(Math.cos(rotation), Math.sin(rotation)) },
-          uColorCount: { value: 1 },
-          uColors: { value: colors },
-          uTransparent: { value: 1 },
-          uScale: { value: settings.scale },
-          uFrequency: { value: settings.frequency },
-          uWarpStrength: { value: settings.warpStrength },
-          uPointer: { value: new THREE.Vector2() },
-          uMouseInfluence: { value: 0 },
-          uParallax: { value: 0 },
-          uNoise: { value: settings.noise },
-          uIterations: { value: settings.iterations },
-          uIntensity: { value: settings.intensity },
-          uBandWidth: { value: settings.bandWidth },
-        }
-        const material = new THREE.ShaderMaterial({
-          vertexShader: colorBendsVertex,
-          fragmentShader: colorBendsFragment,
-          uniforms, premultipliedAlpha: true, transparent: true,
-          depthTest: false, depthWrite: false,
-        })
-        scene.add(new THREE.Mesh(geometry, material))
-        const targetPointer = new THREE.Vector2()
-        const currentPointer = new THREE.Vector2()
+        const renderer = createColorBendsRenderer(settings)
+        const { canvas } = renderer
+        releaseRenderer = renderer.dispose
+        const targetPointer = { x: 0, y: 0 }
+        const currentPointer = { x: 0, y: 0 }
         const interaction = window.matchMedia("(min-width: 48rem) and (hover: hover) and (pointer: fine)")
         const resize = () => {
           const width = Math.max(container.clientWidth, 1)
           const height = Math.max(container.clientHeight, 1)
-          renderer.setPixelRatio(Math.min(width < 768 ? 0.65 : width <= 1024 ? 0.75 : 1, 1440 / width))
-          renderer.setSize(width, height, false)
-          uniforms.uCanvas.value.set(width, height)
+          const pixelRatio = Math.min(width < 768 ? 0.65 : width <= 1024 ? 0.75 : 1, 1440 / width)
+          renderer.setSize(width, height, pixelRatio)
         }
         const onPointerMove = (event: PointerEvent) => {
           if (!canRun() || !interaction.matches || event.pointerType !== "mouse") return
           const rect = surface.getBoundingClientRect()
-          targetPointer.set(
-            Math.max(-1, Math.min(1, (event.clientX - rect.left) / rect.width * 2 - 1)),
-            Math.max(-1, Math.min(1, -((event.clientY - rect.top) / rect.height * 2 - 1))),
-          )
+          targetPointer.x = Math.max(-1, Math.min(1, (event.clientX - rect.left) / rect.width * 2 - 1))
+          targetPointer.y = Math.max(-1, Math.min(1, -((event.clientY - rect.top) / rect.height * 2 - 1)))
         }
-        const onPointerLeave = () => targetPointer.set(0, 0)
+        const onPointerLeave = () => { targetPointer.x = targetPointer.y = 0 }
         const syncInteraction = () => {
           surface.removeEventListener("pointermove", onPointerMove)
           surface.removeEventListener("pointerleave", onPointerLeave)
-          targetPointer.set(0, 0)
-          currentPointer.set(0, 0)
-          uniforms.uPointer.value.set(0, 0)
-          uniforms.uMouseInfluence.value = interaction.matches ? settings.mouseInfluence : 0
-          uniforms.uParallax.value = interaction.matches ? settings.parallax : 0
+          targetPointer.x = targetPointer.y = currentPointer.x = currentPointer.y = 0
           if (interaction.matches) {
             surface.addEventListener("pointermove", onPointerMove, { passive: true })
             surface.addEventListener("pointerleave", onPointerLeave)
@@ -191,14 +150,8 @@ export function ColorBends({ className, variant = "hero" }: { className?: string
           surface.removeEventListener("pointerleave", onPointerLeave)
           interaction.removeEventListener("change", syncInteraction)
           canvas.removeEventListener("webglcontextlost", onContextLost)
-          geometry.dispose()
-          material.dispose()
           renderer.dispose()
-          if (!renderer.getContext().isContextLost()) renderer.forceContextLoss()
-          canvas.remove()
         }
-        // Fall back on a shader compilation failure rather than leave a blank canvas.
-        renderer.debug.onShaderError = () => { failed = true }
         canvas.addEventListener("webglcontextlost", onContextLost)
         interaction.addEventListener("change", syncInteraction)
         syncInteraction()
@@ -207,12 +160,16 @@ export function ColorBends({ className, variant = "hero" }: { className?: string
         container.appendChild(canvas)
         renderFrame = (delta) => {
           // Same inertial lerp as the reference; no pointer-driven React renders.
-          currentPointer.lerp(targetPointer, Math.min(1, delta * 8))
-          uniforms.uPointer.value.copy(currentPointer)
-          uniforms.uTime.value = elapsed
-          uniforms.uSpeed.value = variant === "page" && compact.matches ? mobilePageSpeed : settings.speed
-          renderer.render(scene, camera)
-          if (failed) throw new Error("Color Bends unavailable")
+          const smoothing = Math.min(1, delta * 8)
+          currentPointer.x += (targetPointer.x - currentPointer.x) * smoothing
+          currentPointer.y += (targetPointer.y - currentPointer.y) * smoothing
+          renderer.render({
+            time: elapsed,
+            speed: variant === "page" && compact.matches ? mobilePageSpeed : settings.speed,
+            pointerX: currentPointer.x, pointerY: currentPointer.y,
+            mouseInfluence: interaction.matches ? settings.mouseInfluence : 0,
+            parallax: interaction.matches ? settings.parallax : 0,
+          })
         }
         start()
       } catch {
@@ -223,11 +180,27 @@ export function ColorBends({ className, variant = "hero" }: { className?: string
       }
     }
 
+    const scheduleInitialization = () => {
+      if (loading || !canRun()) return
+      loading = true
+      // Give content a paint before compiling the decorative shader. Keep the
+      // static background until ready, and cancel pending work when offscreen.
+      initializationFrame = requestAnimationFrame(() => {
+        initializationFrame = 0
+        if (!canRun()) { loading = false; return }
+        if (typeof window.requestIdleCallback === "function") {
+          idleCallback = window.requestIdleCallback(initialize, { timeout: 500 })
+        } else {
+          initializationTimer = window.setTimeout(initialize, 0)
+        }
+      })
+    }
+
     const sync = () => {
       if (!media.matches) disposeRenderer()
       else if (!canRun()) stop()
       else if (renderFrame) start()
-      else void initialize()
+      else scheduleInitialization()
     }
     const observer = new IntersectionObserver(([entry]) => {
       inView = entry.isIntersecting

@@ -3,12 +3,7 @@
 import { useState } from "react"
 import Link from "next/link"
 import * as Dialog from "@radix-ui/react-dialog"
-import {
-  Check,
-  Lock as LockKeyhole,
-  SettingsProfiles as SlidersHorizontal,
-  Xmark as X,
-} from "iconoir-react"
+import { Xmark as X } from "iconoir-react"
 
 import { useConsent } from "@/components/consent-provider"
 import { useLanguage } from "@/hooks/use-language"
@@ -55,51 +50,32 @@ export function PrivacyPreferences() {
         <Dialog.Content
           className={styles.dialogContent}
           data-privacy-preferences
-          aria-labelledby="privacy-preferences-title"
-          aria-describedby="privacy-preferences-description"
         >
           <div className={styles.dialogHeader}>
-            <span className={styles.dialogIcon} aria-hidden="true">
-              <SlidersHorizontal />
-            </span>
-            <div>
-              <Dialog.Title id="privacy-preferences-title">
-                {t.consent.preferencesTitle}
-              </Dialog.Title>
-              <Dialog.Description id="privacy-preferences-description">
-                {t.consent.preferencesDescription}
-              </Dialog.Description>
-            </div>
+            <Dialog.Title>{t.consent.preferencesTitle}</Dialog.Title>
             <Dialog.Close asChild>
               <button type="button" className={styles.closeButton} aria-label={t.consent.closePreferences}>
                 <X aria-hidden="true" />
               </button>
             </Dialog.Close>
+            <Dialog.Description>{t.consent.preferencesDescription}</Dialog.Description>
           </div>
 
           <div className={styles.categories}>
             <section className={styles.category} aria-labelledby="necessary-category-title">
               <div className={styles.categoryHeader}>
-                <span className={styles.categoryIcon} aria-hidden="true">
-                  <LockKeyhole />
-                </span>
+                <span className={styles.categoryIndex} aria-hidden="true">01</span>
                 <div>
                   <h3 id="necessary-category-title">{t.consent.necessaryTitle}</h3>
                   <p>{t.consent.necessaryStatus}</p>
                 </div>
-                <span className={styles.requiredBadge}>
-                  <Check aria-hidden="true" />
-                  {t.consent.alwaysActive}
-                </span>
               </div>
               <p className={styles.categoryDescription}>{t.consent.necessaryDescription}</p>
             </section>
 
             <section className={styles.category} aria-labelledby="analytics-category-title">
               <div className={styles.categoryHeader}>
-                <span className={styles.categoryIcon} aria-hidden="true">
-                  <SlidersHorizontal />
-                </span>
+                <span className={styles.categoryIndex} aria-hidden="true">02</span>
                 <div>
                   <h3 id="analytics-category-title">{t.consent.analyticsTitle}</h3>
                   <p>{t.consent.analyticsStatus}</p>

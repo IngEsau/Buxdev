@@ -1,0 +1,373 @@
+.experience {
+  position: relative;
+}
+
+.scene {
+  --depth: 1;
+  --progress: 1;
+  --title-phase: 1;
+  --handoff: 1;
+  position: relative;
+  height: 185svh;
+  border-top: 1px solid var(--border-strong);
+}
+
+.stage {
+  position: sticky;
+  top: calc(var(--header-height) + 0.75rem);
+  display: flex;
+  height: calc(100svh - var(--header-height) - 0.75rem);
+  min-height: 0;
+  flex-direction: column;
+  padding-block: clamp(1.5rem, 3svh, 2.5rem);
+  isolation: isolate;
+}
+
+.sceneGrid {
+  position: absolute;
+  inset: -3rem calc(-1 * var(--page-gutter));
+  z-index: -1;
+  background-image: linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 100% clamp(4.25rem, 7.5vw, 7.5rem);
+  opacity: calc(0.2 + var(--progress) * 0.12);
+  transform: translateY(calc(var(--back-y, 0px) * var(--depth)));
+  mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 80%, transparent);
+  pointer-events: none;
+}
+
+.chapterMeta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  color: var(--foreground-subtle);
+  font-family: var(--font-roboto), Roboto, sans-serif;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.chapterMeta > span:first-child {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  color: var(--foreground-muted);
+}
+
+.chapterMeta i {
+  width: 2rem;
+  height: 1px;
+  background: var(--brand);
+}
+
+.composition {
+  display: grid;
+  flex: 1;
+  min-height: 0;
+  grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.4fr);
+  gap: clamp(2rem, 4vw, 4rem);
+  align-items: center;
+}
+
+.copy {
+  position: relative;
+  z-index: 2;
+  min-width: 0;
+}
+
+.copy h3 {
+  margin: 0;
+  color: var(--foreground);
+  font-size: clamp(2.75rem, 4.8vw, 4.6rem);
+  font-weight: 690;
+  letter-spacing: var(--heading-letter-spacing);
+  line-height: 0.99;
+  transform: translateY(calc((1 - var(--title-phase)) * 18px + var(--front-y, 0px) * 0.08 * var(--depth)));
+}
+
+.copy h3 > span {
+  display: block;
+}
+
+.copy .titleTail {
+  width: fit-content;
+  max-width: 100%;
+  color: color-mix(in srgb, var(--brand) 42%, var(--foreground));
+  opacity: calc(0.65 + var(--title-phase) * 0.35);
+  transform: translateX(calc((1 - var(--title-phase)) * 16px));
+}
+
+.scene[data-kind="security"] h3 {
+  font-size: clamp(2.5rem, 3.5vw, 3.2rem);
+}
+
+.copy .titleTail[data-long="true"],
+.scene[data-kind="automation"] .titleTail {
+  font-size: clamp(2.4rem, 3.3vw, 3.25rem);
+}
+
+.descriptor {
+  max-width: 29rem;
+  margin: 1.75rem 0 0;
+  color: var(--foreground-muted);
+  font-size: clamp(0.95rem, 1.15vw, 1.05rem);
+  line-height: 1.75;
+  opacity: calc(0.6 + var(--phase, 1) * 0.4);
+  transform: translateY(calc((1 - var(--phase, 1)) * 12px));
+}
+
+.ctaReveal {
+  margin-top: 1.5rem;
+  opacity: var(--phase, 1);
+  transform: translateY(calc((1 - var(--phase, 1)) * 12px));
+}
+
+.ctaReveal:focus-within {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto !important;
+}
+
+.cta {
+  display: inline-flex;
+  gap: 0.75rem;
+  align-items: center;
+  padding-block: 0.5rem;
+  color: var(--foreground);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-color: var(--border-strong);
+  text-underline-offset: 0.35rem;
+}
+
+.cta:hover {
+  text-decoration-color: var(--brand);
+}
+
+.cta:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 5px;
+}
+
+.cta svg {
+  width: 1rem;
+  height: 1rem;
+}
+
+.art {
+  min-width: 0;
+  height: min(62svh, 36rem);
+  margin-left: -1.5rem;
+}
+
+.desktopVisual,
+.mobileVisual {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  font-family: var(--font-roboto), Roboto, sans-serif;
+}
+
+.mobileVisual { display: none; }
+.backLayer { transform: translateY(calc(var(--back-y, 0px) * var(--depth))); }
+.midLayer { transform: translateY(calc(var(--mid-y, 0px) * var(--depth))); }
+.frontLayer { transform: translateY(calc(var(--front-y, 0px) * var(--depth))); }
+.reveal { opacity: var(--phase, 1); transform: translateY(calc((1 - var(--phase, 1)) * 16px)); }
+.activate { opacity: calc(0.24 + var(--phase, 1) * 0.76); }
+.scene[data-kind="security"] .activate { opacity: calc(0.45 + var(--phase, 1) * 0.55); }
+.transient { opacity: var(--phase, 0); }
+.fadeOut { opacity: calc(1 - var(--phase, 1)); }
+.designGuides { opacity: calc(0.7 - var(--phase, 1) * 0.4); }
+
+.desktopVisual path,
+.mobileVisual path,
+.wireframe rect,
+.flowTokenOutline {
+  fill: none;
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+.draw,
+.drawFaint {
+  stroke-dasharray: 1;
+  stroke-dashoffset: calc(1 - var(--phase, 1));
+}
+
+.draw,
+.focusLine,
+.anomalyLine {
+  stroke: color-mix(in srgb, var(--brand) 76%, var(--foreground));
+}
+
+.draftLine,
+.drawFaint,
+.nodeCorner,
+.outlineLine {
+  stroke: var(--border-strong);
+}
+
+.topologyLine { stroke: var(--foreground-subtle); }
+.draftLine { opacity: 0.45; }
+.wireframe { opacity: var(--phase, 0); }
+.wireframe rect,
+.wireframe path { stroke: var(--foreground-subtle); }
+.nodeLabel { fill: var(--foreground); font-size: 24px; font-weight: 550; letter-spacing: 0.025em; }
+.nodeNote,
+.technicalLabel { fill: var(--foreground-subtle); font-size: 12px; letter-spacing: 0.1em; }
+.accentText,
+.traceText { fill: color-mix(in srgb, var(--brand) 68%, var(--foreground)); }
+.traceText { font-size: 14px; letter-spacing: 0.05em; }
+.interfaceNav { fill: var(--foreground-muted); font-size: 18px; }
+.interfaceTitle { fill: var(--foreground); font-size: 48px; font-weight: 650; letter-spacing: -0.02em; }
+.interfaceSubtitle { fill: var(--foreground-muted); font-size: 18px; }
+.interfaceInput { fill: var(--foreground); font-size: 24px; }
+.interfaceButton,
+.flowToken { fill: var(--brand); }
+.buttonText { fill: #fff; font-size: 19px; }
+.typeSpecimen { fill: var(--foreground); font-size: 88px; font-weight: 650; }
+.flowTokenOutline { stroke: var(--brand); }
+
+.sceneFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.phases {
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 2rem);
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.phases li,
+.conceptLabel,
+.handoff {
+  color: var(--foreground-subtle);
+  font-family: var(--font-roboto), Roboto, sans-serif;
+  font-size: 0.57rem;
+  letter-spacing: 0.08em;
+}
+
+.scene[data-stage="0"] .phases li:nth-child(1),
+.scene[data-stage="1"] .phases li:nth-child(2),
+.scene[data-stage="2"] .phases li:nth-child(3),
+.scene[data-stage="3"] .phases li:nth-child(4) {
+  color: color-mix(in srgb, var(--brand) 68%, var(--foreground));
+}
+
+.progressTrack {
+  height: 1px;
+  margin-top: 1.2rem;
+  background: var(--border);
+}
+
+.progressTrack span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--brand);
+  transform: scaleX(var(--progress));
+  transform-origin: left;
+}
+
+.handoff {
+  display: flex;
+  min-height: 1.5rem;
+  align-items: end;
+  justify-content: flex-end;
+  gap: 0.65rem;
+  margin-top: 0.75rem;
+  opacity: calc(0.2 + var(--handoff) * 0.8);
+  transform: translateY(calc((1 - var(--handoff)) * 8px));
+}
+
+.handoff svg { width: 0.8rem; height: 0.8rem; }
+
+@media (max-width: 48rem) {
+  .scene { --depth: 0.35; height: 175svh; }
+  .stage { padding-block: 1.25rem; }
+  .chapterMeta { font-size: 0.57rem; }
+  .composition { grid-template-columns: minmax(0, 1fr); gap: 1rem; align-content: center; }
+  .copy h3,
+  .scene[data-kind="security"] h3 { font-size: clamp(1.9rem, 8.5vw, 2.6rem); }
+  .copy .titleTail[data-long="true"],
+  .scene[data-kind="automation"] .titleTail { font-size: inherit; }
+  .descriptor { max-width: 37rem; margin-top: 1rem; font-size: 0.9rem; line-height: 1.6; }
+  .ctaReveal { margin-top: 0.75rem; }
+  .art { width: min(100%, 32rem); height: min(32svh, 20rem); margin-inline: auto; }
+  .desktopVisual { display: none; }
+  .mobileVisual { display: block; }
+  .mobileVisual .nodeLabel { font-size: 22px; }
+  .mobileVisual .interfaceTitle { font-size: 39px; }
+  .mobileVisual .interfaceNav { font-size: 17px; }
+  .mobileVisual .typeSpecimen { font-size: 68px; }
+  .scene[data-kind="automation"] .nodeLabel { font-size: 20px; }
+  .phases { width: 100%; justify-content: space-between; gap: 0.4rem; }
+  .sceneFooter { padding-right: 4.5rem; }
+  .phases li { font-size: 0.51rem; letter-spacing: 0.04em; }
+  .conceptLabel { display: none; }
+  .progressTrack { margin-top: 0.9rem; }
+  .handoff { margin-top: 0.5rem; justify-content: flex-start; }
+}
+
+@media (max-height: 700px) {
+  .stage { padding-block: 0.75rem; }
+  .copy h3 { font-size: clamp(2rem, 4vw, 3rem); }
+  .descriptor { margin-top: 0.8rem; font-size: 0.85rem; line-height: 1.5; }
+  .ctaReveal { margin-top: 0.5rem; }
+  .art { height: 52svh; }
+}
+
+@media (max-width: 48rem) and (max-height: 700px) {
+  .copy h3,
+  .scene[data-kind="security"] h3 { font-size: 1.9rem; }
+  .composition { gap: 0.65rem; }
+  .art { height: 31svh; }
+  .cta { padding-block: 0.3rem; font-size: 0.75rem; }
+  .handoff { min-height: 1rem; }
+  .scene .mobileVisual .nodeLabel { font-size: 28px; }
+  .mobileVisual .nodeNote { display: none; }
+}
+
+@media (min-width: 48.001rem) and (max-width: 64rem) and (max-height: 520px) {
+  .scene { --depth: 0.25; }
+  .stage { padding-block: 0.4rem; }
+  .chapterMeta { font-size: 0.55rem; }
+  .copy h3,
+  .scene[data-kind="security"] h3 { font-size: 1.65rem; }
+  .copy .titleTail[data-long="true"],
+  .scene[data-kind="automation"] .titleTail { font-size: inherit; }
+  .descriptor { font-size: 0.78rem; line-height: 1.45; margin-top: 0.5rem; }
+  .cta { padding-block: 0.25rem; font-size: 0.75rem; }
+  .art { height: 48svh; }
+  .desktopVisual { display: none; }
+  .mobileVisual { display: block; }
+  .scene .mobileVisual .nodeLabel { font-size: 28px; }
+  .mobileVisual .nodeNote { display: none; }
+  .sceneFooter { margin-top: 0.1rem; padding-right: 4.5rem; }
+  .conceptLabel { display: none; }
+  .progressTrack { margin-top: 0.5rem; }
+  .handoff { min-height: 1rem; margin-top: 0.25rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scene { height: auto; }
+  .stage { position: relative; top: auto; height: auto; padding-block: 4rem; }
+  .composition { flex: none; margin-block: 2rem; }
+  .backLayer,
+  .midLayer,
+  .frontLayer,
+  .sceneGrid,
+  .copy h3,
+  .titleTail,
+  .descriptor,
+  .ctaReveal,
+  .reveal,
+  .handoff { transform: none !important; }
+}

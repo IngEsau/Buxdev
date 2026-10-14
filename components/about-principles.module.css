@@ -20,11 +20,11 @@
   position: relative;
   z-index: 1;
   display: flex;
-  min-height: 24rem;
+  min-height: 28rem;
   justify-content: space-between;
   flex-direction: column;
   gap: 4rem;
-  padding: clamp(2rem, 4vw, 3.5rem);
+  padding: clamp(2.5rem, 4.8vw, 4.5rem);
   background: color-mix(in srgb, var(--surface) 12%, transparent);
   transition:
     background-color 220ms ease,
@@ -71,16 +71,9 @@
   letter-spacing: 0.1em;
 }
 
-.principleMeta svg {
-  width: 1.1rem;
-  height: 1.1rem;
-  color: color-mix(in srgb, var(--brand) 72%, var(--foreground));
-  stroke-width: 1.4;
-}
-
 .principle h2 {
   max-width: 24rem;
-  margin: 0 0 1.25rem;
+  margin: 0 0 1.75rem;
   color: var(--foreground);
   font-size: clamp(1.8rem, 3.2vw, 3rem);
   font-weight: 650;
@@ -89,12 +82,12 @@
 }
 
 .principle p {
-  max-width: 35rem;
+  max-width: 38ch;
   margin: 0;
   color: var(--foreground-muted);
   font-size: clamp(0.95rem, 1.25vw, 1.075rem);
   letter-spacing: -0.012em;
-  line-height: 1.75;
+  line-height: 1.9;
 }
 
 .valuesHeading h2 {
@@ -112,7 +105,7 @@
   grid-template-columns: 2.5rem auto 1fr;
   align-items: center;
   gap: 1rem;
-  min-height: 5.5rem;
+  min-height: 7rem;
   border-bottom: 1px solid var(--border);
 }
 
@@ -154,7 +147,7 @@
   .mission,
   .vision {
     grid-column: 1 / -1;
-    min-height: 20rem;
+    min-height: 22rem;
   }
 
   .mission {
@@ -173,8 +166,8 @@
 
 @media (max-width: 30rem) {
   .principle {
-    min-height: 18rem;
-    padding: 1.5rem;
+    min-height: 20rem;
+    padding: 1.75rem;
   }
 
   .values {
@@ -183,6 +176,7 @@
 
   .values li {
     grid-template-columns: 2rem 1fr;
+    min-height: 6.5rem;
   }
 
   .values li > i {

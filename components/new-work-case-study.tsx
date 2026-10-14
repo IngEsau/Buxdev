@@ -26,6 +26,7 @@ export function NewWorkCaseStudy({ project }: { project: Project }) {
   if (project === "sociogramaUtp") {
     return <CaseStudyPage
       content={content}
+      compactTitleOnMobile
       desktopCover={{
         src: "/work/sociograma-utp/public-login.webp",
         alt: t.portfolio.projects.sociogramaUtp.desktopAlt,

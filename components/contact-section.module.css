@@ -125,9 +125,6 @@
   width: 2.55rem;
   height: 2.55rem;
   place-items: center;
-  border: 1px solid var(--border-strong);
-  border-radius: var(--radius-sm);
-  background: color-mix(in srgb, var(--surface) 82%, transparent);
   color: var(--brand-hover);
 }
 
@@ -557,14 +554,12 @@
   width: 100%;
   height: 3.35rem;
   margin-top: 0.2rem;
-  border: 1px solid color-mix(in srgb, var(--brand-hover) 72%, white 8%);
+  border: 1px solid transparent;
   border-radius: var(--radius-md);
   background: var(--brand);
   color: #ffffff;
   font-weight: 650;
-  box-shadow:
-    0 0.9rem 2.5rem color-mix(in srgb, var(--brand) 24%, transparent),
-    inset 0 1px rgb(255 255 255 / 10%);
+  box-shadow: none;
 }
 
 .submitButton:hover {

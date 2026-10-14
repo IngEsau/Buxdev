@@ -62,6 +62,7 @@ export interface CaseStudyContent {
 interface CaseStudyPageProps {
   content: CaseStudyContent
   compactMobile?: boolean
+  compactTitleOnMobile?: boolean
   projectUrl?: string
   desktopCover?: {
     src: string
@@ -80,6 +81,7 @@ interface CaseStudyPageProps {
 export function CaseStudyPage({
   content,
   compactMobile = false,
+  compactTitleOnMobile = false,
   projectUrl,
   desktopCover,
   mobileCover,
@@ -100,7 +102,7 @@ export function CaseStudyPage({
             <div className={styles.heroLayout}>
               <div className={styles.heroCopy}>
                 <p className={styles.eyebrow}>{content.label}</p>
-                <h1 id="case-study-title">{content.title}</h1>
+                <h1 id="case-study-title" className={compactTitleOnMobile ? styles.compactTitleOnMobile : undefined}>{content.title}</h1>
                 <p className={styles.heroDescription}>{content.description}</p>
                 {content.attribution ? <p className={styles.attributionNote}>{content.attribution}</p> : null}
 

@@ -37,26 +37,19 @@
   align-items: start;
 }
 
-.bannerIcon,
-.dialogIcon,
-.categoryIcon {
+.bannerIcon {
   display: grid;
   flex: 0 0 auto;
   place-items: center;
-  border: 1px solid color-mix(in srgb, var(--brand) 42%, var(--border));
-  background: var(--brand-soft);
   color: color-mix(in srgb, var(--brand-hover) 78%, var(--foreground));
 }
 
 .bannerIcon {
   width: 2.5rem;
   height: 2.5rem;
-  border-radius: var(--radius-sm);
 }
 
-.bannerIcon svg,
-.dialogIcon svg,
-.categoryIcon svg {
+.bannerIcon svg {
   width: 1rem;
   height: 1rem;
   stroke-width: 1.65;
@@ -135,7 +128,7 @@
 }
 
 .primaryAction {
-  border-color: color-mix(in srgb, var(--brand) 80%, var(--foreground));
+  border-color: transparent;
   background: var(--brand);
   color: #fff;
 }
@@ -162,7 +155,7 @@
 .dialogOverlay {
   position: fixed;
   inset: 0;
-  z-index: 100;
+  z-index: 1100;
   background: rgb(5 7 11 / 68%);
   backdrop-filter: blur(8px);
   animation: consent-fade 180ms ease-out both;
@@ -172,146 +165,112 @@
   position: fixed;
   top: 50%;
   left: 50%;
-  z-index: 101;
-  width: min(40rem, calc(100vw - 2rem));
-  max-height: min(46rem, calc(100dvh - 2rem));
-  padding: clamp(1.25rem, 3vw, 1.75rem);
+  z-index: 1101;
+  width: min(44rem, calc(100vw - 2rem));
+  max-height: calc(100dvh - 3rem);
+  padding: clamp(1.5rem, 4vw, 3rem);
   overflow-y: auto;
   border: 1px solid var(--border-strong);
   border-radius: var(--radius-xl);
-  background:
-    radial-gradient(circle at 18% 0%, color-mix(in srgb, var(--brand) 12%, transparent), transparent 20rem),
-    color-mix(in srgb, var(--background-elevated) 98%, transparent);
+  background: var(--background-elevated);
   color: var(--foreground);
-  box-shadow:
-    0 2.5rem 8rem rgb(0 0 0 / 44%),
-    inset 0 1px rgb(255 255 255 / 4%);
+  box-shadow: 0 2.5rem 8rem rgb(0 0 0 / 35%);
   transform: translate(-50%, -50%);
   animation: consent-dialog-enter 200ms ease-out both;
 }
 
 .dialogHeader {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 1rem;
+  grid-template-columns: minmax(0, 1fr) 2.75rem;
+  gap: 1.25rem;
   align-items: start;
 }
 
-.dialogIcon {
-  width: 2.75rem;
-  height: 2.75rem;
-  border-radius: var(--radius-md);
-}
-
 .dialogHeader h2 {
-  font-size: clamp(1.25rem, 3vw, 1.65rem);
-  font-weight: 650;
-  line-height: 1.2;
+  font-size: clamp(1.375rem, 3vw, 2rem);
+  font-weight: 600;
+  line-height: 1.25;
 }
 
 .dialogHeader p {
-  margin: 0.55rem 0 0;
+  grid-column: 1 / -1;
+  max-width: 54ch;
+  margin: 0;
   color: var(--foreground-muted);
-  font-size: 0.8rem;
-  line-height: 1.65;
+  font-size: 0.875rem;
+  line-height: 1.8;
 }
 
 .closeButton {
   display: grid;
-  width: 2.5rem;
-  height: 2.5rem;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
   place-items: center;
-  border: 1px solid var(--border);
-  border-radius: 50%;
+  border: 0;
   background: transparent;
   color: var(--foreground-muted);
+  line-height: 0;
   cursor: pointer;
   transition:
-    border-color 180ms ease,
-    background-color 180ms ease,
     color 180ms ease;
 }
 
 .closeButton:hover {
-  border-color: var(--border-strong);
-  background: var(--surface-hover);
   color: var(--foreground);
 }
 
 .closeButton svg {
-  width: 1rem;
-  height: 1rem;
+  display: block;
+  width: 1.2rem;
+  height: 1.2rem;
 }
 
 .categories {
   display: grid;
-  gap: 0.75rem;
-  margin-top: 1.5rem;
+  margin-top: 2.25rem;
 }
 
 .category {
-  padding: 1.1rem;
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  padding-block: 1.75rem;
+  border-top: 1px solid var(--border-strong);
 }
 
 .categoryHeader {
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  gap: 0.8rem;
+  grid-template-columns: 1.6rem minmax(0, 1fr) auto;
+  gap: 1rem;
   align-items: center;
 }
 
-.categoryIcon {
-  width: 2.15rem;
-  height: 2.15rem;
-  border-radius: 0.55rem;
+.categoryIndex {
+  align-self: start;
+  color: var(--foreground-subtle);
+  font-family: var(--font-roboto), Roboto, sans-serif;
+  font-size: 0.6875rem;
+  line-height: 1.8;
 }
 
 .category h3 {
-  font-size: 0.9rem;
-  font-weight: 650;
+  font-size: 1rem;
+  font-weight: 600;
   line-height: 1.25;
 }
 
 .categoryHeader p {
-  margin: 0.22rem 0 0;
+  margin: 0.5rem 0 0;
   color: var(--foreground-subtle);
   font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.58rem;
+  font-size: 0.625rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
 .categoryDescription {
-  margin: 0.9rem 0 0;
+  margin: 1rem 0 0 2.6rem;
   color: var(--foreground-muted);
-  font-size: 0.76rem;
-  line-height: 1.65;
-}
-
-.requiredBadge {
-  display: inline-flex;
-  min-height: 2rem;
-  align-items: center;
-  gap: 0.35rem;
-  padding: 0.4rem 0.65rem;
-  border: 1px solid color-mix(in srgb, var(--brand) 30%, var(--border));
-  border-radius: 999px;
-  background: var(--brand-soft);
-  color: color-mix(in srgb, var(--brand-hover) 72%, var(--foreground));
-  font-family: var(--font-roboto), Roboto, ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.56rem;
-  font-weight: 620;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
-}
-
-.requiredBadge svg {
-  width: 0.75rem;
-  height: 0.75rem;
-  stroke-width: 2;
+  font-size: 0.8125rem;
+  line-height: 1.8;
 }
 
 .switch {
@@ -348,14 +307,13 @@
   height: 1.12rem;
   border-radius: 50%;
   background: var(--foreground-subtle);
-  box-shadow: 0 0.18rem 0.45rem rgb(0 0 0 / 20%);
   transition:
     background-color 180ms ease,
     transform 180ms ease;
 }
 
 .switch input:checked + .switchTrack {
-  border-color: color-mix(in srgb, var(--brand) 78%, var(--foreground));
+  border-color: transparent;
   background: var(--brand);
 }
 
@@ -370,16 +328,17 @@
 }
 
 .dialogPolicy {
-  margin: 1rem 0 0;
+  margin: 0.5rem 0 0;
   color: var(--foreground-subtle);
-  font-size: 0.68rem;
-  line-height: 1.6;
+  font-size: 0.75rem;
+  line-height: 1.8;
 }
 
 .dialogActions {
   justify-content: flex-end;
-  margin-top: 1.4rem;
-  padding-top: 1.25rem;
+  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 1.75rem;
   border-top: 1px solid var(--border);
 }
 
@@ -463,28 +422,15 @@
   }
 
   .dialogHeader {
-    grid-template-columns: auto minmax(0, 1fr);
-  }
-
-  .closeButton {
-    position: absolute;
-    top: 0.85rem;
-    right: 0.85rem;
-  }
-
-  .dialogHeader > div {
-    padding-right: 2.25rem;
+    gap: 1rem;
   }
 
   .categoryHeader {
-    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-columns: 1.25rem minmax(0, 1fr) auto;
+    gap: 0.75rem;
   }
 
-  .requiredBadge,
-  .switch {
-    grid-column: 2;
-    justify-self: start;
-  }
+  .categoryDescription { margin-left: 0; }
 }
 
 @media (prefers-reduced-motion: reduce) {

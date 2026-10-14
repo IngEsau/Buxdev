@@ -1,7 +1,5 @@
 "use client"
 
-import { Eye, Heart, Target } from "lucide-react"
-
 import { MotionReveal } from "@/components/motion-reveal"
 import { useLanguage } from "@/hooks/use-language"
 
@@ -15,7 +13,6 @@ export function AboutPrinciples() {
       <article className={`${styles.principle} ${styles.mission}`}>
         <div className={styles.principleMeta}>
           <span>01</span>
-          <Target aria-hidden="true" />
         </div>
         <div>
           <h2>{t.about.mission.title}</h2>
@@ -26,7 +23,6 @@ export function AboutPrinciples() {
       <article className={`${styles.principle} ${styles.vision}`}>
         <div className={styles.principleMeta}>
           <span>02</span>
-          <Eye aria-hidden="true" />
         </div>
         <div>
           <h2>{t.about.vision.title}</h2>
@@ -38,7 +34,6 @@ export function AboutPrinciples() {
         <div className={styles.valuesHeading}>
           <div className={styles.principleMeta}>
             <span>03</span>
-            <Heart aria-hidden="true" />
           </div>
           <h2>{t.about.values.title}</h2>
         </div>

@@ -183,7 +183,7 @@
   gap: 0.6rem;
   min-height: 3.15rem;
   padding-inline: 1.25rem;
-  border: 1px solid color-mix(in srgb, var(--brand) 76%, var(--foreground));
+  border: 1px solid transparent;
   border-radius: var(--radius-sm);
   background: var(--brand);
   color: #fff;
@@ -240,7 +240,7 @@
 
 .primaryAction:hover,
 .finalAction:hover {
-  border-color: var(--brand-hover);
+  border-color: transparent;
   background: var(--brand-hover);
   transform: translateY(-0.1rem);
 }
@@ -631,6 +631,12 @@
 
   .heroLayout {
     align-items: start;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .heroCopy,
+  .projectMeta {
+    min-width: 0;
   }
 
   .projectMeta {
@@ -709,6 +715,12 @@
 
   .heroCopy h1 {
     font-size: clamp(3.35rem, 18vw, 5rem);
+  }
+
+  .heroCopy h1.compactTitleOnMobile {
+    font-size: clamp(2.4rem, 11.5vw, 3.35rem);
+    line-height: 0.96;
+    overflow-wrap: anywhere;
   }
 
   .featureList {

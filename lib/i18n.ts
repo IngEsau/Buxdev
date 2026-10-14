@@ -137,6 +137,7 @@ export const translations = {
     services: {
       title: "Servicios",
       subtitle: "Soluciones tecnológicas para tu negocio",
+      explore: "Explorar servicios",
       items: [
         {
           title: "Páginas Web",
@@ -947,6 +948,7 @@ export const translations = {
     services: {
       title: "Services",
       subtitle: "Technology solutions for your business",
+      explore: "Explore services",
       items: [
         {
           title: "Websites",

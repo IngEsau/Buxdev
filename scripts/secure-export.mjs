@@ -17,6 +17,7 @@ const allowed = [
   /^(?:robots\.txt|sitemap\.xml)$/,
   /^eb0d64a2c026422a948a7b49af9d1aa1\.txt$/, // Existing domain verification.
   /^(?:brand\/buxdev\/)?[\w-]+\.(?:svg|png|jpe?g|webp|ico)$/,
+  /^brand\/clients\/(?:(?:valeria-herrera|jill-software)\.svg|(?:bandas-asesoria|montblan|utp)\.png|poets-cormorant-latin\.woff2)$/,
   /^og\/[\w-]+\.(?:png|jpe?g|webp)$/,
   /^work\/(?:valeria-herrera|bandas-asesoria|wordpress-incident-response|portfolio)\/(?:desktop|mobile|gallery-(?:about|catalog|contact))\.webp$/,
   /^work\/montblan-mobile\/(?:login|order-form|orders|products|receivables|warehouse-postdated)\.webp$/,

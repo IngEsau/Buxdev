@@ -1,5 +1,5 @@
 import { StructuredData } from "@/components/structured-data"
-import { AboutSection } from "@/components/about-section"
+import { ClientsSection } from "@/components/clients-section"
 import { FinalCta } from "@/components/final-cta"
 import { HeroSection } from "@/components/hero-section"
 import { PortfolioSection } from "@/components/portfolio-section"
@@ -20,7 +20,7 @@ export default function Page() {
       <main id="main-content" tabIndex={-1}>
         <HeroSection />
         <ProjectProcess />
-        <AboutSection />
+        <ClientsSection />
         <ServicesSection />
         <PortfolioSection />
         <FinalCta />

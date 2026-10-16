@@ -15,7 +15,7 @@ test('Export rejects secrets, maps, unexpected files, symlinks and stale CSP', a
     await cp('scripts/secure-export.mjs', resolve(tmp, 'scripts/secure-export.mjs'))
     const run = () => spawnSync(process.execPath, [resolve(tmp, 'scripts/secure-export.mjs'), '--check'])
     assert.equal(run().status, 0)
-    for (const name of ['.env', 'package.json', '_next/static/chunks/leak.js.map', 'api/contact.php']) {
+    for (const name of ['.env', 'package.json', '_next/static/chunks/leak.js.map', 'api/contact.php', 'brand/clients/unapproved.svg', 'brand/clients/logo.php']) {
       const file = resolve(tmp, 'out', name)
       await mkdir(resolve(file, '..'), { recursive: true })
       await writeFile(file, 'test')

@@ -116,6 +116,13 @@ export const translations = {
         ],
       },
     },
+    clients: {
+      label: "Marcas y colaboraciones de BUXDEV",
+      carousel: "carrusel de marcas",
+      visit: "Visitar sitio web (abre en otra pestaña)",
+      previous: "Ver marcas anteriores",
+      next: "Ver siguientes marcas",
+    },
     about: {
       title: "Nosotros",
       company: "BUXDEV",
@@ -926,6 +933,13 @@ export const translations = {
           },
         ],
       },
+    },
+    clients: {
+      label: "BUXDEV brands and collaborations",
+      carousel: "brand carousel",
+      visit: "Visit website (opens in a new tab)",
+      previous: "View previous brands",
+      next: "View next brands",
     },
     about: {
       title: "About Us",

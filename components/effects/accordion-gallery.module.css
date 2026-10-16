@@ -21,8 +21,17 @@
 
 .panel[data-active="true"] { flex-grow: 6.5263157895; }
 
+.surface {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  border-radius: inherit;
+  pointer-events: none;
+}
+
 .trigger {
   position: absolute;
+  z-index: 1;
   inset: 0;
   width: 100%;
   height: 100%;
@@ -37,6 +46,7 @@
 }
 
 .trigger:focus-visible { outline: 3px solid var(--brand); outline-offset: 4px; }
+.preview, .caseLink { display: none; }
 
 .media {
   --gray: 1;
@@ -63,6 +73,7 @@
 
 .label {
   position: absolute;
+  z-index: 2;
   right: 20px;
   bottom: 22px;
   left: 20px;
@@ -70,6 +81,8 @@
   align-items: center;
   gap: 12px;
   opacity: 0;
+  color: #f5f7fa;
+  pointer-events: none;
   font-size: clamp(0.9rem, 1.5vw, 1.2rem);
   font-weight: 650;
   line-height: 1.4;
@@ -78,14 +91,38 @@
 .panel[data-active="true"] .label { opacity: 1; }
 .bar { flex: 0 0 3px; align-self: stretch; min-height: 24px; background: #477dd0; }
 
+@media (max-width: 40rem), (hover: none) and (pointer: coarse) {
+  .caseTrigger { display: none; }
+  .preview { display: block; }
+  .panel[data-active="true"] .label { bottom: 4.25rem; }
+  .panel[data-active="true"] .caseLink {
+    position: absolute;
+    z-index: 3;
+    bottom: 12px;
+    left: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    color: #f5f7fa;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+  .caseLink:focus-visible { outline: 3px solid var(--brand); outline-offset: 4px; }
+}
+
 @media (max-width: 40rem) {
   .gallery { flex-direction: column; height: clamp(36rem, 85svh, 42rem); }
   .media { width: 100%; height: calc((clamp(36rem, 85svh, 42rem) - 40px) * 0.62); }
   .image { object-fit: cover; object-position: center top; }
   .panel[data-project="poetsFlowers"] .image { object-position: center 18%; }
   .label { left: 16px; right: 16px; bottom: 16px; gap: 10px; opacity: 1; font-size: 0.85rem; }
+  .panel[data-active="true"] .caseLink { left: 16px; }
+  .panel:not([data-active="true"]) .label { top: 0; bottom: 0; }
   .panel:not([data-active="true"]) .shade { background: rgb(8 12 20 / 80%); }
-  .panel:not([data-active="true"]) .bar { background: #8b9aaf; }
+  .panel:not([data-active="true"]) .bar { align-self: center; height: 24px; background: #8b9aaf; }
 }
 
 @media (prefers-reduced-motion: reduce) {

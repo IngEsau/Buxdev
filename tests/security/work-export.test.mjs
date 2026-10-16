@@ -23,6 +23,26 @@ test('Home features only the approved projects with real desktop and mobile imag
   assert.doesNotMatch(gallery, /Ampliar imagen/, 'Home gallery must not open the image viewer')
 })
 
+test('Home gallery separates touch previews from explicit case links', async () => {
+  const gallery = (await read('index.html')).match(/<section id="trabajos"[\s\S]*?<\/section>/)?.[0]
+  assert.ok(gallery)
+  const previews = [...gallery.matchAll(/<button\b[^>]*data-gallery-preview[^>]*>/g)].map(match => match[0])
+  assert.equal(previews.length, 5)
+  for (const [index, preview] of previews.entries()) {
+    assert.match(preview, /type="button"/)
+    assert.match(preview, new RegExp(`aria-expanded="${index === 0}"`))
+    assert.match(preview, /aria-label="[^"]+"/)
+    assert.doesNotMatch(preview, /href=/)
+  }
+  const links = [...gallery.matchAll(/<a\b[^>]*data-gallery-case[^>]*>[\s\S]*?<\/a>/g)].map(match => match[0])
+  assert.equal(links.length, 5)
+  for (const link of links) {
+    assert.match(link, /href="\/work\/[^/]+\/"/)
+    assert.match(link, /Ver caso/)
+    assert.doesNotMatch(link, /<button\b/)
+  }
+})
+
 test('The exported Work catalog keeps the approved order, case links and truthful states', async () => {
   const html = await read('work/index.html')
   const names = [

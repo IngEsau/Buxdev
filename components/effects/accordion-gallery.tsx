@@ -39,7 +39,7 @@ type GalleryItem = {
   href: string
 }
 
-export function AccordionGallery({ items, label }: { items: GalleryItem[]; label: string }) {
+export function AccordionGallery({ items, label, caseLabel }: { items: GalleryItem[]; label: string; caseLabel: string }) {
   const root = useRef<HTMLOListElement>(null)
   const current = useRef(0)
   const pointer = useRef({ x: -1, y: -1 })
@@ -134,34 +134,44 @@ export function AccordionGallery({ items, label }: { items: GalleryItem[]; label
     setActive(index)
     paint.current?.()
   }
-  const onKeyDown = (event: KeyboardEvent<HTMLAnchorElement>, index: number) => {
+  const onKeyDown = (event: KeyboardEvent<HTMLElement>, index: number) => {
     const next = event.key === "Home" ? 0 : event.key === "End" ? items.length - 1
       : ["ArrowRight", "ArrowDown"].includes(event.key) ? (index + 1) % items.length
         : ["ArrowLeft", "ArrowUp"].includes(event.key) ? (index - 1 + items.length) % items.length : null
     if (next === null) return
     event.preventDefault()
-    root.current?.querySelectorAll<HTMLAnchorElement>("[data-gallery-trigger]")[next]?.focus()
+    const triggers = Array.from(root.current?.querySelectorAll<HTMLElement>("[data-gallery-trigger]") ?? [])
+      .filter(trigger => trigger.getClientRects().length > 0)
+    triggers[next]?.focus()
   }
 
   return (
     <ol ref={root} className={styles.gallery} aria-label={label}>
       {items.map((item, index) => (
         <li key={item.id} className={styles.panel} data-active={active === index} data-project={item.id}>
-          <Link href={item.href} data-gallery-trigger className={styles.trigger} aria-label={item.label}
-            onFocus={() => select(index)} onKeyDown={event => onKeyDown(event, index)}
-            onPointerMove={event => {
-              if (event.pointerType !== "mouse" || (event.clientX === pointer.current.x && event.clientY === pointer.current.y)) return
-              pointer.current = { x: event.clientX, y: event.clientY }
-              select(index)
-            }}>
-            <span className={styles.media} data-gallery-media aria-hidden="true">
+          <div className={styles.surface} aria-hidden="true">
+            <span className={styles.media} data-gallery-media>
               <picture>
                 <source media="(max-width: 40rem)" srcSet={item.mobileImage} />
                 <Image src={item.image} alt="" fill sizes="(max-width: 640px) 90vw, 65vw" className={styles.image} />
               </picture>
             </span>
-            <span className={styles.shade} aria-hidden="true" />
-            <span className={styles.label} data-gallery-label><span className={styles.bar} aria-hidden="true" />{item.label}</span>
+            <span className={styles.shade} />
+          </div>
+          {/* Touch previews and navigation are separate controls, including before hydration. */}
+          <button type="button" data-gallery-trigger data-gallery-preview className={`${styles.trigger} ${styles.preview}`}
+            aria-label={item.label} aria-expanded={active === index}
+            onFocus={() => select(index)} onClick={() => select(index)} onKeyDown={event => onKeyDown(event, index)} />
+          <Link href={item.href} data-gallery-trigger className={`${styles.trigger} ${styles.caseTrigger}`} aria-label={item.label}
+            onFocus={() => select(index)} onKeyDown={event => onKeyDown(event, index)}
+            onPointerMove={event => {
+              if (event.pointerType !== "mouse" || (event.clientX === pointer.current.x && event.clientY === pointer.current.y)) return
+              pointer.current = { x: event.clientX, y: event.clientY }
+              select(index)
+            }} />
+          <span className={styles.label} data-gallery-label aria-hidden="true"><span className={styles.bar} />{item.label}</span>
+          <Link href={item.href} className={styles.caseLink} data-gallery-case aria-label={`${caseLabel}: ${item.label}`}>
+            {caseLabel}<span aria-hidden="true">↗</span>
           </Link>
         </li>
       ))}

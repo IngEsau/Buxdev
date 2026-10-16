@@ -35,6 +35,7 @@ export function PortfolioSection() {
 
         <AccordionGallery
           label={t.portfolio.title}
+          caseLabel={t.portfolio.actions.viewCaseStudy}
           items={projects.map(project => ({
             id: project.id,
             image: project.image,

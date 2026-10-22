@@ -8,7 +8,7 @@
   --title-phase: 1;
   --handoff: 1;
   position: relative;
-  height: 185svh;
+  height: 225svh;
   border-top: 1px solid var(--border-strong);
 }
 
@@ -118,7 +118,7 @@
 
 .ctaReveal {
   margin-top: 1.5rem;
-  opacity: var(--phase, 1);
+  opacity: calc(0.75 + var(--phase, 1) * 0.25);
   transform: translateY(calc((1 - var(--phase, 1)) * 12px));
 }
 
@@ -158,7 +158,7 @@
 .art {
   min-width: 0;
   height: min(62svh, 36rem);
-  margin-left: -1.5rem;
+  margin-left: 0;
 }
 
 .desktopVisual,
@@ -173,9 +173,8 @@
 .backLayer { transform: translateY(calc(var(--back-y, 0px) * var(--depth))); }
 .midLayer { transform: translateY(calc(var(--mid-y, 0px) * var(--depth))); }
 .frontLayer { transform: translateY(calc(var(--front-y, 0px) * var(--depth))); }
-.reveal { opacity: var(--phase, 1); transform: translateY(calc((1 - var(--phase, 1)) * 16px)); }
-.activate { opacity: calc(0.24 + var(--phase, 1) * 0.76); }
-.scene[data-kind="security"] .activate { opacity: calc(0.45 + var(--phase, 1) * 0.55); }
+.reveal { opacity: calc(0.55 + var(--phase, 1) * 0.45); }
+.activate { opacity: calc(0.55 + var(--phase, 1) * 0.45); }
 .transient { opacity: var(--phase, 0); }
 .fadeOut { opacity: calc(1 - var(--phase, 1)); }
 .designGuides { opacity: calc(0.7 - var(--phase, 1) * 0.4); }
@@ -289,8 +288,8 @@
 
 .handoff svg { width: 0.8rem; height: 0.8rem; }
 
-@media (max-width: 48rem) {
-  .scene { --depth: 0.35; height: 175svh; }
+@media (max-width: 64rem) {
+  .scene { --depth: 0.35; height: 210svh; }
   .stage { padding-block: 1.25rem; }
   .chapterMeta { font-size: 0.57rem; }
   .composition { grid-template-columns: minmax(0, 1fr); gap: 1rem; align-content: center; }
@@ -303,11 +302,11 @@
   .art { width: min(100%, 32rem); height: min(32svh, 20rem); margin-inline: auto; }
   .desktopVisual { display: none; }
   .mobileVisual { display: block; }
-  .mobileVisual .nodeLabel { font-size: 22px; }
+  .mobileVisual .nodeLabel { font-size: 24px; }
   .mobileVisual .interfaceTitle { font-size: 39px; }
   .mobileVisual .interfaceNav { font-size: 17px; }
-  .mobileVisual .typeSpecimen { font-size: 68px; }
-  .scene[data-kind="automation"] .nodeLabel { font-size: 20px; }
+  .mobileVisual .typeSpecimen { font-size: 60px; }
+  .scene[data-kind="automation"] .nodeLabel { font-size: 24px; }
   .phases { width: 100%; justify-content: space-between; gap: 0.4rem; }
   .sceneFooter { padding-right: 4.5rem; }
   .phases li { font-size: 0.51rem; letter-spacing: 0.04em; }
@@ -370,4 +369,16 @@
   .ctaReveal,
   .reveal,
   .handoff { transform: none !important; }
+  .reveal, .activate, .descriptor, .ctaReveal { opacity: 1; }
+  .draw, .drawFaint { stroke-dashoffset: 0; }
+  .wireframe, .fadeOut, .transient[data-window] { opacity: 0; }
+  .transient[data-range] { opacity: 1; }
+}
+
+/* Short viewports cannot fit a readable copy + diagram in one pinned frame. */
+@media (max-height: 600px) {
+  .scene { height: auto; }
+  .stage { position: relative; top: auto; height: auto; padding-block: 2rem; }
+  .composition { flex: none; margin-block: 2rem; }
+  .art { height: clamp(14rem, 50svh, 22rem); }
 }

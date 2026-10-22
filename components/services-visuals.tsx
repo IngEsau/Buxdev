@@ -23,38 +23,32 @@ function Node({ x, y, label, note, range, active = false, accent = false }: {
 
 export function FullstackVisual({ compact }: VisualProps) {
   const nodes = compact ? [
-    [55, 65], [55, 165], [55, 275], [310, 275], [55, 405], [310, 405],
+    [45, 80], [45, 180], [45, 285], [290, 285], [45, 410], [270, 410],
   ] : [
-    [92, 112], [285, 238], [445, 342], [640, 224], [445, 500], [580, 450],
+    [70, 110], [270, 220], [430, 340], [620, 220], [430, 510], [580, 470],
   ]
   const routes = compact ? [
-    "M55 98V130", "M55 198V240", "M180 267H286", "M55 308V370", "M310 308V370",
+    "M45 98V142", "M45 198V247", "M187 277H266", "M45 303V372", "M290 303V350H270V372",
   ] : [
-    "M202 112H244V238H264", "M409 238H445V308", "M564 334H600V224H620", "M445 376V466", "M640 258V394H580V416",
+    "M182 103H235V212H246", "M320 262V290H430V306", "M554 332H590V212H600", "M430 380V476", "M672 262V412H580V436",
   ]
   return <SceneSVG compact={compact}>
     <g className={styles.backLayer}>
-      <path className={styles.draftLine} d={compact ? "M35 35V440M35 220H455M270 220V440" : "M72 70V560M72 290H716M260 70V560M420 70V560M600 70V560"} />
       <path className={styles.drawFaint} pathLength="1" data-range="0,0.25"
-        d={compact ? "M35 35H450M35 440H450" : "M72 70H716M72 560H716"} />
+        d={compact ? "M25 450H455" : "M42 64H738M42 564H738"} />
     </g>
     <g className={styles.midLayer}>
       {routes.map((route, index) => <path key={route} className={styles.draw} pathLength="1" d={route}
         data-range={["0.05,0.26", "0.25,0.47", "0.46,0.65", "0.58,0.76", "0.73,0.92"][index]} />)}
-      <Node x={nodes[0][0]} y={nodes[0][1]} label="CLIENT" note="INGRESS" range="-0.1,0" />
-      <Node x={nodes[1][0]} y={nodes[1][1]} label="FRONTEND" note="EXPERIENCE" range="0.15,0.3" />
-      <Node x={nodes[2][0]} y={nodes[2][1]} label="REST API" note="CONTRACT" range="0.35,0.5" accent />
-      <Node x={nodes[3][0]} y={nodes[3][1]} label="WORKER" note="ASYNC" range="0.5,0.67" />
-      <Node x={nodes[4][0]} y={nodes[4][1]} label="DATABASE" note="PERSISTENCE" range="0.63,0.8" />
-      <Node x={nodes[5][0]} y={nodes[5][1]} label="EXTERNAL API" note="INTEGRATIONS" range="0.77,0.94" />
-      <path className={styles.drawFaint} pathLength="1" data-range="0.86,1"
-        d={compact ? "M55 440H455" : "M445 548V580H716"} />
+      <Node x={nodes[0][0]} y={nodes[0][1]} label="CLIENT" note={compact ? undefined : "INGRESS"} range="-0.1,0" />
+      <Node x={nodes[1][0]} y={nodes[1][1]} label="FRONTEND" note={compact ? undefined : "EXPERIENCE"} range="0.15,0.3" />
+      <Node x={nodes[2][0]} y={nodes[2][1]} label="REST API" note={compact ? undefined : "CONTRACT"} range="0.35,0.5" accent />
+      <Node x={nodes[3][0]} y={nodes[3][1]} label="WORKER" note={compact ? undefined : "ASYNC"} range="0.5,0.67" />
+      <Node x={nodes[4][0]} y={nodes[4][1]} label="DATABASE" note={compact ? undefined : "PERSISTENCE"} range="0.63,0.8" />
+      <Node x={nodes[5][0]} y={nodes[5][1]} label="EXTERNAL API" note={compact ? undefined : "INTEGRATIONS"} range="0.77,0.94" />
     </g>
     <g className={styles.frontLayer}>
-      <text x={compact ? 300 : 560} y={compact ? 52 : 92} className={styles.technicalLabel}>APPLICATION / LAYERS</text>
-      <g className={styles.reveal} data-range="0.78,0.94">
-        <path className={styles.focusLine} d={compact ? "M35 240H170M35 302H170" : "M424 300H556M424 366H556"} />
-      </g>
+      <text x={compact ? 45 : 70} y={compact ? 28 : 45} className={styles.technicalLabel}>APPLICATION / LAYERS</text>
     </g>
   </SceneSVG>
 }
@@ -68,17 +62,17 @@ export function UXUIVisual({ compact }: VisualProps) {
     <g className={styles.backLayer}>
       <g className={styles.designGuides} data-range="0.6,0.92">
         <path className={styles.drawFaint} pathLength="1" data-range="0,0.18"
-          d={compact ? "M35 30V440M180 30V440M310 30V440M445 30V440M15 130H465M15 245H465M15 350H465" : "M70 55V550M230 55V550M270 55V550M470 55V550M700 55V550M45 140H730M45 280H730M45 420H730"} />
+          d={compact ? "M15 130H465M15 445H465" : "M45 140H730M45 550H730M230 145V525"} />
       </g>
     </g>
     <g className={styles.midLayer}>
       <path className={styles.draw} pathLength="1" data-range="0.1,0.32"
-        d={compact ? "M35 65H445M35 115H445M35 430H445" : "M70 125H700M230 145V525M70 540H700"} />
-      <g className={styles.wireframe} data-window="0.2,0.4,0.6,0.82">
-        <rect x={x} y={compact ? 145 : 170} width={compact ? 375 : 385} height="72" />
-        <rect x={x} y={compact ? 260 : 330} width={compact ? 240 : 290} height="50" />
+        d={compact ? "M35 65H445M35 115H445M35 455H445" : "M70 125H700M230 145V525M70 540H700"} />
+      <g className={styles.wireframe} data-window="0.16,0.34,0.42,0.58">
+        <rect x={x - 16} y={compact ? 145 : 170} width={compact ? 407 : 417} height={compact ? 110 : 118} />
+        <rect x={x - 16} y={inputY - 17} width={compact ? 272 : 322} height="72" />
         <rect x={x} y={buttonY} width="170" height="44" />
-        {!compact ? <path d="M85 180H195M85 225H195M85 270H195" /> : null}
+        {!compact ? <path d="M85 198H195M85 243H195M85 288H195" /> : null}
       </g>
       <g className={styles.reveal} data-range="0.42,0.64">
         <text x={compact ? 35 : 80} y={compact ? 51 : 108} className={styles.nodeLabel}>BUXDEV</text>
@@ -101,66 +95,64 @@ export function UXUIVisual({ compact }: VisualProps) {
     <g className={styles.frontLayer}>
       <g className={styles.reveal} data-range="0.68,0.94">
         <text x={compact ? 342 : 80} y={compact ? 395 : 455} className={styles.typeSpecimen}>Aa</text>
-        <text x={compact ? 346 : 80} y={compact ? 419 : 491} className={styles.technicalLabel}>TYPE / SPACE</text>
+        <text x={compact ? 346 : 80} y={compact ? 431 : 491} className={styles.technicalLabel}>TYPE / SPACE</text>
       </g>
     </g>
   </SceneSVG>
 }
 
 export function SecurityVisual({ compact }: VisualProps) {
-  const nodes = compact ? [[40, 125], [220, 125], [350, 225], [220, 365], [45, 365]] : [[95, 175], [335, 175], [585, 175], [335, 390], [585, 390]]
-  const route = compact ? "M45 285H135V355H205" : "M95 425H225V390H319"
-  const boundary = compact ? "M180 70H450V420H180Z" : "M285 100H708V494H285Z"
+  const nodes = compact ? [[45, 125], [230, 125], [330, 245], [230, 385], [45, 385]] : [[80, 175], [310, 175], [570, 175], [310, 400], [550, 400]]
+  const route = compact ? "M45 300H135V377H206" : "M80 435H210V392H286"
+  const boundary = compact ? "M200 70H462V425H200Z" : "M270 100H740V500H270Z"
   return <SceneSVG compact={compact}>
     <g className={styles.backLayer}>
-      <path className={styles.draftLine} d={compact ? "M25 70H455M25 420H455M150 30V440" : "M65 100H720M65 494H720M260 60V550"} />
       <g className={styles.fadeOut} data-range="0.46,0.76">
         <path className={styles.topologyLine} d={route} />
-        <text x={compact ? 45 : 95} y={compact ? 303 : 448} className={styles.technicalLabel}>UNTRUSTED ROUTE</text>
+        <text x={compact ? 45 : 80} y={compact ? 265 : 470} className={styles.technicalLabel}>UNTRUSTED ROUTE</text>
       </g>
     </g>
     <g className={styles.midLayer}>
       <g className={styles.activate} data-range="0.64,0.92">
-        <path className={styles.topologyLine} d={compact ? "M130 118H204M255 155V218H330M350 258V357H290M205 365H115" : "M207 167H318M469 167H568M585 208V383H465M469 390H568"} />
+        <path className={styles.topologyLine} d={compact ? "M145 117H206M285 146V192H330V211M330 266V330H230V351M135 377H206" : "M192 167H286M456 167H546M570 215V310H310V366M412 392H526"} />
       </g>
       <Node x={nodes[0][0]} y={nodes[0][1]} label="CLIENT" range="0,0.12" active />
-      <Node x={nodes[1][0]} y={nodes[1][1]} label="GATEWAY" note="ACCESS" range="0.58,0.84" active accent />
-      <Node x={nodes[2][0]} y={nodes[2][1]} label="SERVICE" note="POLICY" range="0.64,0.92" active />
-      <Node x={nodes[3][0]} y={nodes[3][1]} label="DATA" note="SCOPED" range="0.64,0.92" active />
+      <Node x={nodes[1][0]} y={nodes[1][1]} label="GATEWAY" note={compact ? undefined : "ACCESS"} range="0.58,0.84" active accent />
+      <Node x={nodes[2][0]} y={nodes[2][1]} label="SERVICE" note={compact ? undefined : "POLICY"} range="0.64,0.92" active />
+      <Node x={nodes[3][0]} y={nodes[3][1]} label="DATA" note={compact ? undefined : "SCOPED"} range="0.64,0.92" active />
       <Node x={nodes[4][0]} y={nodes[4][1]} label={compact ? "API" : "INTEGRATION"} range="0,0.12" active />
       <path className={styles.draw} pathLength="1" data-range="0.48,0.86" d={boundary} />
       <g className={styles.reveal} data-range="0.65,0.89">
-        <text x={compact ? 190 : 295} y={compact ? 54 : 83} className={styles.technicalLabel}>AUTHORIZED SCOPE</text>
+        <text x={compact ? 210 : 295} y={compact ? 54 : 83} className={styles.technicalLabel}>AUTHORIZED SCOPE</text>
       </g>
       <g className={styles.transient} data-window="0.1,0.24,0.53,0.74">
-        <path className={styles.anomalyLine} d={compact ? "M34 272h22v22H34ZM30 268l30 30M30 298l30-30" : "M84 414h22v22H84ZM80 410l30 30M80 440l30-30"} />
+        <path className={styles.anomalyLine} d={compact ? "M34 289h22v22H34ZM30 285l30 30M30 315l30-30" : "M69 424h22v22H69ZM65 420l30 30M65 450l30-30"} />
         <path className={styles.draw} pathLength="1" data-range="0.24,0.52" d={route} />
       </g>
     </g>
     <g className={styles.frontLayer}>
       <text x={compact ? 35 : 65} y={compact ? 35 : 70} className={styles.technicalLabel}>ACCESS / BOUNDARIES</text>
-      <g className={styles.transient} data-window="0.12,0.24,0.32,0.44"><text x="35" y={compact ? 448 : 563} className={styles.traceText}>DETECT / REVIEW REQUIRED</text></g>
-      <g className={styles.transient} data-window="0.32,0.42,0.54,0.66"><text x="35" y={compact ? 448 : 563} className={styles.traceText}>TRACE / ORIGIN RESOLVED</text></g>
-      <g className={styles.transient} data-window="0.54,0.65,0.72,0.84"><text x="35" y={compact ? 448 : 563} className={styles.traceText}>ISOLATE / ROUTE EXCLUDED</text></g>
-      <g className={styles.reveal} data-range="0.76,0.93"><text x="35" y={compact ? 448 : 563} className={styles.traceText}>HARDEN / POLICY APPLIED</text></g>
+      <g className={styles.transient} data-window="0.08,0.16,0.22,0.28"><text x="35" y={compact ? 454 : 563} className={styles.traceText}>DETECT / REVIEW REQUIRED</text></g>
+      <g className={styles.transient} data-window="0.28,0.36,0.43,0.49"><text x="35" y={compact ? 454 : 563} className={styles.traceText}>TRACE / ORIGIN RESOLVED</text></g>
+      <g className={styles.transient} data-window="0.49,0.57,0.65,0.71"><text x="35" y={compact ? 454 : 563} className={styles.traceText}>ISOLATE / ROUTE EXCLUDED</text></g>
+      <g className={styles.transient} data-range="0.71,0.86"><text x="35" y={compact ? 454 : 563} className={styles.traceText}>HARDEN / POLICY APPLIED</text></g>
     </g>
   </SceneSVG>
 }
 
 export function AutomationVisual({ compact }: VisualProps) {
-  const nodes = compact ? [[35, 50], [184, 50], [348, 50], [348, 158], [195, 246], [35, 338], [326, 338], [195, 415], [345, 440]] :
-    [[70, 100], [255, 100], [445, 100], [625, 215], [440, 330], [210, 445], [610, 445], [440, 530], [625, 570]]
+  const nodes = compact ? [[35, 60], [190, 60], [355, 60], [300, 160], [170, 255], [50, 350], [330, 350], [170, 420], [355, 440]] :
+    [[65, 100], [270, 100], [535, 100], [600, 235], [350, 320], [135, 425], [590, 425], [350, 520], [625, 560]]
   const paths = compact ? [
-    "M35 80H368V186H220V278", "M220 278H50V370H220V440", "M220 278H351V370H220V440", "M220 440H325",
+    "M35 90H440V188H312V220H145V285H170", "M170 285H25V378H145V444H170", "M170 285H305V444H170", "M170 444H330",
   ] : [
-    "M70 133H652V245H465V363", "M465 363H235V477H465V558", "M465 363H636V477H465V558", "M465 558H604",
+    "M65 135H560V260H600V285H325V350H350", "M350 350H110V455H325V546H350", "M350 350H565V455H475V546H350", "M350 546H604",
   ]
   const labels = ["EVENT", "WEBHOOK", "QUEUE", "WORKER", "DECISION", "API / A", "API / B", "ACTIONS", "AUDIT"]
   const ranges = ["-0.1,0", "0.07,0.2", "0.22,0.35", "0.34,0.48", "0.45,0.6", "0.56,0.74", "0.64,0.84", "0.78,0.9", "0.86,0.95"]
   return <SceneSVG compact={compact}>
     <g className={styles.backLayer}>
-      <path className={styles.draftLine} d={compact ? "M20 18H460M20 208H460M20 398H460M165 18V445" : "M45 55H728M45 293H728M45 507H728M405 55V575"} />
-      <text x={compact ? 35 : 70} y={compact ? 20 : 64} className={styles.technicalLabel}>EVENT / ORCHESTRATION</text>
+      <text x={compact ? 35 : 65} y={compact ? 20 : 45} className={styles.technicalLabel}>EVENT / ORCHESTRATION</text>
     </g>
     <g className={styles.midLayer}>
       {paths.map((path, index) => <g key={path}>
@@ -181,7 +173,7 @@ export function AutomationVisual({ compact }: VisualProps) {
     </g>
     <g className={styles.frontLayer}>
       <g className={styles.reveal} data-range="0.72,0.94">
-        <text x={compact ? 250 : 560} y={compact ? 210 : 289} className={styles.technicalLabel}>WAIT / JOIN / CONTINUE</text>
+        <text x={compact ? 35 : 70} y={compact ? 200 : 300} className={styles.technicalLabel}>WAIT / JOIN / CONTINUE</text>
       </g>
     </g>
   </SceneSVG>
